@@ -5,10 +5,18 @@ Chromosome::Chromosome(const unsigned SIZE)
     values = std::vector<float>(SIZE);
 }
 
+Chromosome::Chromosome(const std::initializer_list<float> valuesList)
+{
+    for (auto &i : valuesList)
+    {
+        values.push_back(i);
+    }
+}
+
 void Chromosome::show()
 {
     std::cout << "Size: " << values.size() << std::endl;
-    for(auto i : values)
+    for (auto i : values)
     {
         std::cout << "[" << i << "] ";
     }
