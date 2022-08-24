@@ -2,7 +2,7 @@
 
 Chromosome::Chromosome()
 {
-    
+    fitness = rand() % 99;
 }
 
 Chromosome::Chromosome(const std::initializer_list<float> valuesList)
@@ -11,6 +11,8 @@ Chromosome::Chromosome(const std::initializer_list<float> valuesList)
     {
         genes.push_back(i);
     }
+
+    fitness = rand() % 99;
 }
 
 void Chromosome::show()
@@ -18,7 +20,7 @@ void Chromosome::show()
     std::cout << "Size: " << genes.size() << std::endl;
     for (auto i : genes)
     {
-        std::cout << "[" << i << "]\t";
+        std::cout << "[" << i << "|" << fitness << "]\t";
     }
     std::cout << std::endl << std::endl;
 }
