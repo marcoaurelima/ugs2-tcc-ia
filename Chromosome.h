@@ -18,6 +18,8 @@ public:
     void setGene(float value);
     float getGene(const unsigned index);
 
+    void setRandomFitness();
+
 private:
     float fitness {}; 
     std::vector<float> genes;

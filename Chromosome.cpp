@@ -2,7 +2,7 @@
 
 Chromosome::Chromosome()
 {
-    fitness = rand() % 99;
+
 }
 
 Chromosome::Chromosome(const std::initializer_list<float> valuesList)
@@ -11,8 +11,6 @@ Chromosome::Chromosome(const std::initializer_list<float> valuesList)
     {
         genes.push_back(i);
     }
-
-    fitness = rand() % 99;
 }
 
 void Chromosome::show()
@@ -45,3 +43,7 @@ float Chromosome::getGene(const unsigned index)
     return genes[index];
 }
 
+void Chromosome::setRandomFitness()
+{
+    fitness = rand() % 99;
+}
