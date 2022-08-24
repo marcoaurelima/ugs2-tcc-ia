@@ -3,13 +3,6 @@
 Chromosome::Chromosome(const unsigned SIZE)
 {
     values = std::vector<float>(SIZE);
-
-   
-}
-
-Chromosome::~Chromosome()
-{
-
 }
 
 void Chromosome::show()
@@ -20,4 +13,14 @@ void Chromosome::show()
         std::cout << "[" << i << "] ";
     }
     std::cout << std::endl;
+}
+
+void Chromosome::setFitness(float fitness)
+{
+    this->fitness = fitness;
+}
+
+float Chromosome::getFitness()
+{
+    return fitness;
 }

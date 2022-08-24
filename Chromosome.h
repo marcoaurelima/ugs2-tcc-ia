@@ -10,11 +10,12 @@ class Chromosome
 {
 public:
     Chromosome(const unsigned SIZE);
-    ~Chromosome();
-
+    void setFitness(float fitness);
+    float getFitness();
     void show();
 
 private:
+    float fitness {}; 
     std::vector<float> values;
 };
 
