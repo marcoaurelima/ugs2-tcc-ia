@@ -5,9 +5,9 @@
 
 int main(int argc, char **argv) 
 {
-    Population p;
-    p.createInitialPopulation(3,10);
-    p.show();
+    Population population;
+    population.createInitialPopulation(3,10);
+    population.show();
 
     return 0;
 }
