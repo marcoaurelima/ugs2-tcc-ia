@@ -1,15 +1,13 @@
 #include <iostream>
 #include <array>
 
-#include "Chromosome.h"
+#include "Population.h"
 
 int main(int argc, char **argv) 
 {
-    Chromosome c(5);
-    c.show();
-    std::cout << c.getFitness() << std::endl;
-    c.setFitness(55);
-    std::cout << c.getFitness() << std::endl;
-    
+    Population p;
+    p.createInitialPopulation(3,10);
+    p.show();
+
     return 0;
 }

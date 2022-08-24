@@ -9,14 +9,18 @@
 class Chromosome
 {
 public:
-    Chromosome::Chromosome(const std::initializer_list<float> valuesList);
+    Chromosome();
+    Chromosome(const std::initializer_list<float> valuesList);
     void setFitness(float fitness);
     float getFitness();
     void show();
 
+    void setGene(float value);
+    float getGene(const unsigned index);
+
 private:
     float fitness {}; 
-    std::vector<float> values;
+    std::vector<float> genes;
 };
 
 #endif
