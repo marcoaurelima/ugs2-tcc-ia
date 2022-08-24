@@ -1,10 +1,5 @@
 #include "Chromosome.h"
 
-Chromosome::Chromosome(const unsigned SIZE)
-{
-    values = std::vector<float>(SIZE);
-}
-
 Chromosome::Chromosome(const std::initializer_list<float> valuesList)
 {
     for (auto &i : valuesList)
