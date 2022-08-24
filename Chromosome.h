@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <array>
+
 class Chromosome
 {
 public:
@@ -10,7 +12,7 @@ public:
     ~Chromosome();
 
 private:
-
+    
 };
 
 #endif

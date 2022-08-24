@@ -1,11 +1,11 @@
-#include "chromosome.h"
+#include "Chromosome.h"
 
-chromosome::chromosome()
+Chromosome::Chromosome()
 {
 
 }
 
-chromosome::~chromosome()
+Chromosome::~Chromosome()
 {
 
 }
