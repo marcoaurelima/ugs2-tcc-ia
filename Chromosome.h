@@ -3,16 +3,17 @@
 
 #pragma once
 
-#include <array>
+#include <iostream>
+#include <vector>
 
 class Chromosome
 {
 public:
-    Chromosome();
+    Chromosome(const unsigned SIZE);
     ~Chromosome();
 
 private:
-    
+    std::vector<float> values;
 };
 
 #endif

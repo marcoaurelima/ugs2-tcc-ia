@@ -1,14 +1,11 @@
 #include <iostream>
 #include <array>
 
+#include "Chromosome.h"
+
 int main(int argc, char **argv) 
 {
-    unsigned SIZE = 6;
-
-    std::array<float, SIZE> arr{1,2,3,4,5,6};
-
-
-    std::cout << "hello " << arr.back() << std::endl;
-
+    Chromosome c(5);
+    
     return 0;
 }
