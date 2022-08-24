@@ -12,6 +12,8 @@ public:
     Chromosome(const unsigned SIZE);
     ~Chromosome();
 
+    void show();
+
 private:
     std::vector<float> values;
 };

@@ -6,6 +6,7 @@
 int main(int argc, char **argv) 
 {
     Chromosome c(5);
+    c.show();
     
     return 0;
 }
