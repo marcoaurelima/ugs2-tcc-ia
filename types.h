@@ -23,7 +23,7 @@ enum class MUTATION_TYPE
     UNIFORM
 };
 
-struct NewGenInfo
+struct NewGenParams
 {
     SELECTION_TYPE selectionType;
     CROSSOVER_TYPE crossoverType;

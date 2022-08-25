@@ -37,3 +37,9 @@ void Population::show()
         c.show();
     }
 }
+
+void Population::generateNewPopulation(NewGenParams newGenParams)
+{
+    
+}
+
