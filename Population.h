@@ -4,6 +4,7 @@
 #pragma once
 #include <vector>
 #include "Chromosome.h"
+#include "types.h"
 
 class Population
 {
@@ -13,6 +14,8 @@ public:
 
     void createInitialPopulation(const unsigned POPULATION_SIZE, const unsigned CHROMOSSOME_SIZE);
     void show();
+
+    void generateNewPopulation(NewGenInfo newGenInfo );
 
 private:
     std::vector<Chromosome> chromosomes;
