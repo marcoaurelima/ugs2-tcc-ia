@@ -13,8 +13,10 @@ int main(int argc, char **argv)
 
     NewGenParams n;
     n.crossoverType = CROSSOVER_TYPE::MULTI_POINT;
-    n.mutationType = MUTATION_TYPE::INSERTION;
+    n.mutationType  = MUTATION_TYPE::INSERTION;
     n.selectionType = SELECTION_TYPE::FITNESS;
+
+    population.generateNewPopulation(n);
 
     return 0;
 }
