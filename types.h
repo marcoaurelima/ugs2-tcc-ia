@@ -1,3 +1,6 @@
+#ifndef TYPES_H
+#define TYPES_H
+
 enum class SELECTION_TYPE 
 {
     FITNESS,
@@ -22,5 +25,9 @@ enum class MUTATION_TYPE
 
 struct NewGenInfo
 {
-    /* data */
+    SELECTION_TYPE selectionType;
+    CROSSOVER_TYPE crossoverType;
+    MUTATION_TYPE  mutationType;
 };
+
+#endif
