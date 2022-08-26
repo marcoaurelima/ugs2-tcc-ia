@@ -160,3 +160,54 @@ std::set<float> Population::selectionEstocastic(std::vector<float> fitness, unsi
     return selection;
 
 }
+
+
+// parent1 / parent2:       Cromossomos dos pais
+// taxParent1 / taxParent2: taxa em porcentagem da participação dos respectivos pais no cruzamento. 
+std::vector<float> Population::crossoverUniform(std::vector<float> parent1, std::vector<float> parent2, unsigned taxParent1, unsigned taxParent2)
+{
+    if(parent1.size() != parent2.size())
+    {
+        std::cerr << "Error: parent1 and parent2 must have the same size." << std::endl;
+        return std::vector<float>();
+    }
+
+    if(taxParent1 + taxParent2 != 100)
+    {
+        std::cerr << "Error: Invalid number of taxParent1." << std::endl;
+        return std::vector<float>();
+    }
+
+    size_t chromossomeSize = (parent1.size() + parent2.size()) / 2;
+    unsigned parent1size = (chromossomeSize * taxParent1) / 100;
+    unsigned parent2size = chromossomeSize - parent1size;
+
+    // Produzir a mascara binária;
+    // Será gerado trues de acordo com a porcentagem do pai 1;
+    // Será gerado falses com a quantidade que faltar para completar a mascara;
+
+    std::vector<bool> mask {};
+    for (size_t i = 0; i < parent1size; i++) { mask.push_back(true); }
+    for (size_t i = 0; i < parent2size; i++) { mask.push_back(false); }
+    
+    // Embaralhar mascara de forma aleatória
+    
+    std::random_device randDevice {};
+    std::default_random_engine randEngine{randDevice()};
+    std::shuffle(std::begin(mask), std::end(mask), randEngine);
+
+    // Efetuar cruzamento a partir da mascara
+
+    std::vector<float> child {};
+    for (size_t i = 0; i < mask.size(); i++)
+    {
+        if(mask[i] == true) {
+            child.push_back(parent1[i]);
+        } 
+        else {  
+            child.push_back(parent2[i]);
+        }
+    }
+
+    return child;
+}

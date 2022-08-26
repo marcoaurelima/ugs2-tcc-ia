@@ -5,6 +5,8 @@
 #include <vector>
 #include <set>
 #include <deque>
+#include <algorithm>
+#include <random>
 #include "Chromosome.h"
 #include "types.h"
 
@@ -23,6 +25,10 @@ private:
     std::vector<Chromosome> chromosomes;
 
     std::set<float> selectionEstocastic(std::vector<float> fitness, unsigned qtdNidles, unsigned spin);
+
+    std::vector<float> crossoverUniform(std::vector<float> parent1, std::vector<float> parent2, unsigned taxParent1, unsigned taxParent2);
+
+
 };
 
 #endif
