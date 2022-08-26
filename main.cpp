@@ -3,104 +3,93 @@
 #include <deque>
 #include <set>
 #include <initializer_list>
-
 #include "Population.h"
-
 #include "types.h"
 
+#define DEBUG
 
-
-
-void selecaoestocastica()
+// fitness: vetor com todos os fitness que estarao na roleta
+// qtdNidles: quantidade de agulhas na roleta
+// spin: giro da roleta; porcentagem do giro 1% - 99%
+std::set<float> selecaoestocastica(std::vector<float> fitness, unsigned qtdNidles, unsigned spin)
 {
-    std::vector<float> fitnessCromossomos {5,3,2,1};
-    int qtd_agulhas = 4;
-    int giro = 20;
-    float soma_fitness = 5.0 + 3.0 + 2.0 + 1.0;
+    float fitnessSum = 0;
+    for (auto &i : fitness) {  fitnessSum += i; }
+    
+    // Produzir um vetor de aprox. de 100 posições (valores float as vezes somam 99% no total),
+    // onde terão vários blocos de valores repetidos representando as fatias da roleta.
+    // cada bloco conterá o indice do cromossomo. Ex.: 001111222
+    // No caso acima, o fitness na posição 2 tem uma fatia maior, enquanto o 0 tem a menor.
 
-    unsigned p1 = (5.0 / soma_fitness) * 100;
-    unsigned p2 = (3.0 / soma_fitness) * 100;
-    unsigned p3 = (2.0 / soma_fitness) * 100;
-    unsigned p4 = (1.0 / soma_fitness) * 100;
-
-    std::cout << p1 << std::endl;
-    std::cout << p2 << std::endl;
-    std::cout << p3 << std::endl;
-    std::cout << p4 << std::endl;
+    std::vector<unsigned> percents;
+    for (unsigned i = 0; i < fitness.size(); i++)
+    {
+        unsigned value = (fitness[i] / fitnessSum) * 100;
+        percents.push_back(value);
+    }
+    
+    // Preencher a roleta com blocos de valores
 
     std::deque<float> roleta {};
-
-    for (size_t i = 0; i < p1; i++)
+    for(unsigned int i = 0; i < percents.size(); i++)
     {
-        roleta.push_back(1);
+        for (unsigned j = 0; j < percents[i]; j++)
+        {
+            roleta.push_back(i);
+        }  
     }
     
-    for (size_t i = 0; i < p2; i++)
-    {
-        roleta.push_back(2);
-    }
-    
-    for (size_t i = 0; i < p3; i++)
-    {
-        roleta.push_back(3);
-    }
-
-    for (size_t i = 0; i < p4; i++)
-    {
-        roleta.push_back(3);
-    }
-    
-
-    std::cout << "total: " << roleta.size() << std::endl;
-
-    for (auto &i : roleta)
-    {
-        std::cout << i;
-    }
+    #ifdef DEBUG
+    for (auto &i : roleta) { std::cout << i; }
     puts("");
-    
+    #endif
 
     /// girar a roleta
-    for (size_t i = 0; i < giro; i++)
-    {
-        roleta.push_back(roleta[i]);
-        roleta.pop_front();
-    }
+
+    for (unsigned i = 0; i < spin; i++) { roleta.push_back(roleta[i]); }
+    for (unsigned i = 0; i < spin; i++) { roleta.pop_front(); }
     
-    for (auto &i : roleta)
-    {
-        std::cout << i;
-    }
+    #ifdef DEBUG
+    for (auto &i : roleta) { std::cout << i; }
     puts("");
-    
+    #endif
 
-    std::set<int> cromossomosSelecionados;
-    //selecionar novos valores na rolera girada
-    for (size_t i = 0; i < qtd_agulhas; i++)
-    {
-        int offset = ((100 / qtd_agulhas) * i) + ((100 / qtd_agulhas)/2);
+    // Calcular indices das agulhas
 
-        cromossomosSelecionados.insert(offset);
-    }
-    
-    std::cout << "--------------------------------\n";
-    for (auto &i : cromossomosSelecionados)
+    std::vector<unsigned> indexNidles {};
+    for (size_t i = 0; i < qtdNidles; i++)
     {
-        std::cout << i << " ";
+        int index = ((100 / qtdNidles) * i) + ((100 / qtdNidles)/2);
+        indexNidles.push_back(index);
     }
+
+    #ifdef DEBUG
+    for (auto &i : indexNidles) { std::cout << i << " "; }
     puts("");
+    #endif
 
-    std::cout << "Cromossomos selecionados: " << std::endl;
-    for (auto &i : cromossomosSelecionados)
+    // Efetuar seleção com base no indice das agulhas
+
+    std::set<float> selection {};
+    for (unsigned& i : indexNidles)
     {
-        std::cout << roleta[i] << " ";
+        selection.insert(roleta[i]);
     }
+
+    #ifdef DEBUG
+    std::cout << "Selection: " << std::endl;
+    for (auto &i : selection) { std::cout << i << " "; }
+    puts("");
+    #endif
+
+    return selection;
 
 }
 
+
 int main(int argc, char **argv) 
 {
-    selecaoestocastica();
+    selecaoestocastica(std::vector<float>{1,2,7,9}, 4, 20);
 
     return 0;
     Population population;
