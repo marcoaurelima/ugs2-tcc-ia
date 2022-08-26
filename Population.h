@@ -24,11 +24,11 @@ public:
 private:
     std::vector<Chromosome> chromosomes;
 
-    std::set<float> selectionEstocastic(std::vector<float> fitness, unsigned qtdNidles, unsigned spin);
+    std::set<float> selectionEstocastic(const std::vector<float>& fitness, const unsigned& qtdNidles, const unsigned& spin);
 
-    std::vector<float> crossoverUniform(std::vector<float> parent1, std::vector<float> parent2, unsigned taxParent1, unsigned taxParent2);
+    std::vector<float> crossoverUniform(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2);
 
-    std::vector<float> mutationInsertion(std::vector<float> chromosome);
+    std::vector<float> mutationInsertion(const std::vector<float>& chromosome);
 
 };
 

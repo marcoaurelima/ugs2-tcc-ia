@@ -86,7 +86,7 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
 // fitness: vetor com todos os fitness que estarao na roleta
 // qtdNidles: quantidade de agulhas na roleta
 // spin: giro da roleta; porcentagem do giro 1% - 99%
-std::set<float> Population::selectionEstocastic(std::vector<float> fitness, unsigned qtdNidles, unsigned spin)
+std::set<float> Population::selectionEstocastic(const std::vector<float>& fitness, const unsigned& qtdNidles, const unsigned& spin)
 {
     float fitnessSum = 0;
     for (auto &i : fitness) {  fitnessSum += i; }
@@ -142,7 +142,7 @@ std::set<float> Population::selectionEstocastic(std::vector<float> fitness, unsi
 
 // parent1 / parent2:       Cromossomos dos pais
 // taxParent1 / taxParent2: taxa em porcentagem da participação dos respectivos pais no cruzamento. 
-std::vector<float> Population::crossoverUniform(std::vector<float> parent1, std::vector<float> parent2, unsigned taxParent1, unsigned taxParent2)
+std::vector<float> Population::crossoverUniform(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2)
 {
     if(parent1.size() != parent2.size())
     {
@@ -190,7 +190,7 @@ std::vector<float> Population::crossoverUniform(std::vector<float> parent1, std:
     return child;
 }
 
-std::vector<float> Population::mutationInsertion(std::vector<float> chromosome)
+std::vector<float> Population::mutationInsertion(const std::vector<float>& chromosome)
 {
     size_t chromosomeSize = chromosome.size();
 
