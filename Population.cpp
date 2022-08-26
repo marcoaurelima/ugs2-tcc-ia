@@ -1,14 +1,8 @@
 #include "Population.h"
 
-Population::Population()
-{
+Population::Population() { }
 
-}
-
-Population::~Population()
-{
-
-}
+Population::~Population() { }
 
 float getRandomFloat()
 {
@@ -38,27 +32,6 @@ void Population::show()
     }
 }
 
-/*
-    FITNESS,
-    TOURNAMENT,
-    ROULLETE,
-    ESTOCASTIC
-};
-
-enum class CROSSOVER_TYPE 
-{
-    SINGLE_POINT,
-    MULTI_POINT,
-    UNIFORM
-};
-
-enum class MUTATION_TYPE 
-{
-    INSERTION,
-    INVERSION,
-    UNIFORM
-};
-*/
 void Population::generateNewPopulation(NewGenParams newGenParams)
 {
     /// seleção ///
