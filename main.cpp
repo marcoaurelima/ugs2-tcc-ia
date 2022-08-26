@@ -8,13 +8,26 @@
 #include "Population.h"
 #include "types.h"
 
-std::vector<char> cruzamentouniforme(std::vector<char> parent1, std::vector<char> parent2, unsigned taxParent1, unsigned taxParent2)
+
+// parent1 / parent2:       Cromossomos dos pais
+// taxParent1 / taxParent2: taxa em porcentagem da participação dos respectivos pais no cruzamento. 
+std::vector<float> crossoverUniform(std::vector<float> parent1, std::vector<float> parent2, unsigned taxParent1, unsigned taxParent2)
 {
+    if(parent1.size() != parent2.size())
+    {
+        std::cerr << "Error: parent1 and parent2 must have the same size." << std::endl;
+        return std::vector<float>();
+    }
+
+    if(taxParent1 + taxParent2 != 100)
+    {
+        std::cerr << "Error: Invalid number of taxParent1." << std::endl;
+        return std::vector<float>();
+    }
+
     size_t chromossomeSize = (parent1.size() + parent1.size()) / 2;
     unsigned parent1size = (chromossomeSize * taxParent1) / 100;
     unsigned parent2size = chromossomeSize - parent1size;
-
-    std::cout << "parent1size: " << parent1size << " parent2size: " << parent2size << std::endl;
 
     // Produzir a mascara binária;
     // Será gerado trues de acordo com a porcentagem do pai 1;
@@ -24,45 +37,35 @@ std::vector<char> cruzamentouniforme(std::vector<char> parent1, std::vector<char
     for (size_t i = 0; i < parent1size; i++) { mask.push_back(true); }
     for (size_t i = 0; i < parent2size; i++) { mask.push_back(false); }
     
-    for (size_t i = 0; i < mask.size(); i++) 
-    {
-        std::cout << mask[i];
-    }
-    puts("");
+    // Embaralhar mascara de forma aleatória
     
     std::random_device randDevice {};
     std::default_random_engine randEngine{randDevice()};
     std::shuffle(std::begin(mask), std::end(mask), randEngine);
 
-    for (size_t i = 0; i < mask.size(); i++) 
-    {
-        std::cout << mask[i];
-    }
-    puts("");
+    // Efetuar cruzamento a partir da mascara
 
-    std::vector<char> filho {};
+    std::vector<float> child {};
     for (size_t i = 0; i < mask.size(); i++)
     {
-        if(mask[i] == true)
-        {
-            filho.push_back(parent1[i]);
+        if(mask[i] == true) {
+            child.push_back(parent1[i]);
         } 
         else {  
-            filho.push_back(parent2[i]);
+            child.push_back(parent2[i]);
         }
     }
 
-    return filho;
-
+    return child;
 }
 
 
 int main(int argc, char **argv) 
 {
-    std::vector<char> pai1 {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'};
-    std::vector<char> pai2 {'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v'};
+    std::vector<float> pai1 {0,1,2,3,4,5,6,7,8,9};
+    std::vector<float> pai2 {10,11,12,13,14,15,16,17,18,19};
 
-    auto res = cruzamentouniforme(pai1, pai2, 50, 50); 
+    auto res = crossoverUniform(pai1, pai2, 50, 50); 
     
     for(auto& i : res)
     {
