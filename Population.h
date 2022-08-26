@@ -3,6 +3,8 @@
 
 #pragma once
 #include <vector>
+#include <set>
+#include <deque>
 #include "Chromosome.h"
 #include "types.h"
 
@@ -19,6 +21,8 @@ public:
 
 private:
     std::vector<Chromosome> chromosomes;
+
+    std::set<float> selectionEstocastic(std::vector<float> fitness, unsigned qtdNidles, unsigned spin);
 };
 
 #endif
