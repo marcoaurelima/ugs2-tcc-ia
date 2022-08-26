@@ -113,22 +113,12 @@ std::set<float> Population::selectionEstocastic(std::vector<float> fitness, unsi
             roleta.push_back(i);
         }  
     }
-    
-    #ifdef DEBUG
-    for (auto &i : roleta) { std::cout << i; }
-    puts("");
-    #endif
 
     /// girar a roleta
 
     for (unsigned i = 0; i < spin; i++) { roleta.push_back(roleta[i]); }
     for (unsigned i = 0; i < spin; i++) { roleta.pop_front(); }
-    
-    #ifdef DEBUG
-    for (auto &i : roleta) { std::cout << i; }
-    puts("");
-    #endif
-
+  
     // Calcular indices das agulhas
 
     std::vector<unsigned> indexNidles {};
@@ -138,11 +128,6 @@ std::set<float> Population::selectionEstocastic(std::vector<float> fitness, unsi
         indexNidles.push_back(index);
     }
 
-    #ifdef DEBUG
-    for (auto &i : indexNidles) { std::cout << i << " "; }
-    puts("");
-    #endif
-
     // Efetuar seleção com base no indice das agulhas
 
     std::set<float> selection {};
@@ -151,16 +136,9 @@ std::set<float> Population::selectionEstocastic(std::vector<float> fitness, unsi
         selection.insert(roleta[i]);
     }
 
-    #ifdef DEBUG
-    std::cout << "Selection: " << std::endl;
-    for (auto &i : selection) { std::cout << i << " "; }
-    puts("");
-    #endif
-
     return selection;
 
 }
-
 
 // parent1 / parent2:       Cromossomos dos pais
 // taxParent1 / taxParent2: taxa em porcentagem da participação dos respectivos pais no cruzamento. 
@@ -210,4 +188,50 @@ std::vector<float> Population::crossoverUniform(std::vector<float> parent1, std:
     }
 
     return child;
+}
+
+std::vector<float> Population::mutationInsertion(std::vector<float> chromosome)
+{
+    size_t chromosomeSize = chromosome.size();
+
+    srand((unsigned int)time(NULL));
+    unsigned index1 = 0, index2 = 0;
+    while (index1 == index2) 
+    {
+        index1 = (rand() % chromosomeSize*100)/100;
+        index2 = (rand() % chromosomeSize*100)/100;
+    }
+    
+    // Ordenar indices - index1 deve conter menor valor dos dois
+
+    if(index1 > index2)
+    {
+        unsigned temp = index1;
+        index1 = index2;
+        index2 = temp;
+    }
+    
+    std::vector<float> mutation {};
+
+    // Salvar valor de (index1) para variavel (auxiliar)
+    // Copiar para mutation os valores até (index2)-1, pulando o valor de (index1)
+    // Inserir valor de (auxiliar) em (index2)-1
+    // Copiar para mutation os valores restantes a partir de (index2)
+
+    float aux = chromosome[index1];
+    for (size_t i = 0; i < index2; i++)
+    {
+        if(i == index1){ continue; }
+        mutation.push_back(chromosome[i]);
+    }
+
+    mutation.push_back(aux);
+
+    for (size_t i = index2; i < chromosomeSize; i++)
+    {
+        mutation.push_back(chromosome[i]);
+    }
+
+    return mutation; 
+
 }

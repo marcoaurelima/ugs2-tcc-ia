@@ -28,6 +28,7 @@ private:
 
     std::vector<float> crossoverUniform(std::vector<float> parent1, std::vector<float> parent2, unsigned taxParent1, unsigned taxParent2);
 
+    std::vector<float> mutationInsertion(std::vector<float> chromosome);
 
 };
 
