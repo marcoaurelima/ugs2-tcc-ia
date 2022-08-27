@@ -7,6 +7,7 @@
 #include <deque>
 #include <algorithm>
 #include <random>
+#include <fstream>
 #include "Chromosome.h"
 #include "types.h"
 
@@ -32,6 +33,8 @@ private:
 
     std::vector<float> mutationInsertion(const std::vector<float>& chromosome);
 
+    Configuration configuration;
+    Configuration getconfiguration();
 };
 
 #endif

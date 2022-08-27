@@ -1,6 +1,9 @@
 #include "Population.h"
 
-Population::Population() { }
+Population::Population() 
+{ 
+    configuration = getconfiguration(); 
+}
 
 Population::~Population() { }
 
@@ -242,4 +245,70 @@ std::vector<float> Population::mutationInsertion(const std::vector<float>& chrom
 std::vector<Chromosome> Population::getCurrentPopulation()
 {
     return chromosomes;
+}
+
+
+Configuration Population::getconfiguration()
+{
+    std::ifstream file("GAConfiguration.ini");
+    Configuration configuration;
+    std::string key, value;
+
+    // selection/fitness
+    file >> key; file >> key; 
+    file >> key >> value;
+    configuration.selection.fitness = std::make_pair(key, value);
+
+    // selection/tournament
+    file >> key; 
+    file >> key >> value;
+    configuration.selection.tournament = std::make_pair(key, value);
+    
+    // selection/roullete
+    file >> key; 
+    file >> key >> value;
+    configuration.selection.roullete = std::make_pair(key, (unsigned)std::stoi(value));
+
+    // selection/estocastic
+    file >> key; 
+    file >> key >> value;
+    configuration.selection.estocastic = std::make_pair(key, (unsigned)std::stoi(value));
+    
+    // crossover/singlepoint
+    file >> key; file >> key; 
+    file >> key >> value;
+    configuration.crossover.singlepoint = std::make_pair(key, (unsigned)std::stoi(value));
+
+    // crossover/multipoint
+    file >> key; 
+    file >> key >> value;
+    std::vector<unsigned> value_vector;
+    for(auto& i : value)
+    {
+        if(i != '-') { value_vector.push_back(atoi(&i)); }
+    }
+    configuration.crossover.multipoint = std::make_pair(key, value_vector);
+    
+    // crossover/uniform
+    file >> key; 
+    file >> key >> value;
+    configuration.crossover.uniform = std::make_pair(key, value);
+
+    // mutation/insertion
+    file >> key; file >> key; 
+    file >> key >> value;
+    configuration.mutation.insertion = std::make_pair(key, value);
+
+    // mutation/inversion
+    file >> key; 
+    file >> key >> value;
+    configuration.mutation.inversion = std::make_pair(key, value);
+    
+    // mutation/uniform
+    file >> key; 
+    file >> key >> value;
+    configuration.mutation.uniform = std::make_pair(key, value);
+    
+    return configuration;
+
 }
