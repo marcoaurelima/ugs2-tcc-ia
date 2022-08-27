@@ -21,6 +21,8 @@ public:
 
     void generateNewPopulation(NewGenParams newGenParams);
 
+    std::vector<Chromosome> getCurrentPopulation();
+
 private:
     std::vector<Chromosome> chromosomes;
 

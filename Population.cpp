@@ -235,3 +235,8 @@ std::vector<float> Population::mutationInsertion(const std::vector<float>& chrom
     return mutation; 
 
 }
+
+std::vector<Chromosome> Population::getCurrentPopulation()
+{
+    return chromosomes;
+}
