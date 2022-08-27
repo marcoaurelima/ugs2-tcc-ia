@@ -140,6 +140,7 @@ std::set<float> Population::selectionEstocastic(const std::vector<float>& fitnes
 
 }
 
+
 // parent1 / parent2:       Cromossomos dos pais
 // taxParent1 / taxParent2: taxa em porcentagem da participação dos respectivos pais no cruzamento. 
 std::vector<float> Population::crossoverUniform(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2)
@@ -190,6 +191,7 @@ std::vector<float> Population::crossoverUniform(const std::vector<float>& parent
     return child;
 }
 
+
 std::vector<float> Population::mutationInsertion(const std::vector<float>& chromosome)
 {
     size_t chromosomeSize = chromosome.size();
@@ -235,6 +237,7 @@ std::vector<float> Population::mutationInsertion(const std::vector<float>& chrom
     return mutation; 
 
 }
+
 
 std::vector<Chromosome> Population::getCurrentPopulation()
 {
