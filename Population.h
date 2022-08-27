@@ -34,7 +34,7 @@ private:
     std::vector<float> mutationInsertion(const std::vector<float>& chromosome);
 
     Configuration configuration;
-    Configuration getconfiguration();
+    void loadConfiguration();
 };
 
 #endif

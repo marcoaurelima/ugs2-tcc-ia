@@ -2,7 +2,7 @@
 
 Population::Population() 
 { 
-    configuration = getconfiguration(); 
+    loadConfiguration(); 
 }
 
 Population::~Population() { }
@@ -248,7 +248,7 @@ std::vector<Chromosome> Population::getCurrentPopulation()
 }
 
 
-Configuration Population::getconfiguration()
+void Population::loadConfiguration()
 {
     std::ifstream file("GAConfiguration.ini");
     Configuration configuration;
@@ -309,6 +309,4 @@ Configuration Population::getconfiguration()
     file >> key >> value;
     configuration.mutation.uniform = std::make_pair(key, value);
     
-    return configuration;
-
 }
