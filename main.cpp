@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <array>
 #include <deque>
 #include <set>
@@ -21,7 +22,7 @@ struct Configuration
     struct Crossover{
         std::pair<std::string, unsigned> singlepoint;
         std::pair<std::string, std::vector<unsigned>> multipoint;
-        std::pair<std::string, std::vector<bool>> uniform;
+        std::pair<std::string, std::string> uniform;
     } crossover;
 
     struct Mutation{
@@ -34,21 +35,73 @@ struct Configuration
 
 void getconfiguration()
 {
-    std::cout << "Configuration: " << std::endl;
-
-    FILE *file = fopen("GAConfiguration.ini", "r");
-
-    fseek(file, 7, SEEK_SET);
-
-    char* content = NULL;
-
-    fscanf(file, "%s", content);
-
-    std::cout << content << std::endl;
-
     Configuration configuration;
 
-    configuration.selection.estocastic = std::make_pair("asd", "dnhj");
+    std::ifstream file("GAConfiguration.ini");
+
+
+    std::string key, value;
+
+    // selection/fitness
+    file >> key; file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    configuration.selection.fitness = std::make_pair(key, value);
+
+    // selection/tournament
+    file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    
+    // selection/roullete
+    file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    
+    // selection/estocastic
+    file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    
+    std::cout << "--------------------------------\n";
+
+    // crossover/singlepoint
+    file >> key; file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    configuration.selection.fitness = std::make_pair(key, value);
+
+    // crossover/multipoint
+    file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    
+    // crossover/uniform
+    file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    
+    std::cout << "--------------------------------\n";
+
+    // mutation/insertion
+    file >> key; file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    configuration.selection.fitness = std::make_pair(key, value);
+
+    // mutation/inversion
+    file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    
+    // mutation/uniform
+    file >> key; 
+    file >> key >> value;
+    std::cout << key << " " << value << std::endl;
+    
+    std::cout << "--------------------------------\n";
+
+
 
 
 }
