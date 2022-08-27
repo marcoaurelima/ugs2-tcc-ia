@@ -33,83 +33,79 @@ struct Configuration
 };
 
 
-void getconfiguration()
+Configuration getconfiguration()
 {
-    Configuration configuration;
-
     std::ifstream file("GAConfiguration.ini");
-
-
+    Configuration configuration;
     std::string key, value;
 
     // selection/fitness
     file >> key; file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
     configuration.selection.fitness = std::make_pair(key, value);
 
     // selection/tournament
     file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
+    configuration.selection.tournament = std::make_pair(key, value);
     
     // selection/roullete
     file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
-    
+    configuration.selection.roullete = std::make_pair(key, (unsigned)std::stoi(value));
+
     // selection/estocastic
     file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
+    configuration.selection.estocastic = std::make_pair(key, (unsigned)std::stoi(value));
     
-    std::cout << "--------------------------------\n";
-
     // crossover/singlepoint
     file >> key; file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
-    configuration.selection.fitness = std::make_pair(key, value);
+    configuration.crossover.singlepoint = std::make_pair(key, (unsigned)std::stoi(value));
 
     // crossover/multipoint
     file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
+    std::vector<unsigned> value_vector;
+    for(auto& i : value)
+    {
+        if(i != '-') { value_vector.push_back(atoi(&i)); }
+    }
+    configuration.crossover.multipoint = std::make_pair(key, value_vector);
     
     // crossover/uniform
     file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
-    
-    std::cout << "--------------------------------\n";
+    configuration.crossover.uniform = std::make_pair(key, value);
 
     // mutation/insertion
     file >> key; file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
-    configuration.selection.fitness = std::make_pair(key, value);
+    configuration.mutation.insertion = std::make_pair(key, value);
 
     // mutation/inversion
     file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
+    configuration.mutation.inversion = std::make_pair(key, value);
     
     // mutation/uniform
     file >> key; 
     file >> key >> value;
-    std::cout << key << " " << value << std::endl;
+    configuration.mutation.uniform = std::make_pair(key, value);
     
-    std::cout << "--------------------------------\n";
-
-
-
+    return configuration;
 
 }
 
 int main(int argc, char **argv) 
 {
 
-    getconfiguration();
+    Configuration c = getconfiguration();
+
+    std::cout << c.crossover.multipoint.second[1] << std::endl;
+
+
     return 0;
 
     Population population;
