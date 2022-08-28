@@ -13,7 +13,7 @@
 int main(int argc, char **argv) 
 {
     Population population;
-    population.createInitialPopulation(3,20);
+    population.createInitialPopulation(4,20);
     population.show();
 
     NewGenParams newGenParams;
