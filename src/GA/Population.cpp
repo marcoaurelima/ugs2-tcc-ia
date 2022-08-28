@@ -1,4 +1,4 @@
-#include "Population.h"
+#include "GA/Population.h"
 
 Population::Population() 
 { 

@@ -6,8 +6,8 @@
 #include <random>
 #include <algorithm>
 #include <initializer_list>
-#include "Population.h"
-#include "types.h"
+#include "GA/Population.h"
+#include "GA/types.h"
 
 
 int main(int argc, char **argv) 

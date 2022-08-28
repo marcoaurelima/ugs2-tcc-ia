@@ -1,4 +1,4 @@
-#include "Chromosome.h"
+#include "GA/Chromosome.h"
 
 Chromosome::Chromosome()
 {
