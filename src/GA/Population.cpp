@@ -194,6 +194,8 @@ void Population::crossoverUniform()
 {
     const unsigned taxParent1 = getConf("configurations/GA/crossover/uniform/contrib")[0];
     const unsigned taxParent2 = getConf("configurations/GA/crossover/uniform/contrib")[1];
+    std::cout << "taxParent1 " << taxParent1 << "   " << "taxParent2 " << taxParent2 << std::endl;
+    std::cout << "masks ";
 
     // verificar se o vetor de cromossomos tem mais de 1 cromossomo
     if(chromosomes.size() < 2) return;
@@ -206,6 +208,7 @@ void Population::crossoverUniform()
         unsigned index = (rand()%chromosomes.size());
         chromosomes.push_back(chromosomes[index]);
     }
+
 
     std::vector<float> children {};
 
@@ -254,10 +257,13 @@ void Population::crossoverUniform()
                 children.push_back(parent2[i]);
             }
         }
-    }
-    
-    std::cout << "taxParent1 " << taxParent1 << "   " << "taxParent2 " << taxParent2 << std::endl;
 
+        for(auto i : mask){ std::cout << i; }
+         std::cout << "   ";
+    }
+
+    std::cout << std::endl;
+    
     show();
 
 }
