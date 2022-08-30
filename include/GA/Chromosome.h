@@ -17,6 +17,7 @@ public:
 
     void setGene(float value);
     float getGene(const unsigned index);
+    std::vector<float> getAllGenes();
 
     void setRandomFitness();
 

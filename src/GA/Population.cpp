@@ -156,21 +156,46 @@ void Population::selectionEstocastic()
 }
 
 
-// parent1 / parent2:       Cromossomos dos pais
-// taxParent1 / taxParent2: taxa em porcentagem da participação dos respectivos pais no cruzamento. 
-std::vector<float> Population::crossoverUniform(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2)
+// No cruzamento, serão selecionados pares de cromossomos:
+// Por exemplo, em um vetor de 4 cromossomos, o cruzamento será de
+// (0,1) e (2,3). Em caso de impares, o ultimo cruzará com um cromossomo aleatório do votor.
+void Population::crossoverUniform()
+//(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2)
 {
-    if(parent1.size() != parent2.size())
+    const unsigned taxParent1 = configuration.crossover.uniform.second[0];
+    const unsigned taxParent2 = configuration.crossover.uniform.second[1];
+
+    // verificar se o vetor de cromossomos tem mais de 1 cromossomo
+    if(chromosomes.size() < 2) return;
+
+    // verificar se o vetor de cromossomos tem uma quantidade impar
+    if(chromosomes.size()%2==1)
     {
-        std::cerr << "Error: parent1 and parent2 must have the same size." << std::endl;
-        return std::vector<float>();
+        // se tiver, selecionar um cromossomo aleatorio e inserir no final
+        srand(time(NULL));
+        unsigned index = (rand()%chromosomes.size());
+        chromosomes.push_back(chromosomes[index]);
     }
 
-    if(taxParent1 + taxParent2 != 100)
+    std::vector<float> childs {};
+
+    for (size_t i = 0; i < chromosomes.size(); i++)
     {
-        std::cerr << "Error: Invalid number of taxParent1." << std::endl;
-        return std::vector<float>();
+        const std::vector<float>& parent1 = chromosomes[i  ].getAllGenes();
+        const std::vector<float>& parent2 = chromosomes[i+1].getAllGenes();
+
+        if(parent1.size() != parent1.size())
+        {
+            std::cerr << "Error: parent1 and parent2 must have the same size." << std::endl;
+        }
+
+        if(taxParent1 + taxParent2 != 100)
+        {
+            std::cerr << "Error: Invalid number of taxParent1." << std::endl;
+        }
     }
+    
+
 
     size_t chromossomeSize = (parent1.size() + parent2.size()) / 2;
     unsigned parent1size = (chromossomeSize * taxParent1) / 100;
@@ -304,7 +329,12 @@ void Population::loadConfiguration()
     // crossover/uniform
     file >> key; 
     file >> key >> value;
-    configuration.crossover.uniform = std::make_pair(key, value);
+    std::vector<unsigned> value_vector;
+    for(auto& i : value)
+    {
+        if(i != '-') { value_vector.push_back(atoi(&i)); }
+    }
+    configuration.crossover.uniform = std::make_pair(key, value_vector);
 
     // mutation/insertion
     file >> key; file >> key; 

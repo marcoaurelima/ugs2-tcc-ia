@@ -42,7 +42,7 @@ struct Configuration
     struct Crossover{
         std::pair<std::string, unsigned> singlepoint;
         std::pair<std::string, std::vector<unsigned>> multipoint;
-        std::pair<std::string, std::string> uniform;
+        std::pair<std::string, std::vector<unsigned>>  uniform;
     } crossover;
 
     struct Mutation{

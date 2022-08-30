@@ -47,3 +47,8 @@ void Chromosome::setRandomFitness()
 {
     fitness = rand() % 99;
 }
+
+std::vector<float> Chromosome::getAllGenes()
+{
+    return genes;
+}

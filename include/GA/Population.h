@@ -29,7 +29,7 @@ private:
 
     void selectionEstocastic();
 
-    std::vector<float> crossoverUniform(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2);
+    void crossoverUniform(); //(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2);
 
     std::vector<float> mutationInsertion(const std::vector<float>& chromosome);
 
