@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 
     NewGenParams newGenParams;
     newGenParams.selectionType = SELECTION_TYPE::ESTOCASTIC;
-    newGenParams.crossoverType = CROSSOVER_TYPE::MULTI_POINT;
+    newGenParams.crossoverType = CROSSOVER_TYPE::UNIFORM;
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 
     population.generateNewPopulation(newGenParams);

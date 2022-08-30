@@ -65,6 +65,7 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
         break;
     case CROSSOVER_TYPE::UNIFORM:
         std::cout << "crossover UNIFORM" << std::endl;
+        crossoverUniform();
         break;
     default:
         break;
@@ -162,9 +163,11 @@ void Population::selectionEstocastic()
 void Population::crossoverUniform()
 //(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2)
 {
+    std::cout << "================" << "crossoverUniform()" << "================" << std::endl;
     const unsigned taxParent1 = configuration.crossover.uniform.second[0];
     const unsigned taxParent2 = configuration.crossover.uniform.second[1];
 
+    exit(0);
     // verificar se o vetor de cromossomos tem mais de 1 cromossomo
     if(chromosomes.size() < 2) return;
 
@@ -177,7 +180,7 @@ void Population::crossoverUniform()
         chromosomes.push_back(chromosomes[index]);
     }
 
-    std::vector<float> childs {};
+    std::vector<float> children {};
 
     for (size_t i = 0; i < chromosomes.size(); i++)
     {
@@ -193,42 +196,41 @@ void Population::crossoverUniform()
         {
             std::cerr << "Error: Invalid number of taxParent1." << std::endl;
         }
-    }
-    
 
 
-    size_t chromossomeSize = (parent1.size() + parent2.size()) / 2;
-    unsigned parent1size = (chromossomeSize * taxParent1) / 100;
-    unsigned parent2size = chromossomeSize - parent1size;
+        size_t chromossomeSize = (parent1.size() + parent2.size()) / 2;
+        unsigned parent1size = (chromossomeSize * taxParent1) / 100;
+        unsigned parent2size = chromossomeSize - parent1size;
 
-    // Produzir a mascara binária;
-    // Será gerado trues de acordo com a porcentagem do pai 1;
-    // Será gerado falses com a quantidade que faltar para completar a mascara;
+        // Produzir a mascara binária;
+        // Será gerado trues de acordo com a porcentagem do pai 1;
+        // Será gerado falses com a quantidade que faltar para completar a mascara;
 
-    std::vector<bool> mask {};
-    for (size_t i = 0; i < parent1size; i++) { mask.push_back(true); }
-    for (size_t i = 0; i < parent2size; i++) { mask.push_back(false); }
-    
-    // Embaralhar mascara de forma aleatória
-    
-    std::random_device randDevice {};
-    std::default_random_engine randEngine{randDevice()};
-    std::shuffle(std::begin(mask), std::end(mask), randEngine);
+        std::vector<bool> mask {};
+        for (size_t i = 0; i < parent1size; i++) { mask.push_back(true); }
+        for (size_t i = 0; i < parent2size; i++) { mask.push_back(false); }
 
-    // Efetuar cruzamento a partir da mascara
+        // Embaralhar mascara de forma aleatória
+        
+        std::random_device randDevice {};
+        std::default_random_engine randEngine{randDevice()};
+        std::shuffle(std::begin(mask), std::end(mask), randEngine);
 
-    std::vector<float> child {};
-    for (size_t i = 0; i < mask.size(); i++)
-    {
-        if(mask[i] == true) {
-            child.push_back(parent1[i]);
-        } 
-        else {  
-            child.push_back(parent2[i]);
+        // Efetuar cruzamento a partir da mascara
+
+        for (size_t i = 0; i < mask.size(); i++)
+        {
+            if(mask[i] == true) {
+                children.push_back(parent1[i]);
+            } 
+            else {  
+                children.push_back(parent2[i]);
+            }
         }
     }
+    
+    _debug("CHILDREN ", children);
 
-    return child;
 }
 
 
@@ -319,23 +321,32 @@ void Population::loadConfiguration()
     // crossover/multipoint
     file >> key; 
     file >> key >> value;
-    std::vector<unsigned> value_vector;
+    std::vector<unsigned> value_vector1;
     for(auto& i : value)
     {
-        if(i != '-') { value_vector.push_back(atoi(&i)); }
+        if(i != '-') { value_vector1.push_back(atoi(&i)); }
     }
-    configuration.crossover.multipoint = std::make_pair(key, value_vector);
-    
+    configuration.crossover.multipoint = std::make_pair(key, value_vector1);
+    _debug("crossover/multipoint", value_vector1, " ");
     // crossover/uniform
     file >> key; 
     file >> key >> value;
-    std::vector<unsigned> value_vector;
-    for(auto& i : value)
-    {
-        if(i != '-') { value_vector.push_back(atoi(&i)); }
-    }
-    configuration.crossover.uniform = std::make_pair(key, value_vector);
 
+    if(value.size() != 5){ std::cerr << "crossover/uniform: [Erro] Parametro deve seguir o padão: 00-00\n"; exit(-1); }
+    std::vector<unsigned> value_vector2;
+
+    unsigned val1 = (static_cast<unsigned>(value[0]) - 48) * pow(10, 1) + 
+                    (static_cast<unsigned>(value[1]) - 48) * pow(10, 0);
+
+    unsigned val2 = (static_cast<unsigned>(value[3]) - 48) * pow(10, 1) + 
+                    (static_cast<unsigned>(value[4]) - 48) * pow(10, 0);
+    
+    
+    value_vector2.push_back(val1);
+    value_vector2.push_back(val2);
+
+    configuration.crossover.uniform = std::make_pair(key, value_vector2);
+    _debug("crossover/uniform", value_vector2, " "); exit(0);
     // mutation/insertion
     file >> key; file >> key; 
     file >> key >> value;
