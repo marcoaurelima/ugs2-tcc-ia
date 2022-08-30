@@ -13,15 +13,15 @@
 int main(int argc, char **argv) 
 {
     Population population;
-    population.createInitialPopulation(4,20);
+    population.createInitialPopulation(6,20);
     population.show();
 
     NewGenParams newGenParams;
-    newGenParams.selectionType = SELECTION_TYPE::FITNESS;
+    newGenParams.selectionType = SELECTION_TYPE::ESTOCASTIC;
     newGenParams.crossoverType = CROSSOVER_TYPE::MULTI_POINT;
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 
     population.generateNewPopulation(newGenParams);
-
+population.show();
     return 0;
 }

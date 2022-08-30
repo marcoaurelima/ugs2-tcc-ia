@@ -52,4 +52,15 @@ struct Configuration
     } mutation;
 };
 
+template <typename T>
+void _debug(std::string title, T container, std::string separator = "")
+{
+    std::cout << title << "------------ " << title << " ------------" << std::endl;
+    for(auto& i : container)
+    {
+        std::cout << i << separator;
+    }
+    std::cout << "\n-------------------------------------------\n" << std::endl;
+}
+
 #endif

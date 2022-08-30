@@ -48,6 +48,7 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
         break;
     case SELECTION_TYPE::ESTOCASTIC:
         std::cout << "Seleção ESTOCASTIC" << std::endl;
+        selectionEstocastic();
         break;
     default:
         break;
@@ -86,13 +87,18 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
     }
 }
 
+
 // fitness: vetor com todos os fitness que estarao na roleta
 // qtdNidles: quantidade de agulhas na roleta
 // spin: giro da roleta; porcentagem do giro 1% - 99%
-std::set<float> Population::selectionEstocastic(const std::vector<float>& fitness, const unsigned& qtdNidles, const unsigned& spin)
+void Population::selectionEstocastic()
 {
+    const unsigned qtdNidles = configuration.selection.estocastic.second;
+    srand(time(NULL));
+    const unsigned spin = (rand() % 99);
+
     float fitnessSum = 0;
-    for (auto &i : fitness) {  fitnessSum += i; }
+    for (Chromosome &c : chromosomes) {  fitnessSum += c.getFitness(); }
     
     // Produzir um vetor de aprox. de 100 posições (valores float as vezes somam 99% no total),
     // onde terão vários blocos de valores repetidos representando as fatias da roleta.
@@ -100,46 +106,52 @@ std::set<float> Population::selectionEstocastic(const std::vector<float>& fitnes
     // No caso acima, o fitness na posição 2 tem uma fatia maior, enquanto o 0 tem a menor.
 
     std::vector<unsigned> percents;
-    for (unsigned i = 0; i < fitness.size(); i++)
+    for (unsigned i = 0; i < chromosomes.size(); i++)
     {
-        unsigned value = (fitness[i] / fitnessSum) * 100;
+        unsigned value = (chromosomes[i].getFitness() / fitnessSum) * 100;
         percents.push_back(value);
     }
     
     // Preencher a roleta com blocos de valores
 
-    std::deque<float> roleta {};
+    std::deque<unsigned> roulette {};
     for(unsigned int i = 0; i < percents.size(); i++)
     {
         for (unsigned j = 0; j < percents[i]; j++)
         {
-            roleta.push_back(i);
+            roulette.push_back(i);
         }  
     }
 
     /// girar a roleta
 
-    for (unsigned i = 0; i < spin; i++) { roleta.push_back(roleta[i]); }
-    for (unsigned i = 0; i < spin; i++) { roleta.pop_front(); }
+    for (unsigned i = 0; i < spin; i++) { roulette.push_back(roulette[i]); }
+    for (unsigned i = 0; i < spin; i++) { roulette.pop_front(); }
   
-    // Calcular indices das agulhas
+    // Calcular indices das agulhas em relação a roleta
 
     std::vector<unsigned> indexNidles {};
     for (size_t i = 0; i < qtdNidles; i++)
     {
-        int index = ((100 / qtdNidles) * i) + ((100 / qtdNidles)/2);
+        unsigned index = ((100 / qtdNidles) * i) + ((100 / qtdNidles)/2);
         indexNidles.push_back(index);
     }
 
-    // Efetuar seleção com base no indice das agulhas
+    // Efetuar seleção dos indices dos cromossomos que as agulhas apontam
 
-    std::set<float> selection {};
+    std::set<unsigned> selectionIndexes {};
     for (unsigned& i : indexNidles)
     {
-        selection.insert(roleta[i]);
+        selectionIndexes.insert(roulette[i]);
     }
 
-    return selection;
+    std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    chromosomes.clear();
+
+    for (const unsigned& i : selectionIndexes)
+    {
+        chromosomes.push_back(chromosomesTEMP[i]);
+    }
 
 }
 

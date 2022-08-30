@@ -27,7 +27,7 @@ public:
 private:
     std::vector<Chromosome> chromosomes;
 
-    std::set<float> selectionEstocastic(const std::vector<float>& fitness, const unsigned& qtdNidles, const unsigned& spin);
+    void selectionEstocastic();
 
     std::vector<float> crossoverUniform(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2);
 
