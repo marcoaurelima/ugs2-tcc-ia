@@ -9,7 +9,11 @@ Population::~Population() { }
 
 float getRandomFloat()
 {
-    return static_cast<float>((rand()%10000)) / 1000;
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<float> dist(0.0, 10.0);
+
+    return dist(mt);
 }
 
 void Population::createInitialPopulation(const unsigned POPULATION_SIZE, const unsigned CHROMOSSOME_SIZE)
@@ -116,8 +120,11 @@ void Population::selectionEstocastic()
     
     const unsigned qtdNidles = getConf("configurations/GA/selection/estocastic/qtdneedles")[0];
 
-    srand(time(NULL));
-    const unsigned spin = (rand() % 99);
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<int> dist(1, 99);
+
+    const unsigned spin = dist(mt);
 
     float fitnessSum = 0;
     for (Chromosome &c : chromosomes) {  fitnessSum += c.getFitness(); }
@@ -178,7 +185,8 @@ void Population::selectionEstocastic()
     std::cout << "qtdNidles " << qtdNidles << "   ";
     std::cout << "indexNidles ";
     for(auto& i : indexNidles){ std::cout << i << " "; }
-    std::cout  << "   ";
+    std::cout  << "  ";
+    std::cout << "spin " << spin << std::endl;
     std::cout << "selectionIndexes ";
     for(auto& i : selectionIndexes){ std::cout << i << " "; }
     std::cout  << "   \n";
@@ -204,9 +212,13 @@ void Population::crossoverUniform()
     // verificar se o vetor de cromossomos tem uma quantidade impar
     if(chromosomes.size()%2==1)
     {
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_int_distribution<int> dist(0, chromosomes.size()-1);
+
         // se tiver, selecionar um cromossomo aleatorio e inserir no final
-        srand(time(NULL));
-        unsigned index = (rand()%chromosomes.size());
+
+        unsigned index = dist(mt);
         chromosomes.push_back(chromosomes[index]);
     }
 
@@ -285,28 +297,25 @@ void Population::mutationInsertion()
     {
         // Calcular probabilidade (porcentagens inteiras ex.: 1%)
         std::vector<bool> range(100);
-        srand(time(NULL));
+        
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_int_distribution<unsigned> dist(0, 100);
+        
+    
+        for(unsigned i = 0; i < probability; i++) range[dist(mt)] = true;
 
-        for(unsigned i = 0; i < probability; i++) range[rand()%100] = true;
-
-        bool makeMutation = range[rand()%100];
-
+        bool makeMutation = range[dist(mt)];
         if(!makeMutation){ std::cout << "Não haverá mutação neste inddivíduo.\n"; continue; }
-
-
 
         unsigned chromosomeSize = c.getSize();
 
-        std::random_device rd;
-        std::mt19937 mt(rd());
-        std::uniform_int_distribution<unsigned> dist(0,chromosomeSize-1);
-
-        srand(time(NULL));
+        std::uniform_int_distribution<unsigned> dist2(0,chromosomeSize-1);
         unsigned index1 = 0, index2 = 0;
         while (index1 == index2) 
         {
-            index1 = dist(mt);
-            index2 = dist(mt);
+            index1 = dist2(mt);
+            index2 = dist2(mt);
         }
         
         // Ordenar indices - index1 deve conter menor valor dos dois
@@ -347,49 +356,7 @@ void Population::mutationInsertion()
     std::cout << std::endl;
     
     show();
-/*
-    size_t chromosomeSize = chromosome.size();
 
-    srand((unsigned int)time(NULL));
-    unsigned index1 = 0, index2 = 0;
-    while (index1 == index2) 
-    {
-        index1 = (rand() % chromosomeSize*100)/100;
-        index2 = (rand() % chromosomeSize*100)/100;
-    }
-    
-    // Ordenar indices - index1 deve conter menor valor dos dois
-
-    if(index1 > index2)
-    {
-        unsigned temp = index1;
-        index1 = index2;
-        index2 = temp;
-    }
-    
-    std::vector<float> mutation {};
-
-    // Salvar valor de (index1) para variavel (auxiliar)
-    // Copiar para mutation os valores até (index2)-1, pulando o valor de (index1)
-    // Inserir valor de (auxiliar) em (index2)-1
-    // Copiar para mutation os valores restantes a partir de (index2)
-
-    float aux = chromosome[index1];
-    for (size_t i = 0; i < index2; i++)
-    {
-        if(i == index1){ continue; }
-        mutation.push_back(chromosome[i]);
-    }
-
-    mutation.push_back(aux);
-
-    for (size_t i = index2; i < chromosomeSize; i++)
-    {
-        mutation.push_back(chromosome[i]);
-    }
-
-    return mutation; 
-*/
 }
 
 
