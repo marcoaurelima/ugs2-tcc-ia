@@ -2,7 +2,7 @@
 
 Population::Population()
 { 
-    loadConfiguration(); 
+    //loadConfiguration(); 
 }
 
 Population::~Population() { }
@@ -29,9 +29,9 @@ void Population::createInitialPopulation(const unsigned POPULATION_SIZE, const u
 
 void Population::show()
 {
-    std::cout << "+++++++++++++++ Population: +++++++++++++++++ " << std::endl;
+    std::cout << "------------------------------- Population: ------------------------------- " << std::endl;
     for(auto& c : chromosomes) { c.show(); }
-    std::cout << "+++++++++++++++++++++++++++++++++++++++++++++\n" << std::endl;
+    std::cout << "---------------------------------------------------------------------------\n" << std::endl;
 }
 
 void Population::generateNewPopulation(NewGenParams newGenParams)
@@ -91,14 +91,30 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
 }
 
 
+
+std::vector<unsigned> getConf(const std::string& path)
+{
+    std::ifstream stream(path);
+    if(!stream.is_open()){ std::cout << "ERROR in Loading configuration" << std::endl; }
+    std::vector<unsigned> values;
+    std::string v;
+    while(stream >> v)
+    {
+        values.push_back(std::stoi(v));
+    }
+
+    return values;
+}
+
+
 // fitness: vetor com todos os fitness que estarao na roleta
 // qtdNidles: quantidade de agulhas na roleta
 // spin: giro da roleta; porcentagem do giro 1% - 99%
 void Population::selectionEstocastic()
-{
+{   
     
-    const unsigned qtdNidles = configuration.selection.estocastic.second;
-    std::cout << "qtdNidles: " << configuration.selection.estocastic.second << std::endl;
+    const unsigned qtdNidles = getConf("configurations/GA/selection/estocastic/qtdneedles")[0];
+
     srand(time(NULL));
     const unsigned spin = (rand() % 99);
 
@@ -151,19 +167,24 @@ void Population::selectionEstocastic()
     }
 
     std::vector<Chromosome> chromosomesTEMP = chromosomes;
-    std::cout << "qtdNidles " << qtdNidles << "\n";
-    std::cout << "indexNidles size " << indexNidles.size() << "\n";
-    std::cout << "Chromosome size " << chromosomesTEMP.size() << "\n";
-    std::cout << "selectionIndexes " << selectionIndexes.size() << "\n";
     chromosomes.clear();
 
     for (const unsigned& i : selectionIndexes)
     {
         chromosomes.push_back(chromosomesTEMP[i]);
     }
+    
+    std::cout << "qtdNidles " << qtdNidles << "   ";
+    std::cout << "indexNidles ";
+    for(auto& i : indexNidles){ std::cout << i << " "; }
+    std::cout  << "   ";
+    std::cout << "selectionIndexes ";
+    for(auto& i : selectionIndexes){ std::cout << i << " "; }
+    std::cout  << "   \n";
     show();
 
 }
+
 
 
 // No cruzamento, serão selecionados pares de cromossomos:
@@ -172,13 +193,15 @@ void Population::selectionEstocastic()
 void Population::crossoverUniform()
 //(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2)
 {
+
+
     std::cout << "================" << "crossoverUniform()" << "================" << std::endl;
     const unsigned taxParent1 = 50; //configuration.crossover.uniform.second[0];
     const unsigned taxParent2 = 50; //configuration.crossover.uniform.second[1];
 
     std::cout << "taxes: " << configuration.crossover.uniform.second[0] << " " << configuration.crossover.uniform.second[1] << std::endl;
 
-    exit(0);
+    //exit(0);
     // verificar se o vetor de cromossomos tem mais de 1 cromossomo
     if(chromosomes.size() < 2) return;
 
@@ -301,6 +324,7 @@ std::vector<Chromosome> Population::getCurrentPopulation()
 void Population::loadConfiguration()
 {
     std::ifstream file("GAConfiguration.ini");
+    //if(file.is_open()){ std::cout << "Loading configuration OK..." << std::endl; exit(0); }
     Configuration configuration;
     std::string key, value;
 

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Chromosome.h"
+#include "GA/Chromosome.h"
 
 class NeuralNetwork
 {
