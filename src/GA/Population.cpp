@@ -67,7 +67,7 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
         break;
     case CROSSOVER_TYPE::UNIFORM:
         std::cout << "crossover UNIFORM" << std::endl;
-        //crossoverUniform();
+        crossoverUniform();
         break;
     default:
         break;
@@ -191,17 +191,10 @@ void Population::selectionEstocastic()
 // Por exemplo, em um vetor de 4 cromossomos, o cruzamento será de
 // (0,1) e (2,3). Em caso de impares, o ultimo cruzará com um cromossomo aleatório do votor.
 void Population::crossoverUniform()
-//(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2)
 {
+    const unsigned taxParent1 = getConf("configurations/GA/crossover/uniform/contrib")[0];
+    const unsigned taxParent2 = getConf("configurations/GA/crossover/uniform/contrib")[1];
 
-
-    std::cout << "================" << "crossoverUniform()" << "================" << std::endl;
-    const unsigned taxParent1 = 50; //configuration.crossover.uniform.second[0];
-    const unsigned taxParent2 = 50; //configuration.crossover.uniform.second[1];
-
-    std::cout << "taxes: " << configuration.crossover.uniform.second[0] << " " << configuration.crossover.uniform.second[1] << std::endl;
-
-    //exit(0);
     // verificar se o vetor de cromossomos tem mais de 1 cromossomo
     if(chromosomes.size() < 2) return;
 
@@ -263,7 +256,9 @@ void Population::crossoverUniform()
         }
     }
     
-    //showvalues("CHILDREN ", children);
+    std::cout << "taxParent1 " << taxParent1 << "   " << "taxParent2 " << taxParent2 << std::endl;
+
+    show();
 
 }
 
