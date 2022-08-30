@@ -13,6 +13,14 @@ Chromosome::Chromosome(const std::initializer_list<float> valuesList)
     }
 }
 
+Chromosome::Chromosome(const std::vector<float> valuesList)
+{
+    for (auto &i : valuesList)
+    {
+        genes.push_back(i);
+    }
+}
+
 void Chromosome::show()
 {
     std::cout << "Size: " << genes.size() << std::endl;
@@ -51,4 +59,10 @@ void Chromosome::setRandomFitness()
 std::vector<float> Chromosome::getAllGenes()
 {
     return genes;
+}
+
+void Chromosome::setAllGenes(std::vector<float> genes)
+{
+    this->genes.clear();
+    this->genes = genes;
 }

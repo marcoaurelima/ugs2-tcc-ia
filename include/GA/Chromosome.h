@@ -11,6 +11,7 @@ class Chromosome
 public:
     Chromosome();
     Chromosome(const std::initializer_list<float> valuesList);
+    Chromosome(const std::vector<float> valuesList);
     void setFitness(float fitness);
     float getFitness();
     void show();
@@ -18,6 +19,7 @@ public:
     void setGene(float value);
     float getGene(const unsigned index);
     std::vector<float> getAllGenes();
+    void setAllGenes(std::vector<float> genes);
 
     void setRandomFitness();
 

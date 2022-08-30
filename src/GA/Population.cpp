@@ -209,15 +209,18 @@ void Population::crossoverUniform()
         chromosomes.push_back(chromosomes[index]);
     }
 
+    std::vector<Chromosome> chromosomeTEMP = chromosomes;
+    chromosomes.clear();
 
-    std::vector<float> children {};
 
-    for (size_t i = 0; i < chromosomes.size(); i++)
+    for (size_t i = 0; i < chromosomeTEMP.size(); i+=2)
     {
-        const std::vector<float>& parent1 = chromosomes[i  ].getAllGenes();
-        const std::vector<float>& parent2 = chromosomes[i+1].getAllGenes();
+        
+        Chromosome parent1 = chromosomeTEMP[i  ];
+        Chromosome parent2 = chromosomeTEMP[i+1];
+        Chromosome child {};
 
-        if(parent1.size() != parent1.size())
+        if(parent1.getAllGenes().size() != parent1.getAllGenes().size())
         {
             std::cerr << "Error: parent1 and parent2 must have the same size." << std::endl;
         }
@@ -227,8 +230,7 @@ void Population::crossoverUniform()
             std::cerr << "Error: Invalid number of taxParent1." << std::endl;
         }
 
-
-        size_t chromossomeSize = (parent1.size() + parent2.size()) / 2;
+        size_t chromossomeSize = (parent1.getAllGenes().size() + parent2.getAllGenes().size()) / 2;
         unsigned parent1size = (chromossomeSize * taxParent1) / 100;
         unsigned parent2size = chromossomeSize - parent1size;
 
@@ -250,22 +252,23 @@ void Population::crossoverUniform()
 
         for (size_t i = 0; i < mask.size(); i++)
         {
-            if(mask[i] == true) {
-                children.push_back(parent1[i]);
+            if(mask[i] == false) {
+                child.setGene(parent1.getGene(i));
             } 
             else {  
-                children.push_back(parent2[i]);
+                child.setGene(parent2.getGene(i));
             }
         }
 
-        for(auto i : mask){ std::cout << i; }
-         std::cout << "   ";
+        chromosomes.push_back(child);
+
+        for(auto i : mask){ std::cout << i; } std::cout << "   ";
     }
 
     std::cout << std::endl;
     
     show();
-
+ 
 }
 
 
@@ -322,82 +325,3 @@ std::vector<Chromosome> Population::getCurrentPopulation()
 }
 
 
-void Population::loadConfiguration()
-{
-    std::ifstream file("GAConfiguration.ini");
-    //if(file.is_open()){ std::cout << "Loading configuration OK..." << std::endl; exit(0); }
-    Configuration configuration;
-    std::string key, value;
-
-
-    // selection/fitness
-    file >> key; file >> key; 
-    file >> key >> value;
-    configuration.selection.fitness = std::make_pair(key, value);
-
-
-    // selection/tournament
-    file >> key; 
-    file >> key >> value;
-    configuration.selection.tournament = std::make_pair(key, value);
-    
-    // selection/roullete
-    file >> key; 
-    file >> key >> value;
-    configuration.selection.roullete = std::make_pair(key, (unsigned)std::stoi(value));
-
-
-    // selection/estocastic
-    file >> key; 
-    file >> key >> value;
-    configuration.selection.estocastic = std::make_pair(key, (unsigned)std::stoi(value));
-    //std::cout << "@@Selection: " << configuration.selection.estocastic.second << std::endl;
-
-    // crossover/singlepoint
-    file >> key; file >> key; 
-    file >> key >> value;
-    configuration.crossover.singlepoint = std::make_pair(key, (unsigned)std::stoi(value));
-
-
-    // crossover/multipoint
-    file >> key; 
-    file >> key >> value;
-    std::vector<unsigned> value_vector1;
-    for(auto& i : value)
-    {
-        if(i != '-') { value_vector1.push_back(atoi(&i)); }
-    }
-    configuration.crossover.multipoint = std::make_pair(key, value_vector1);
- 
-    // crossover/uniform
-    file >> key; 
-    file >> key >> value;
-    if(value.size() != 5){ std::cerr << "crossover/uniform: [Erro] Parametro deve seguir o padão: 00-00\n"; exit(-1); }
-    std::vector<unsigned> value_vector2;
-    unsigned val1 = (static_cast<unsigned>(value[0]) - 48) * pow(10, 1) + 
-                    (static_cast<unsigned>(value[1]) - 48) * pow(10, 0);
-    unsigned val2 = (static_cast<unsigned>(value[3]) - 48) * pow(10, 1) + 
-                    (static_cast<unsigned>(value[4]) - 48) * pow(10, 0);
-    value_vector2.push_back(val1);
-    value_vector2.push_back(val2);
-    configuration.crossover.uniform = std::make_pair(key, value_vector2);
-
-
-    // mutation/insertion
-    file >> key; file >> key; 
-    file >> key >> value;
-    configuration.mutation.insertion = std::make_pair(key, value);
-
-
-    // mutation/inversion
-    file >> key; 
-    file >> key >> value;
-    configuration.mutation.inversion = std::make_pair(key, value);
-    
-
-    // mutation/uniform
-    file >> key; 
-    file >> key >> value;
-    configuration.mutation.uniform = std::make_pair(key, value);
-    
-}

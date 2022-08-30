@@ -33,8 +33,6 @@ private:
 
     std::vector<float> mutationInsertion(const std::vector<float>& chromosome);
 
-    Configuration configuration;
-    void loadConfiguration();
 };
 
 #endif
