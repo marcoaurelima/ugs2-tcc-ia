@@ -22,6 +22,7 @@ int main(int argc, char **argv)
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 
     population.generateNewPopulation(newGenParams);
-population.show();
+    population.show();
+    
     return 0;
 }

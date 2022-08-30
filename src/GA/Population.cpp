@@ -1,6 +1,6 @@
 #include "GA/Population.h"
 
-Population::Population() 
+Population::Population()
 { 
     loadConfiguration(); 
 }
@@ -29,7 +29,9 @@ void Population::createInitialPopulation(const unsigned POPULATION_SIZE, const u
 
 void Population::show()
 {
+    std::cout << "+++++++++++++++ Population: +++++++++++++++++ " << std::endl;
     for(auto& c : chromosomes) { c.show(); }
+    std::cout << "+++++++++++++++++++++++++++++++++++++++++++++\n" << std::endl;
 }
 
 void Population::generateNewPopulation(NewGenParams newGenParams)
@@ -65,7 +67,7 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
         break;
     case CROSSOVER_TYPE::UNIFORM:
         std::cout << "crossover UNIFORM" << std::endl;
-        crossoverUniform();
+        //crossoverUniform();
         break;
     default:
         break;
@@ -94,7 +96,9 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
 // spin: giro da roleta; porcentagem do giro 1% - 99%
 void Population::selectionEstocastic()
 {
+    
     const unsigned qtdNidles = configuration.selection.estocastic.second;
+    std::cout << "qtdNidles: " << configuration.selection.estocastic.second << std::endl;
     srand(time(NULL));
     const unsigned spin = (rand() % 99);
 
@@ -147,12 +151,17 @@ void Population::selectionEstocastic()
     }
 
     std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    std::cout << "qtdNidles " << qtdNidles << "\n";
+    std::cout << "indexNidles size " << indexNidles.size() << "\n";
+    std::cout << "Chromosome size " << chromosomesTEMP.size() << "\n";
+    std::cout << "selectionIndexes " << selectionIndexes.size() << "\n";
     chromosomes.clear();
 
     for (const unsigned& i : selectionIndexes)
     {
         chromosomes.push_back(chromosomesTEMP[i]);
     }
+    show();
 
 }
 
@@ -164,8 +173,10 @@ void Population::crossoverUniform()
 //(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2)
 {
     std::cout << "================" << "crossoverUniform()" << "================" << std::endl;
-    const unsigned taxParent1 = configuration.crossover.uniform.second[0];
-    const unsigned taxParent2 = configuration.crossover.uniform.second[1];
+    const unsigned taxParent1 = 50; //configuration.crossover.uniform.second[0];
+    const unsigned taxParent2 = 50; //configuration.crossover.uniform.second[1];
+
+    std::cout << "taxes: " << configuration.crossover.uniform.second[0] << " " << configuration.crossover.uniform.second[1] << std::endl;
 
     exit(0);
     // verificar se o vetor de cromossomos tem mais de 1 cromossomo
@@ -229,7 +240,7 @@ void Population::crossoverUniform()
         }
     }
     
-    _debug("CHILDREN ", children);
+    //showvalues("CHILDREN ", children);
 
 }
 
@@ -293,10 +304,12 @@ void Population::loadConfiguration()
     Configuration configuration;
     std::string key, value;
 
+
     // selection/fitness
     file >> key; file >> key; 
     file >> key >> value;
     configuration.selection.fitness = std::make_pair(key, value);
+
 
     // selection/tournament
     file >> key; 
@@ -308,15 +321,18 @@ void Population::loadConfiguration()
     file >> key >> value;
     configuration.selection.roullete = std::make_pair(key, (unsigned)std::stoi(value));
 
+
     // selection/estocastic
     file >> key; 
     file >> key >> value;
     configuration.selection.estocastic = std::make_pair(key, (unsigned)std::stoi(value));
-    
+    //std::cout << "@@Selection: " << configuration.selection.estocastic.second << std::endl;
+
     // crossover/singlepoint
     file >> key; file >> key; 
     file >> key >> value;
     configuration.crossover.singlepoint = std::make_pair(key, (unsigned)std::stoi(value));
+
 
     // crossover/multipoint
     file >> key; 
@@ -327,36 +343,33 @@ void Population::loadConfiguration()
         if(i != '-') { value_vector1.push_back(atoi(&i)); }
     }
     configuration.crossover.multipoint = std::make_pair(key, value_vector1);
-    _debug("crossover/multipoint", value_vector1, " ");
+ 
     // crossover/uniform
     file >> key; 
     file >> key >> value;
-
     if(value.size() != 5){ std::cerr << "crossover/uniform: [Erro] Parametro deve seguir o padão: 00-00\n"; exit(-1); }
     std::vector<unsigned> value_vector2;
-
     unsigned val1 = (static_cast<unsigned>(value[0]) - 48) * pow(10, 1) + 
                     (static_cast<unsigned>(value[1]) - 48) * pow(10, 0);
-
     unsigned val2 = (static_cast<unsigned>(value[3]) - 48) * pow(10, 1) + 
                     (static_cast<unsigned>(value[4]) - 48) * pow(10, 0);
-    
-    
     value_vector2.push_back(val1);
     value_vector2.push_back(val2);
-
     configuration.crossover.uniform = std::make_pair(key, value_vector2);
-    _debug("crossover/uniform", value_vector2, " "); exit(0);
+
+
     // mutation/insertion
     file >> key; file >> key; 
     file >> key >> value;
     configuration.mutation.insertion = std::make_pair(key, value);
+
 
     // mutation/inversion
     file >> key; 
     file >> key >> value;
     configuration.mutation.inversion = std::make_pair(key, value);
     
+
     // mutation/uniform
     file >> key; 
     file >> key >> value;

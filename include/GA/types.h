@@ -53,7 +53,7 @@ struct Configuration
 };
 
 template <typename T>
-void _debug(std::string title, T container, std::string separator = "")
+void showvalues(std::string title, T container, std::string separator = "")
 {
     std::cout << title << "------------ " << title << " ------------" << std::endl;
     for(auto& i : container)
