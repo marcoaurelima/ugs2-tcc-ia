@@ -1,9 +1,6 @@
 #include "GA/Population.h"
 
-Population::Population()
-{ 
-    //loadConfiguration(); 
-}
+Population::Population() { }
 
 Population::~Population() { }
 
@@ -15,6 +12,7 @@ float getRandomFloat()
 
     return dist(mt);
 }
+
 
 void Population::createInitialPopulation(const unsigned POPULATION_SIZE, const unsigned CHROMOSSOME_SIZE)
 {
@@ -31,12 +29,14 @@ void Population::createInitialPopulation(const unsigned POPULATION_SIZE, const u
     }   
 }
 
+
 void Population::show()
 {
     std::cout << "------------------------------- Population: ------------------------------- " << std::endl;
     for(auto& c : chromosomes) { c.show(); }
-    std::cout << "---------------------------------------------------------------------------\n" << std::endl;
+    std::cout << "---------------------------------------------------------------------------\n\n" << std::endl;
 }
+
 
 void Population::generateNewPopulation(NewGenParams newGenParams)
 {
@@ -44,16 +44,16 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
     switch (newGenParams.selectionType)
     {
     case SELECTION_TYPE::FITNESS:
-        std::cout << "Seleção FITNESS" << std::endl;
+        std::cout << "ETAPA: Seleção    MÉTODO: Fitness" << std::endl;
         break;
     case SELECTION_TYPE::TOURNAMENT:
-        std::cout << "Seleção TOURNAMENT" << std::endl;
+        std::cout << "ETAPA: Seleção    MÉTODO: Tournament" << std::endl;
         break;
     case SELECTION_TYPE::ROULLETE:
         std::cout << "Seleção ROULLETE" << std::endl;
         break;
-    case SELECTION_TYPE::ESTOCASTIC:
-        std::cout << "Seleção ESTOCASTIC" << std::endl;
+    case SELECTION_TYPE::STOCHASTIC_US:
+        std::cout << "ETAPA: Seleção    MÉTODO: Stochastic Universal Sampling" << std::endl;
         selectionEstocastic();
         break;
     default:
@@ -64,31 +64,31 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
     switch (newGenParams.crossoverType)
     {
     case CROSSOVER_TYPE::SINGLE_POINT:
-        std::cout << "crossover SINGLE_POINT" << std::endl;
+        std::cout << "ETAPA: Crossover    MÉTODO: Single-Point" << std::endl;
         break;
     case CROSSOVER_TYPE::MULTI_POINT:
-        std::cout << "crossover MULTI_POINT" << std::endl;
+        std::cout << "ETAPA: Crossover    MÉTODO: Multi-Point MULTI_POINT" << std::endl;
         break;
     case CROSSOVER_TYPE::UNIFORM:
-        std::cout << "crossover UNIFORM" << std::endl;
+        std::cout << "ETAPA: Crossover    MÉTODO: Uniform" << std::endl;
         crossoverUniform();
         break;
     default:
         break;
     }
 
-    /// cruzamento ///
+    /// mutação ///
     switch (newGenParams.mutationType)
     {
     case MUTATION_TYPE::INSERTION:
-        std::cout << "mutation INSERTION" << std::endl;
+        std::cout << "ETAPA: Mutação    MÉTODO: Inserção" << std::endl;
         mutationInsertion();
         break;
     case MUTATION_TYPE::INVERSION:
-        std::cout << "mutation INSERTION" << std::endl;
+        std::cout << "ETAPA: Mutação    MÉTODO: Inverção" << std::endl;
         break;
     case MUTATION_TYPE::UNIFORM:
-        std::cout << "mutation UNIFORM" << std::endl;
+        std::cout << "ETAPA: Mutação    MÉTODO: Uniform" << std::endl;
         break;
     default:
         break;
@@ -96,11 +96,10 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
 }
 
 
-
-std::vector<unsigned> getConf(const std::string& path)
+std::vector<unsigned> Population::getConfig(const std::string& path)
 {
     std::ifstream stream(path);
-    if(!stream.is_open()){ std::cout << "ERROR in Loading configuration" << std::endl; }
+    if(!stream.is_open()){ std::cout << "ERROR: configuration \"" << path << "\" not found." << std::endl; }
     std::vector<unsigned> values;
     std::string v;
     while(stream >> v)
@@ -117,8 +116,7 @@ std::vector<unsigned> getConf(const std::string& path)
 // spin: giro da roleta; porcentagem do giro 1% - 99%
 void Population::selectionEstocastic()
 {   
-    
-    const unsigned qtdNidles = getConf("configurations/GA/selection/estocastic/qtdneedles")[0];
+    const unsigned qtdNidles = getConfig("configurations/GA/selection/estocastic/qtdneedles")[0];
 
     std::random_device rd;
     std::mt19937 mt(rd());
@@ -182,18 +180,17 @@ void Population::selectionEstocastic()
         chromosomes.push_back(chromosomesTEMP[i]);
     }
     
-    std::cout << "qtdNidles " << qtdNidles << "   ";
+    std::cout << "qtdNidles " << qtdNidles << "    ";
     std::cout << "indexNidles ";
     for(auto& i : indexNidles){ std::cout << i << " "; }
-    std::cout  << "  ";
+    std::cout  << "   ";
     std::cout << "spin " << spin << std::endl;
     std::cout << "selectionIndexes ";
     for(auto& i : selectionIndexes){ std::cout << i << " "; }
-    std::cout  << "   \n";
+    std::cout  << "    \n";
     show();
 
 }
-
 
 
 // No cruzamento, serão selecionados pares de cromossomos:
@@ -201,9 +198,9 @@ void Population::selectionEstocastic()
 // (0,1) e (2,3). Em caso de impares, o ultimo cruzará com um cromossomo aleatório do votor.
 void Population::crossoverUniform()
 {
-    const unsigned taxParent1 = getConf("configurations/GA/crossover/uniform/contrib")[0];
-    const unsigned taxParent2 = getConf("configurations/GA/crossover/uniform/contrib")[1];
-    std::cout << "taxParent1 " << taxParent1 << "   " << "taxParent2 " << taxParent2 << std::endl;
+    const unsigned taxParent1 = getConfig("configurations/GA/crossover/uniform/contrib")[0];
+    const unsigned taxParent2 = getConfig("configurations/GA/crossover/uniform/contrib")[1];
+    std::cout << "taxParent1 " << taxParent1 << "%    " << "taxParent2 " << taxParent2 << "%" << std::endl;
     std::cout << "masks ";
 
     // verificar se o vetor de cromossomos tem mais de 1 cromossomo
@@ -225,10 +222,8 @@ void Population::crossoverUniform()
     std::vector<Chromosome> chromosomeTEMP = chromosomes;
     chromosomes.clear();
 
-
     for (size_t i = 0; i < chromosomeTEMP.size(); i+=2)
     {
-        
         Chromosome parent1 = chromosomeTEMP[i  ];
         Chromosome parent2 = chromosomeTEMP[i+1];
         Chromosome child {};
@@ -275,7 +270,7 @@ void Population::crossoverUniform()
 
         chromosomes.push_back(child);
 
-        for(auto i : mask){ std::cout << i; } std::cout << "   ";
+        for(auto i : mask){ std::cout << i; } std::cout << "    ";
     }
 
     std::cout << std::endl;
@@ -284,15 +279,16 @@ void Population::crossoverUniform()
  
 }
 
+
 // Efetuar mutações na população atual
 // Cada mutação será um novo indivíduo no vetor
 // Estas mutações ocorrerão seguindo uma probabilidade aleatória
 void Population::mutationInsertion()
-//std::vector<float> Population::mutationInsertion(const std::vector<float>& chromosome)
 {
-    unsigned probability = getConf("configurations/GA/mutation/insertion/probability")[0];
+    unsigned probability = getConfig("configurations/GA/mutation/insertion/probability")[0];
     std::cout << "Ocorrency probability: " << probability << "%   \n";
 
+    unsigned count = 0;
     for(Chromosome& c : chromosomes) 
     {
         // Calcular probabilidade (porcentagens inteiras ex.: 1%)
@@ -302,11 +298,10 @@ void Population::mutationInsertion()
         std::mt19937 mt(rd());
         std::uniform_int_distribution<unsigned> dist(0, 100);
         
-    
         for(unsigned i = 0; i < probability; i++) range[dist(mt)] = true;
 
         bool makeMutation = range[dist(mt)];
-        if(!makeMutation){ std::cout << "Não haverá mutação neste inddivíduo.\n"; continue; }
+        if(!makeMutation){ std::cout << "indexes-mutation(" << count << ") No-Mutation.   "; continue; }
 
         unsigned chromosomeSize = c.getSize();
 
@@ -327,7 +322,7 @@ void Population::mutationInsertion()
             index2 = temp;
         }
         
-        std::cout << "indexes: [" << index1 << "]["<< index2 << "]   ";
+        std::cout << "indexes-mutation(" << count << "): [" << index1 << "]["<< index2 << "]   ";
         Chromosome mutation {};
 
         // Salvar valor de (index1) para variavel (auxiliar)
@@ -350,7 +345,8 @@ void Population::mutationInsertion()
         }
 
         chromosomes.push_back(mutation);
-        
+
+        count++;
     }
 
     std::cout << std::endl;

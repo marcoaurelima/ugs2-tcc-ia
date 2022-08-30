@@ -22,13 +22,11 @@ $(OBJ)/main.o: main.cpp
 $(OBJ)/Chromosome.o: $(SRC)/GA/Chromosome.cpp
 	$(CXX) -c $(SRC)/GA/Chromosome.cpp -I $(INCLUDE) -o $(OBJ)/Chromosome.o
 
-
-$(OBJ)/Neuron.o: $(SRC)/GA/Neuron.cpp
-	$(CXX) -c $(SRC)/GA/Neuron.cpp -I $(INCLUDE) -o $(OBJ)/Neuron.o
-
 $(OBJ)/Population.o: $(SRC)/GA/Population.cpp
 	$(CXX) -c $(SRC)/GA/Population.cpp -I $(INCLUDE) -o $(OBJ)/Population.o
 
+$(OBJ)/Neuron.o: $(SRC)/NN/Neuron.cpp
+	$(CXX) -c $(SRC)/NN/Neuron.cpp -I $(INCLUDE) -o $(OBJ)/Neuron.o
 
 $(OBJ)/Connection.o: $(SRC)/NN/Connection.cpp
 	$(CXX) -c $(SRC)/NN/Connection.cpp -I $(INCLUDE) -o $(OBJ)/Connection.o

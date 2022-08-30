@@ -18,20 +18,16 @@ public:
     ~Population();
 
     void createInitialPopulation(const unsigned POPULATION_SIZE, const unsigned CHROMOSSOME_SIZE);
-    void show();
-
     void generateNewPopulation(NewGenParams newGenParams);
-
     std::vector<Chromosome> getCurrentPopulation();
+    void show();
 
 private:
     std::vector<Chromosome> chromosomes;
-
+    std::vector<unsigned> getConfig(const std::string& path);
     void selectionEstocastic();
-
-    void crossoverUniform(); //(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2);
-
-    void mutationInsertion(); //(const std::vector<float>& chromosome);
+    void crossoverUniform(); 
+    void mutationInsertion(); 
 
 };
 

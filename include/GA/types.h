@@ -6,7 +6,7 @@ enum class SELECTION_TYPE
     FITNESS,
     TOURNAMENT,
     ROULLETE,
-    ESTOCASTIC
+    STOCHASTIC_US
 };
 
 enum class CROSSOVER_TYPE 

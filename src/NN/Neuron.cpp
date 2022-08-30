@@ -1,4 +1,4 @@
-#include "GA/Neuron.h"
+#include "NN/Neuron.h"
 
 Neuron::Neuron()
 {

@@ -12,18 +12,17 @@ public:
     Chromosome();
     Chromosome(const std::initializer_list<float> valuesList);
     Chromosome(const std::vector<float> valuesList);
+    
     void setFitness(float fitness);
-    float getFitness();
-    void show();
-
+    void setRandomFitness();
     void setGene(float value);
-    float getGene(const unsigned index);
-    std::vector<float> getAllGenes();
     void setAllGenes(std::vector<float> genes);
 
+    float getFitness();
+    float getGene(const unsigned index);
+    std::vector<float> getAllGenes();
     size_t getSize();
-
-    void setRandomFitness();
+    void show();
 
 private:
     float fitness {}; 
