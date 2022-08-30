@@ -66,3 +66,8 @@ void Chromosome::setAllGenes(std::vector<float> genes)
     this->genes.clear();
     this->genes = genes;
 }
+
+size_t Chromosome::getSize()
+{
+    return genes.size();
+}

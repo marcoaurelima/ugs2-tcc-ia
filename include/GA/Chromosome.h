@@ -21,6 +21,8 @@ public:
     std::vector<float> getAllGenes();
     void setAllGenes(std::vector<float> genes);
 
+    size_t getSize();
+
     void setRandomFitness();
 
 private:

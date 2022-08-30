@@ -31,7 +31,7 @@ private:
 
     void crossoverUniform(); //(const std::vector<float>& parent1, const std::vector<float>& parent2, const unsigned& taxParent1, const unsigned& taxParent2);
 
-    std::vector<float> mutationInsertion(const std::vector<float>& chromosome);
+    void mutationInsertion(); //(const std::vector<float>& chromosome);
 
 };
 

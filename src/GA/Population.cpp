@@ -78,6 +78,7 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
     {
     case MUTATION_TYPE::INSERTION:
         std::cout << "mutation INSERTION" << std::endl;
+        mutationInsertion();
         break;
     case MUTATION_TYPE::INVERSION:
         std::cout << "mutation INSERTION" << std::endl;
@@ -271,9 +272,82 @@ void Population::crossoverUniform()
  
 }
 
-
-std::vector<float> Population::mutationInsertion(const std::vector<float>& chromosome)
+// Efetuar mutações na população atual
+// Cada mutação será um novo indivíduo no vetor
+// Estas mutações ocorrerão seguindo uma probabilidade aleatória
+void Population::mutationInsertion()
+//std::vector<float> Population::mutationInsertion(const std::vector<float>& chromosome)
 {
+    unsigned probability = getConf("configurations/GA/mutation/insertion/probability")[0];
+    std::cout << "Ocorrency probability: " << probability << "%   \n";
+
+    for(Chromosome& c : chromosomes) 
+    {
+        // Calcular probabilidade (porcentagens inteiras ex.: 1%)
+        std::vector<bool> range(100);
+        srand(time(NULL));
+
+        for(unsigned i = 0; i < probability; i++) range[rand()%100] = true;
+
+        bool makeMutation = range[rand()%100];
+
+        if(!makeMutation){ std::cout << "Não haverá mutação neste inddivíduo.\n"; continue; }
+
+
+
+        unsigned chromosomeSize = c.getSize();
+
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_int_distribution<unsigned> dist(0,chromosomeSize-1);
+
+        srand(time(NULL));
+        unsigned index1 = 0, index2 = 0;
+        while (index1 == index2) 
+        {
+            index1 = dist(mt);
+            index2 = dist(mt);
+        }
+        
+        // Ordenar indices - index1 deve conter menor valor dos dois
+
+        if(index1 > index2)
+        {
+            unsigned temp = index1;
+            index1 = index2;
+            index2 = temp;
+        }
+        
+        std::cout << "indexes: [" << index1 << "]["<< index2 << "]   ";
+        Chromosome mutation {};
+
+        // Salvar valor de (index1) para variavel (auxiliar)
+        // Copiar para mutation os valores até (index2)-1, pulando o valor de (index1)
+        // Inserir valor de (auxiliar) em (index2)-1
+        // Copiar para mutation os valores restantes a partir de (index2)
+
+        float aux = c.getGene(index1);
+        for (size_t i = 0; i < index2; i++)
+        {
+            if(i == index1){ continue; }
+            mutation.setGene(c.getGene(i));
+        }
+
+        mutation.setGene(aux);
+
+        for (size_t i = index2; i < chromosomeSize; i++)
+        {
+            mutation.setGene(c.getGene(i));
+        }
+
+        chromosomes.push_back(mutation);
+        
+    }
+
+    std::cout << std::endl;
+    
+    show();
+/*
     size_t chromosomeSize = chromosome.size();
 
     srand((unsigned int)time(NULL));
@@ -315,7 +389,7 @@ std::vector<float> Population::mutationInsertion(const std::vector<float>& chrom
     }
 
     return mutation; 
-
+*/
 }
 
 
