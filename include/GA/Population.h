@@ -19,12 +19,13 @@ public:
 
     void createInitialPopulation(const unsigned POPULATION_SIZE, const unsigned CHROMOSSOME_SIZE);
     void generateNewPopulation(NewGenParams newGenParams);
-    std::vector<Chromosome> getCurrentPopulation();
-    void show();
+    std::vector<Chromosome> getCurrentPopulation() const;
+    void show() const;
 
 private:
     std::vector<Chromosome> chromosomes;
-    std::vector<unsigned> getConfig(const std::string& path);
+    std::vector<unsigned> getConfig(const std::string& path) const;
+    float getRandomFloat();
     void selectionEstocastic();
     void crossoverUniform(); 
     void mutationInsertion(); 

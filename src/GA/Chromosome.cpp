@@ -21,7 +21,7 @@ Chromosome::Chromosome(const std::vector<float> valuesList)
 }
 
 
-void Chromosome::show()
+void Chromosome::show() const
 {
     std::cout << "Size: " << genes.size() << std::endl;
     for (auto i : genes)
@@ -38,7 +38,7 @@ void Chromosome::setFitness(float fitness)
 }
 
 
-float Chromosome::getFitness()
+float Chromosome::getFitness() const
 {
     return fitness;
 }
@@ -50,7 +50,7 @@ void Chromosome::setGene(float value)
 }
  
 
-float Chromosome::getGene(const unsigned index)
+float Chromosome::getGene(const unsigned index) const
 {
     return genes[index];
 }
@@ -62,7 +62,7 @@ void Chromosome::setRandomFitness()
 }
 
 
-std::vector<float> Chromosome::getAllGenes()
+std::vector<float> Chromosome::getAllGenes() const
 {
     return genes;
 }
@@ -75,7 +75,7 @@ void Chromosome::setAllGenes(std::vector<float> genes)
 }
 
 
-size_t Chromosome::getSize()
+size_t Chromosome::getSize() const
 {
     return genes.size();
 }

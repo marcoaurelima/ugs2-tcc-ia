@@ -4,7 +4,7 @@ Population::Population() { }
 
 Population::~Population() { }
 
-float getRandomFloat()
+float Population::getRandomFloat()
 {
     std::random_device rd;
     std::mt19937 mt(rd());
@@ -30,7 +30,7 @@ void Population::createInitialPopulation(const unsigned POPULATION_SIZE, const u
 }
 
 
-void Population::show()
+void Population::show() const
 {
     std::cout << "------------------------------- Population: ------------------------------- " << std::endl;
     for(auto& c : chromosomes) { c.show(); }
@@ -96,7 +96,7 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
 }
 
 
-std::vector<unsigned> Population::getConfig(const std::string& path)
+std::vector<unsigned> Population::getConfig(const std::string& path) const
 {
     std::ifstream stream(path);
     if(!stream.is_open()){ std::cout << "ERROR: configuration \"" << path << "\" not found." << std::endl; }
@@ -356,7 +356,7 @@ void Population::mutationInsertion()
 }
 
 
-std::vector<Chromosome> Population::getCurrentPopulation()
+std::vector<Chromosome> Population::getCurrentPopulation() const
 {
     return chromosomes;
 }

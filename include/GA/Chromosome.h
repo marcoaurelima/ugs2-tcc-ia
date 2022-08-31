@@ -18,11 +18,11 @@ public:
     void setGene(float value);
     void setAllGenes(std::vector<float> genes);
 
-    float getFitness();
-    float getGene(const unsigned index);
-    std::vector<float> getAllGenes();
-    size_t getSize();
-    void show();
+    float getFitness() const;
+    float getGene(const unsigned index) const;
+    std::vector<float> getAllGenes() const;
+    size_t getSize() const;
+    void show() const;
 
 private:
     float fitness {}; 
