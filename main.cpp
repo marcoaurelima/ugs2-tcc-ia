@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 
     NewGenParams newGenParams;
     newGenParams.selectionType = SELECTION_TYPE::ROULLETE;
-    newGenParams.crossoverType = CROSSOVER_TYPE::UNIFORM;
+    newGenParams.crossoverType = CROSSOVER_TYPE::SINGLE_POINT;
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 
     population.generateNewPopulation(newGenParams);

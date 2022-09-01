@@ -31,6 +31,7 @@ private:
     void selectionRoulette();
 
     void crossoverUniform(); 
+    void crossoverSinglePoint(int indexPointDivision = -1); 
     
     void mutationInsertion(); 
 

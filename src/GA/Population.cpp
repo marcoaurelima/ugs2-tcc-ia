@@ -66,6 +66,7 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
     {
     case CROSSOVER_TYPE::SINGLE_POINT:
         std::cout << "ETAPA: Crossover    MÉTODO: Single-Point" << std::endl;
+        crossoverSinglePoint();
         break;
     case CROSSOVER_TYPE::MULTI_POINT:
         std::cout << "ETAPA: Crossover    MÉTODO: Multi-Point MULTI_POINT" << std::endl;
@@ -292,6 +293,32 @@ void Population::crossoverUniform()
  
 }
 
+void Population::crossoverSinglePoint(int indexPointDivision)
+{
+    // Se não for passado um indice válido por parametro, será gerado um válido aleatório.
+    if(indexPointDivision == -1)
+    {
+        const unsigned CHROMOSSOMES_SIZE = chromosomes[0].getAllGenes().size();  
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_int_distribution<unsigned> dist(0, CHROMOSSOMES_SIZE-1);
+        indexPointDivision = dist(mt);
+
+        // Evitar que o ponto seja o indice máximo do cromossomo.
+        // Se o o indice for esse, não haverá cruzamento pois a primeira parte da 
+        // divisão do cromossomo tem tamanho igual ao tamanho dele.
+        while(indexPointDivision > static_cast<int>(CHROMOSSOMES_SIZE-1))
+        {
+            indexPointDivision = dist(mt);
+        }
+    }
+
+    std::cout <<  "indexPointDivision " << indexPointDivision << std::endl;
+
+
+
+
+}
 
 // Efetuar mutações na população atual
 // Cada mutação será um novo indivíduo no vetor
