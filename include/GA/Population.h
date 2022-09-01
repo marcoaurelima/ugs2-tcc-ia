@@ -34,6 +34,7 @@ private:
     void crossoverSinglePoint(int indexPointDivision = -1); 
     
     void mutationInsertion(); 
+    void mutationUniform(const float MIN_VALUE = 0.0, const float MAX_VALUE = 1.0); 
 
 };
 

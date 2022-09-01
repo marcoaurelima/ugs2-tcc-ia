@@ -16,7 +16,9 @@ public:
     void setFitness(float fitness);
     void setRandomFitness();
     void setGene(float value);
+    void changeGene(unsigned index, float value);
     void setAllGenes(std::vector<float> genes);
+
 
     float getFitness() const;
     float getGene(const unsigned index) const;

@@ -91,6 +91,7 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
         break;
     case MUTATION_TYPE::UNIFORM:
         std::cout << "ETAPA: Mutação    MÉTODO: Uniform" << std::endl;
+        mutationUniform();
         break;
     default:
         break;
@@ -343,9 +344,7 @@ void Population::crossoverSinglePoint(int indexPointDivision)
     
     std::cout <<  "Population size [initial: " << chromosomesTEMP.size()  <<  "] - [final: " << chromosomes.size() << ']' << std::endl;
 
-
     show();
-
 }
 
 // Efetuar mutações na população atual
@@ -423,6 +422,58 @@ void Population::mutationInsertion()
 
 }
 
+void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
+{
+    unsigned probability = getConfig("configurations/GA/mutation/uniform/probability")[0];probability=50;
+    std::cout << "Ocorrency probability: " << probability << "%   \n";
+
+    // Calcular probabilidade (porcentagens inteiras ex.: 1%)
+    // Ficará separado de acordo com a prob. Ex.: 1111100000 -> 50%
+    std::vector<bool> range(100);
+    for(unsigned int i = 0; i < probability; ++i){ range[i] = true; }
+
+    unsigned count = 0;
+    std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    for (unsigned i = 0; i < chromosomesTEMP.size(); ++i) 
+    {
+
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_int_distribution<unsigned> dist(0, 100);
+
+        int randIndex = dist(mt);
+        bool makeMutation = !(range[randIndex]);
+        if(makeMutation)
+        { 
+            std::cout << "[" << i << "|N/M]\t"; 
+            continue;
+        } else {
+            std::cout << "[" << i << "|ok]\t"; 
+        }
+
+        // Gerar um valor válido e inserir em um indice aleatório
+   
+        std::uniform_real_distribution<float> dist3(MIN_VALUE, MAX_VALUE);
+        float valueToInsert = dist3(mt);
+        
+        std::uniform_int_distribution<unsigned> dist4(0, chromosomesTEMP.size()-1);
+        unsigned index = dist4(mt);
+
+        Chromosome mutation = chromosomes[i];
+        mutation.changeGene(index, valueToInsert);
+        chromosomes.push_back(mutation);
+
+        count++;
+    }
+
+    std::cout << "\ncount: " << count << std::endl;
+    std::cout << "chromosomesTEMP size: " << chromosomesTEMP.size() << std::endl;
+    std::cout << "chromosomesNEWSIZE: " << chromosomes.size() << std::endl;
+    std::cout << std::endl;
+    
+    show();
+    
+}
 
 std::vector<Chromosome> Population::getCurrentPopulation() const
 {

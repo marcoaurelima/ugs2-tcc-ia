@@ -79,3 +79,8 @@ size_t Chromosome::getSize() const
 {
     return genes.size();
 }
+
+void Chromosome::changeGene(unsigned index, float value)
+{
+    genes[index] = value;
+}
