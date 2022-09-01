@@ -307,7 +307,7 @@ void Population::crossoverSinglePoint(int indexPointDivision)
         // Evitar que o ponto seja o indice máximo do cromossomo.
         // Se o o indice for esse, não haverá cruzamento pois a primeira parte da 
         // divisão do cromossomo tem tamanho igual ao tamanho dele.
-        while(indexPointDivision > static_cast<int>(CHROMOSSOMES_SIZE-1))
+        while(indexPointDivision < 1)
         {
             indexPointDivision = dist(mt);
         }
@@ -315,7 +315,38 @@ void Population::crossoverSinglePoint(int indexPointDivision)
 
     std::cout <<  "indexPointDivision " << indexPointDivision << std::endl;
 
+    int cont = 0;
 
+    // Efetuar cruzamento da população 
+    for (unsigned i = 0; i < chromosomes.size(); i++)
+    {
+        for (unsigned j = i; j < chromosomes.size(); j++)
+        {
+            if(i==j){ continue; }
+
+            const Chromosome& parent1 = chromosomes[i];
+            const Chromosome& parent2 = chromosomes[j];
+
+            Chromosome child;
+
+            for (int i = 0; i < indexPointDivision; i++)
+            {
+                child.setGene(parent1.getGene(i));
+            }
+
+            for (unsigned i = indexPointDivision; i < parent2.getSize(); i++)
+            {
+                child.setGene(parent2.getGene(i));
+            }
+            std::cout << "#";
+            child.show();
+            cont++;
+        }   
+    }
+    
+    std::cout <<  "chromosomes.size(): " << chromosomes.size() << std::endl;
+    std::cout <<  "cont: " << cont << std::endl;
+    std::cout <<  "done\n" << std::endl;
 
 
 }
