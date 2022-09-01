@@ -298,10 +298,10 @@ void Population::crossoverSinglePoint(int indexPointDivision)
     // Se não for passado um indice válido por parametro, será gerado um válido aleatório.
     if(indexPointDivision == -1)
     {
-        const unsigned CHROMOSSOMES_SIZE = chromosomes[0].getAllGenes().size();  
+        const unsigned SIZE = chromosomes[0].getAllGenes().size();  
         std::random_device rd;
         std::mt19937 mt(rd());
-        std::uniform_int_distribution<unsigned> dist(0, CHROMOSSOMES_SIZE-1);
+        std::uniform_int_distribution<unsigned> dist(0, SIZE-1);
         indexPointDivision = dist(mt);
 
         // Evitar que o ponto seja o indice máximo do cromossomo.
@@ -314,18 +314,17 @@ void Population::crossoverSinglePoint(int indexPointDivision)
     }
 
     std::cout <<  "indexPointDivision " << indexPointDivision << std::endl;
-
-    int cont = 0;
-
+    
     // Efetuar cruzamento da população 
+    std::vector<Chromosome> chromosomesTEMP = chromosomes;
     for (unsigned i = 0; i < chromosomes.size(); i++)
     {
-        for (unsigned j = i; j < chromosomes.size(); j++)
+        for (unsigned j = i; j < chromosomesTEMP.size(); j++)
         {
             if(i==j){ continue; }
 
-            const Chromosome& parent1 = chromosomes[i];
-            const Chromosome& parent2 = chromosomes[j];
+            const Chromosome& parent1 = chromosomesTEMP[i];
+            const Chromosome& parent2 = chromosomesTEMP[j];
 
             Chromosome child;
 
@@ -338,16 +337,14 @@ void Population::crossoverSinglePoint(int indexPointDivision)
             {
                 child.setGene(parent2.getGene(i));
             }
-            std::cout << "#";
-            child.show();
-            cont++;
+            chromosomes.push_back(child);
         }   
     }
     
-    std::cout <<  "chromosomes.size(): " << chromosomes.size() << std::endl;
-    std::cout <<  "cont: " << cont << std::endl;
-    std::cout <<  "done\n" << std::endl;
+    std::cout <<  "Population size [initial: " << chromosomesTEMP.size()  <<  "] - [final: " << chromosomes.size() << ']' << std::endl;
 
+
+    show();
 
 }
 
