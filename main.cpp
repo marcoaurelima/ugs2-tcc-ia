@@ -13,11 +13,11 @@
 int main(int argc, char **argv) 
 {   
     Population population;
-    population.createInitialPopulation(4,10);
+    population.createInitialPopulation(8,10);
     population.show();
 
     NewGenParams newGenParams;
-    newGenParams.selectionType = SELECTION_TYPE::STOCHASTIC_US;
+    newGenParams.selectionType = SELECTION_TYPE::ROULLETE;
     newGenParams.crossoverType = CROSSOVER_TYPE::SINGLE_POINT;
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 

@@ -28,10 +28,10 @@ void Population::createInitialPopulation(const unsigned POPULATION_SIZE, const u
     }
 }
 
-
 void debugNumber(int number)
 {
-    for(int i = 0; i < 20; i++) std::cout << number << " ";
+    for (int i = 0; i < 20; i++)
+        std::cout << number << " ";
     std::cout << "\n";
 }
 
@@ -225,8 +225,121 @@ void Population::selectionEstocastic(int qtdNidles)
 // Roleta: mesmo algorítmo do estocastico, so que com apenas 1 agulha
 void Population::selectionRoulette()
 {
-    const unsigned qtdNidles = 1;
-    selectionEstocastic(qtdNidles);
+    unsigned qtdTurns = getConfig("configurations/GA/selection/roullete/qtdturns")[0];
+    std::cout << "qtdTurns: " << qtdTurns << std::endl;
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<int> dist(1, 99);
+
+    // Efetuar a quantidade de turnos definida; em cada turno guardar o indice escolhido.
+    // Estes indices serão guardados no set para evitar repetidos.
+
+    std::set<unsigned> indexesSelection;
+
+    std::cout << "Selection: ";
+    for (size_t i = 0; i < qtdTurns; i++)
+    {
+        const unsigned spin = dist(mt);
+
+        float fitnessSum = 0;
+        for (Chromosome &c : chromosomes)
+        {
+            fitnessSum += c.getFitness();
+        }
+
+        // Produzir um vetor de aprox. de 100 posições (valores float as vezes somam 99% no total),
+        // onde terão vários blocos de valores repetidos representando as fatias da roleta.
+        // cada bloco conterá o indice do cromossomo. Ex.: 001111222
+        // No caso acima, o fitness na posição 2 tem uma fatia maior, enquanto o 0 tem a menor.
+
+        std::vector<unsigned> percents;
+        for (unsigned i = 0; i < chromosomes.size(); i++)
+        {
+            unsigned value = (chromosomes[i].getFitness() / fitnessSum) * 100;
+            percents.push_back(value);
+        }
+        // Preencher a roleta com blocos de valores
+
+        std::deque<unsigned> roulette{};
+        for (unsigned int i = 0; i < percents.size(); i++)
+        {
+            for (unsigned j = 0; j < percents[i]; j++)
+            {
+                roulette.push_back(i);
+            }
+        }
+
+        /// girar a roleta
+
+        for (unsigned i = 0; i < spin; i++)
+        {
+            roulette.push_back(roulette[i]);
+        }
+        for (unsigned i = 0; i < spin; i++)
+        {
+            roulette.pop_front();
+        }
+
+        // A agulha está definida para ser estática na posição 0 da roleta
+        indexesSelection.insert(roulette[0]);
+        std::cout << "[" << roulette[0] << "] ";
+    }
+
+    std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    chromosomes.clear();
+
+    for(auto i : indexesSelection)
+    {
+        chromosomes.push_back(chromosomesTEMP[i]);
+    }
+    
+    std::cout << "\nPopulation size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
+
+
+    /*
+        // Calcular indices das agulhas em relação a roleta
+
+        std::vector<unsigned> indexNidles{};
+        for (size_t i = 0; i < static_cast<size_t>(qtdNidles); i++)
+        {
+            unsigned index = ((100 / qtdNidles) * i) + ((100 / qtdNidles) / 2);
+            indexNidles.push_back(index);
+        }
+
+        // Efetuar seleção dos indices dos cromossomos que as agulhas apontam
+
+
+        for (unsigned &i : indexNidles)
+        {
+            selectionIndexes.insert(roulette[i]);
+        }
+
+        std::vector<Chromosome> chromosomesTEMP = chromosomes;
+        chromosomes.clear();
+
+        for (const unsigned &i : selectionIndexes)
+        {
+            chromosomes.push_back(chromosomesTEMP[i]);
+        }
+
+        std::cout << "qtdNidles " << qtdNidles << "    ";
+        std::cout << "indexNidles ";
+        for (auto &i : indexNidles)
+        {
+            std::cout << i << " ";
+        }
+        std::cout << "   ";
+        std::cout << "spin " << spin << std::endl;
+        std::cout << "selectionIndexes ";
+        for (auto &i : selectionIndexes)
+        {
+            std::cout << i << " ";
+        }
+        */
+
+    std::cout << "    \n";
+    show();
 }
 
 // No cruzamento, serão selecionados pares de cromossomos:
@@ -397,7 +510,7 @@ void Population::mutationInsertion()
     {
         range[i] = true;
     }
-  
+
     unsigned count = 0;
     std::vector<Chromosome> chromosomesTEMP = chromosomes;
     for (unsigned i = 0; i < chromosomesTEMP.size(); ++i)
@@ -430,7 +543,7 @@ void Population::mutationInsertion()
             index1 = dist2(mt);
             index2 = dist2(mt);
         }
-  
+
         // Ordenar indices - index1 deve conter menor valor dos dois
 
         if (index1 > index2)
@@ -439,7 +552,7 @@ void Population::mutationInsertion()
             index1 = index2;
             index2 = temp;
         }
- 
+
         Chromosome mutation{};
 
         // Salvar valor de (index1) para variavel (auxiliar)
@@ -469,7 +582,7 @@ void Population::mutationInsertion()
 
         count++;
     }
- 
+
     std::cout << "\nPopulation size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
 
     show();
