@@ -52,17 +52,17 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
     switch (newGenParams.selectionType)
     {
     case SELECTION_TYPE::FITNESS:
-        std::cout << "ETAPA: Seleção    MÉTODO: Fitness" << std::endl;
+        std::cout << "ETAPA: Selection    MÉTODO: Fitness" << std::endl;
         break;
     case SELECTION_TYPE::TOURNAMENT:
-        std::cout << "ETAPA: Seleção    MÉTODO: Tournament" << std::endl;
+        std::cout << "ETAPA: Selection    MÉTODO: Tournament" << std::endl;
         break;
     case SELECTION_TYPE::ROULLETE:
-        std::cout << "ETAPA: Seleção    MÉTODO: Roullete" << std::endl;
+        std::cout << "ETAPA: Selection    MÉTODO: Roullete" << std::endl;
         selectionRoulette();
         break;
     case SELECTION_TYPE::STOCHASTIC_US:
-        std::cout << "ETAPA: Seleção    MÉTODO: Stochastic Universal Sampling" << std::endl;
+        std::cout << "ETAPA: Selection    MÉTODO: Stochastic Universal Sampling" << std::endl;
         selectionEstocastic();
         break;
     default:
@@ -91,14 +91,14 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
     switch (newGenParams.mutationType)
     {
     case MUTATION_TYPE::INSERTION:
-        std::cout << "ETAPA: Mutação    MÉTODO: Inserção" << std::endl;
+        std::cout << "ETAPA: Mutation    MÉTODO: Inserção" << std::endl;
         mutationInsertion();
         break;
     case MUTATION_TYPE::INVERSION:
-        std::cout << "ETAPA: Mutação    MÉTODO: Inverção" << std::endl;
+        std::cout << "ETAPA: Mutation    MÉTODO: Inverção" << std::endl;
         break;
     case MUTATION_TYPE::UNIFORM:
-        std::cout << "ETAPA: Mutação    MÉTODO: Uniform" << std::endl;
+        std::cout << "ETAPA: Mutation    MÉTODO: Uniform" << std::endl;
         mutationUniform();
         break;
     default:
@@ -216,9 +216,11 @@ void Population::selectionEstocastic(int qtdNidles)
     std::cout << "selectionIndexes ";
     for (auto &i : selectionIndexes)
     {
-        std::cout << i << " ";
+        std::cout << "[" << i << "] ";
     }
     std::cout << "    \n";
+
+    std::cout << "Population size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
     show();
 }
 
@@ -289,56 +291,12 @@ void Population::selectionRoulette()
     std::vector<Chromosome> chromosomesTEMP = chromosomes;
     chromosomes.clear();
 
-    for(auto i : indexesSelection)
+    for (auto i : indexesSelection)
     {
         chromosomes.push_back(chromosomesTEMP[i]);
     }
-    
+
     std::cout << "\nPopulation size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
-
-
-    /*
-        // Calcular indices das agulhas em relação a roleta
-
-        std::vector<unsigned> indexNidles{};
-        for (size_t i = 0; i < static_cast<size_t>(qtdNidles); i++)
-        {
-            unsigned index = ((100 / qtdNidles) * i) + ((100 / qtdNidles) / 2);
-            indexNidles.push_back(index);
-        }
-
-        // Efetuar seleção dos indices dos cromossomos que as agulhas apontam
-
-
-        for (unsigned &i : indexNidles)
-        {
-            selectionIndexes.insert(roulette[i]);
-        }
-
-        std::vector<Chromosome> chromosomesTEMP = chromosomes;
-        chromosomes.clear();
-
-        for (const unsigned &i : selectionIndexes)
-        {
-            chromosomes.push_back(chromosomesTEMP[i]);
-        }
-
-        std::cout << "qtdNidles " << qtdNidles << "    ";
-        std::cout << "indexNidles ";
-        for (auto &i : indexNidles)
-        {
-            std::cout << i << " ";
-        }
-        std::cout << "   ";
-        std::cout << "spin " << spin << std::endl;
-        std::cout << "selectionIndexes ";
-        for (auto &i : selectionIndexes)
-        {
-            std::cout << i << " ";
-        }
-        */
-
-    std::cout << "    \n";
     show();
 }
 
