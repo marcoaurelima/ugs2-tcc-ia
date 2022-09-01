@@ -26,8 +26,12 @@ private:
     std::vector<Chromosome> chromosomes;
     std::vector<unsigned> getConfig(const std::string& path) const;
     float getRandomFloat();
-    void selectionEstocastic();
+
+    void selectionEstocastic(int qtdNidles = 0);
+    void selectionRoulette();
+
     void crossoverUniform(); 
+    
     void mutationInsertion(); 
 
 };

@@ -50,7 +50,8 @@ void Population::generateNewPopulation(NewGenParams newGenParams)
         std::cout << "ETAPA: Seleção    MÉTODO: Tournament" << std::endl;
         break;
     case SELECTION_TYPE::ROULLETE:
-        std::cout << "Seleção ROULLETE" << std::endl;
+        std::cout << "ETAPA: Seleção    MÉTODO: Roullete" << std::endl;
+        selectionRoulette();
         break;
     case SELECTION_TYPE::STOCHASTIC_US:
         std::cout << "ETAPA: Seleção    MÉTODO: Stochastic Universal Sampling" << std::endl;
@@ -114,9 +115,13 @@ std::vector<unsigned> Population::getConfig(const std::string& path) const
 // fitness: vetor com todos os fitness que estarao na roleta
 // qtdNidles: quantidade de agulhas na roleta
 // spin: giro da roleta; porcentagem do giro 1% - 99%
-void Population::selectionEstocastic()
+void Population::selectionEstocastic(int qtdNidles)
 {   
-    const unsigned qtdNidles = getConfig("configurations/GA/selection/estocastic/qtdneedles")[0];
+    // Se não for definido uma quantidade por parametro, este será lido no arquivo de conf.
+    if(qtdNidles == 0)
+    {
+        qtdNidles = getConfig("configurations/GA/selection/estocastic/qtdneedles")[0];
+    }
 
     std::random_device rd;
     std::mt19937 mt(rd());
@@ -158,7 +163,7 @@ void Population::selectionEstocastic()
     // Calcular indices das agulhas em relação a roleta
 
     std::vector<unsigned> indexNidles {};
-    for (size_t i = 0; i < qtdNidles; i++)
+    for (size_t i = 0; i < static_cast<size_t>(qtdNidles); i++)
     {
         unsigned index = ((100 / qtdNidles) * i) + ((100 / qtdNidles)/2);
         indexNidles.push_back(index);
@@ -190,6 +195,14 @@ void Population::selectionEstocastic()
     std::cout  << "    \n";
     show();
 
+}
+
+
+// Roleta: mesmo algorítmo do estocastico, so que com apenas 1 agulha
+void Population::selectionRoulette()
+{   
+    const unsigned qtdNidles = 1;
+    selectionEstocastic(qtdNidles);
 }
 
 

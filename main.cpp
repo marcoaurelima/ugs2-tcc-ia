@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     population.show();
 
     NewGenParams newGenParams;
-    newGenParams.selectionType = SELECTION_TYPE::STOCHASTIC_US;
+    newGenParams.selectionType = SELECTION_TYPE::ROULLETE;
     newGenParams.crossoverType = CROSSOVER_TYPE::UNIFORM;
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 
