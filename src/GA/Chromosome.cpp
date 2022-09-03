@@ -26,7 +26,10 @@ void Chromosome::show() const
     std::cout << "Size: " << genes.size() << std::endl;
     for (auto i : genes)
     {
-        std::cout << "[" << i << "|" << fitness << "]\t";
+        std::cout << std::setprecision(3) << std::fixed;
+        std::cout << "[" << i << "|";
+        std::cout << std::setprecision(0) << std::fixed;
+        std::cout << fitness << "]\t";
     }
     std::cout << std::endl << std::endl;
 }
