@@ -9,6 +9,7 @@
 #include "GA/Population.h"
 #include "GA/types.h"
 
+#include "NN/types.h"
 #include "NN/NeuralNetwork.h"
 
 // testando commit
@@ -18,9 +19,9 @@ int main(int argc, char **argv)
 
     NeuralNetwork network;
 
-    network.setInputLayer();
-    network.setHidenLayer();
-    network.setOutputLayer();
+    network.setInputLayer(InputLayer(2));
+    network.setHiddenLayer(HiddenLayer({3,3}));
+    network.setOutputLayer(OutputLayer(1));
 
 
     /*

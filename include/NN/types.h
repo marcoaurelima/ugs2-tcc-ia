@@ -8,7 +8,7 @@ struct InputLayer {
     unsigned qtdNeurons;
 };
 
-using OutpuLayer = InputLayer;
+using OutputLayer = InputLayer;
 
 struct HiddenLayer {
     HiddenLayer(std::initializer_list<unsigned> sizeOfNeuronsGroups) 

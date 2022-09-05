@@ -3,14 +3,19 @@
 
 #pragma once
 
+#include "NN/types.h"
 #include "GA/Chromosome.h"
 
 class NeuralNetwork
 {
 public:
-    NeuralNetwork(unsigned inputLayerSize, unsigned hiddenLayerSize, Chromosome& chromosome );
+    NeuralNetwork();
     ~NeuralNetwork();
 
+    void setInputLayer(InputLayer layer);
+    void setHiddenLayer(HiddenLayer layer);
+    void setOutputLayer(OutputLayer layer);
+    
 private:
 
 };
