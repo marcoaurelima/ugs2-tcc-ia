@@ -26,7 +26,10 @@ void Chromosome::show() const
     std::cout << "Size: " << genes.size() << std::endl;
     for (auto i : genes)
     {
-        std::cout << "[" << i << "|" << fitness << "]\t";
+        std::cout << std::setprecision(3) << std::fixed;
+        std::cout << "[" << i << "|";
+        std::cout << std::setprecision(0) << std::fixed;
+        std::cout << fitness << "]\t";
     }
     std::cout << std::endl << std::endl;
 }
@@ -78,4 +81,9 @@ void Chromosome::setAllGenes(std::vector<float> genes)
 size_t Chromosome::getSize() const
 {
     return genes.size();
+}
+
+void Chromosome::changeGene(unsigned index, float value)
+{
+    genes[index] = value;
 }
