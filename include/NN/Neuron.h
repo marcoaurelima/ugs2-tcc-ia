@@ -3,6 +3,10 @@
 
 #pragma once
 
+#include <vector>
+
+using height = float;
+
 class Neuron
 {
 public:
@@ -10,8 +14,10 @@ public:
     ~Neuron();
 
 private:
+    bool isActive;
     float bias;
-    
+    float value;
+    std::vector<height> connections;
 
 };
 

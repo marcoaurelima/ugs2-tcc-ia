@@ -19,10 +19,12 @@ int main(int argc, char **argv)
 
     NeuralNetwork network;
 
-    network.setInputLayer(InputLayer(2));
-    network.setHiddenLayer(HiddenLayer({3,3}));
-    network.setOutputLayer(OutputLayer(1));
+    network.setInputLayer(InputLayerInfo(2));
+    network.setHiddenLayer(HiddenLayerInfo({3,3}));
+    network.setOutputLayer(OutputLayerInfo(1));
 
+    unsigned int i=0, k=0;
+    network.takeDecision({i,k});
 
     /*
     Population population;

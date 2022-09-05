@@ -2,18 +2,25 @@
 #define NNTYPES_H
 
 #include <initializer_list>
+#include "Neuron.h"
 
-struct InputLayer {
-    InputLayer(unsigned qtdNeurons) : qtdNeurons(qtdNeurons) {};
+struct InputLayerInfo {
+    InputLayerInfo(unsigned qtdNeurons) : qtdNeurons(qtdNeurons) {};
     unsigned qtdNeurons;
 };
 
-using OutputLayer = InputLayer;
+using OutputLayerInfo = InputLayerInfo;
 
-struct HiddenLayer {
-    HiddenLayer(std::initializer_list<unsigned> sizeOfNeuronsGroups) 
+struct HiddenLayerInfo {
+    HiddenLayerInfo(std::initializer_list<unsigned> sizeOfNeuronsGroups) 
     : sizeOfNeuronsGroups(sizeOfNeuronsGroups) {};
     std::initializer_list<unsigned> sizeOfNeuronsGroups;
 };
+
+
+using InputLayer = std::vector<Neuron>;
+using HiddenLayer = std::vector<std::vector<Neuron>>;
+using OutputLayer = std::vector<Neuron>;
+
 
 #endif
