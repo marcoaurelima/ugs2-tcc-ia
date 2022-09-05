@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef GATYPES_H
+#define GATYPES_H
 
 enum class SELECTION_TYPE 
 {
