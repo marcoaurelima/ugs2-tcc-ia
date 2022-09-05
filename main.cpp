@@ -14,7 +14,7 @@
 
 // testando commit
 
-int main(int argc, char **argv) 
+int main() 
 {   
 
     NeuralNetwork network;
@@ -23,8 +23,11 @@ int main(int argc, char **argv)
     network.setHiddenLayer(HiddenLayerInfo({3,3}));
     network.setOutputLayer(OutputLayerInfo(1));
 
+/*
     float i=0, k=0;
     network.takeDecision({i,k});
+*/
+    network.show();
 
     /*
     Population population;

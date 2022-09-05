@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <vector>
 #include "NN/types.h"
 
@@ -19,10 +20,12 @@ public:
 
     std::vector<unsigned> takeDecision(std::initializer_list<float> inputParams);
     
+    void show() const;
 private:
     InputLayer inputLayer;
     HiddenLayer hiddenLayer;
     OutputLayer outputLayer;
+
 };
 
 #endif
