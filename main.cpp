@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     network.setHiddenLayer(HiddenLayerInfo({3,3}));
     network.setOutputLayer(OutputLayerInfo(1));
 
-    unsigned int i=0, k=0;
+    float i=0, k=0;
     network.takeDecision({i,k});
 
     /*
