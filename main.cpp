@@ -13,6 +13,10 @@
 
 int main(int argc, char **argv) 
 {   
+
+    
+
+    /*
     Population population;
     population.createInitialPopulation(8,10);
     population.show();
@@ -23,7 +27,7 @@ int main(int argc, char **argv)
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 
     population.generateNewPopulation(newGenParams);
-
+    */
 
     return 0;
 }
