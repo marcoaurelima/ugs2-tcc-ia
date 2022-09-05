@@ -5,7 +5,6 @@
 
 #include <vector>
 #include "NN/types.h"
-#include "GA/Chromosome.h"
 
 class NeuralNetwork
 {
@@ -13,15 +12,17 @@ public:
     NeuralNetwork();
     ~NeuralNetwork();
 
-    void setInputLayer(InputLayerInfo layer);
-    void setHiddenLayer(HiddenLayerInfo layer);
-    void setOutputLayer(OutputLayerInfo layer);
+    void setInputLayer(InputLayerInfo layerInfo);
+    void setHiddenLayer(HiddenLayerInfo layerInfo);
+    void setOutputLayer(OutputLayerInfo layerInfo);
 
 
-    std::vector<unsigned> takeDecision(std::initializer_list<unsigned> inputParams);
+    std::vector<unsigned> takeDecision(std::initializer_list<float> inputParams);
     
 private:
-
+    InputLayer inputLayer;
+    HiddenLayer hiddenLayer;
+    OutputLayer outputLayer;
 };
 
 #endif

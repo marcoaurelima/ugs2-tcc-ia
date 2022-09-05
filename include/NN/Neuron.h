@@ -14,9 +14,9 @@ public:
     ~Neuron();
 
 private:
-    bool isActive;
-    float bias;
-    float value;
+    bool isActive {true};
+    float bias {};
+    float value {};
     std::vector<height> connections;
 
 };
