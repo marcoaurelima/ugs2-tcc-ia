@@ -13,15 +13,15 @@ public:
     NeuralNetwork();
     ~NeuralNetwork();
 
-    void setInputLayer(InputLayer layer);
-    void setHiddenLayer(HiddenLayer layer);
-    void setOutputLayer(OutputLayer layer);
+    void setInputLayer(InputLayerInfo layer);
+    void setHiddenLayer(HiddenLayerInfo layer);
+    void setOutputLayer(OutputLayerInfo layer);
 
 
     std::vector<unsigned> takeDecision(std::initializer_list<unsigned> inputParams);
     
 private:
-    
+
 };
 
 #endif
