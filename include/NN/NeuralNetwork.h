@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
 #include "NN/types.h"
 
 class NeuralNetwork
@@ -17,10 +18,12 @@ public:
     void setHiddenLayer(HiddenLayerInfo layerInfo);
     void setOutputLayer(OutputLayerInfo layerInfo);
 
-
     std::vector<unsigned> takeDecision(std::initializer_list<float> inputParams);
     
     void show() const;
+
+    void loadDataFromFile(const std::string& path);
+
 private:
     InputLayer inputLayer;
     HiddenLayer hiddenLayer;

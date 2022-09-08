@@ -22,6 +22,8 @@ int main()
     network.setInputLayer(InputLayerInfo(2));
     network.setHiddenLayer(HiddenLayerInfo({3,3}));
     network.setOutputLayer(OutputLayerInfo(1));
+    network.loadDataFromFile("configurations/NN/network-data.ini");
+
 
 /*
     float i=0, k=0;
