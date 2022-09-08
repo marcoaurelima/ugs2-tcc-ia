@@ -9,6 +9,19 @@ void NeuralNetwork::show() const
     std::cout << std::endl;
     std::cout << "------ INPUT LAYER ------" << std::endl;
     std::cout << "- size: " <<  inputLayer.size() << std::endl << std::endl;
+    for (size_t i = 0; i < inputLayer.size(); i++)
+    {
+        std::cout << "neuron[" << i << "]" 
+        << " Value: " << inputLayer[i].getValue()
+        << "  Bias: " << inputLayer[i].getBias() << std::endl;
+        std::cout << "#: " << inputLayer[i].getConnectionsHeights().size() << std::endl;
+        for(auto h : inputLayer[i].getConnectionsHeights())
+        {
+            std::cout << " [" << h << "] ";
+        }
+        std::cout << std::endl;
+    }
+    
 
     std::cout << "------ HIDDEN LAYER ------" << std::endl;
     std::cout << "- size: " <<  hiddenLayer.size() << "   ";
@@ -58,10 +71,8 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     std::ifstream file(path);
     if(!file.is_open()) { std::cerr << "[Error] File '" << path << "' not found!"<< std::endl; return; }
 
-
     std::string v;
     file >> v;
-
     
     std::vector<std::vector<float>> values;
     std::vector<float> value;
@@ -71,12 +82,30 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
         {
             values.push_back(value);
             value.clear();
-        } else
-        {
-            value.push_back(std::stof(v));
+            continue;
         }
-        //std::cout << "#: " << v << std::endl;
+        
+        value.push_back(std::stof(v)); 
     }
+
+    // Inserir dados coletados nos neuronios decada camada
+
+    // Camada de entrada
+    for (size_t i = 0; i < inputLayer.size(); i++)
+    {
+        inputLayer[i].setValue(values[i][0]);
+        inputLayer[i].setBias(values[i][1]);
+
+        std::vector<float> weights;
+        for (size_t j = 2; j < values[i].size(); j++)
+        {
+            weights.push_back(values[i][j]);
+        }
+        inputLayer[i].setConnectionsHeights(weights); 
+    }
+    
+
+
 //exit(0);
     for(auto& value : values)
     {
@@ -84,7 +113,7 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
         {
             std::cout << v;
         }
-            std::cout << std::endl;
+        std::cout << std::endl;
     }
 
 
