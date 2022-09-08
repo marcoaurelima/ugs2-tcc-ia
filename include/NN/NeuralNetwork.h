@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <deque>
 #include "NN/types.h"
 
 class NeuralNetwork
