@@ -25,10 +25,10 @@ public:
     std::vector<height> getConnectionsHeights() const;
 
 private:
-    bool active {false};
     float bias {};
     float value {};
     std::vector<height> connectionsHeights;
+    bool active {false};
 
 };
 

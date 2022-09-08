@@ -22,7 +22,7 @@ public:
     
     void show() const;
 
-    void loadDataFromFile(const std::string& path);
+    void loadDataFromFile(const std::string path);
 
 private:
     InputLayer inputLayer;

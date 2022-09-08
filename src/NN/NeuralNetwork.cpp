@@ -51,54 +51,41 @@ std::vector<unsigned> NeuralNetwork::takeDecision(std::initializer_list<float> i
     return std::vector<unsigned>(0);
 }
 
-void NeuralNetwork::loadDataFromFile(const std::string& path)
+void NeuralNetwork::loadDataFromFile(const std::string path)
 {
     // Preencher os valores dos neuronios da camada de entrada 
 
     std::ifstream file(path);
     if(!file.is_open()) { std::cerr << "[Error] File '" << path << "' not found!"<< std::endl; return; }
 
-    // [0]: Camada de entrada   [1]: Camada oculta   [2]: Camada de Saída
-    unsigned layerCount = 0;
-    enum layerType 
-    {
-        INPUT,
-        HIDDEN,
-        OUTPUT
-    };
 
-    std::string value;
-    file >> value;
+    std::string v;
+    file >> v;
 
-    //unsigned count = 0;
     
-    std::vector<float> values;
-    while(file >> value)
+    std::vector<std::vector<float>> values;
+    std::vector<float> value;
+    while(file >> v)
     { 
-        if(value == "\\")
+        if(v == "\\")
         {
-            values.clear();
-            if(layerCount == layerType::INPUT)
-            {
-                inputLayer[0].setValue(values[0]); 
-                inputLayer[0].setBias(values[1]); 
-                
-                std::vector<float> heights;
-                for(size_t i = 2; i < values.size(); i++)
-                {
-                    heights.push_back(values[i]);
-                }
-                inputLayer[0].setConnections(heights);
-            }
-
-
-            layerCount++;
+            values.push_back(value);
+            value.clear();
+        } else
+        {
+            value.push_back(std::stof(v));
         }
-        values.push_back(std::stof(value));
-
-        std::cout << "#: " << value << std::endl;
+        //std::cout << "#: " << v << std::endl;
     }
-
+//exit(0);
+    for(auto& value : values)
+    {
+        for(auto& v : value)
+        {
+            std::cout << v;
+        }
+            std::cout << std::endl;
+    }
 
 
 
