@@ -7,58 +7,69 @@ NeuralNetwork::~NeuralNetwork() {}
 void NeuralNetwork::show() const
 {
     std::cout << std::endl;
-    std::cout << "------ INPUT LAYER ------" << std::endl;
-    std::cout << "- size: " << inputLayer.size() << std::endl
-              << std::endl;
+    std::cout << "\n------ INPUT LAYER ------" << std::endl;
+    std::cout << "- size: " << inputLayer.size() << std::endl;
     for (size_t i = 0; i < inputLayer.size(); i++)
     {
         std::cout << "neuron[" << i << "]:"
-                  << " Value: " << inputLayer[i].getValue()
-                  << "  Bias: " << inputLayer[i].getBias() 
-                  << "  connections: ";
-                  
+                  << " Value: (" << inputLayer[i].getValue()
+                  << ")  Bias: (" << inputLayer[i].getBias()
+                  << ")  Connections: ";
+
         for (auto h : inputLayer[i].getConnectionsHeights())
         {
-            std::cout << " [" << h << "] ";
+            std::cout << "(" << h << ") ";
         }
         std::cout << std::endl;
     }
 
-    std::cout << "\n------ HIDDEN LAYER ------" << std::endl;
+    std::cout << "\n\n------ HIDDEN LAYER ------" << std::endl;
     unsigned hiddenLayerSize = 0;
-    for(size_t i = 0; i < hiddenLayer.size(); i++){ hiddenLayerSize += hiddenLayer[i].size(); }
+    for (size_t i = 0; i < hiddenLayer.size(); i++)
+    {
+        hiddenLayerSize += hiddenLayer[i].size();
+    }
     std::cout << "- size: " << hiddenLayerSize << "   ";
     for (size_t i = 0; i < hiddenLayer.size(); i++)
     {
         std::cout << "Group Size[" << i << "]: " << hiddenLayer[i].size() << "    ";
     }
 
-    std::cout << std::endl;
-
     for (size_t i = 0; i < hiddenLayer.size(); i++)
     {
         std::cout << "\nGroup[" << i << "]: \n";
         for (size_t j = 0; j < hiddenLayer[i].size(); j++)
         {
-            std::cout << "   neuron[" << i << "]" << "[" << j << "] "
-                      << " Value: " << hiddenLayer[i][j].getValue()
-                      << "  Bias: " << hiddenLayer[i][j].getBias() 
-                      << " connections: ";
-                      
+            std::cout << "   neuron[" << i << "]"
+                      << "[" << j << "] "
+                      << " Value: (" << hiddenLayer[i][j].getValue()
+                      << ")  Bias: (" << hiddenLayer[i][j].getBias()
+                      << ")  Connections: ";
+
             for (auto h : hiddenLayer[i][j].getConnectionsHeights())
             {
-                std::cout << " [" << h << "] ";
+                std::cout << "(" << h << ") ";
             }
-        std::cout << std::endl;
+            std::cout << std::endl;
         }
     }
 
-    std::cout << std::endl
-              << std::endl;
+    std::cout << "\n\n------ OUTPUT LAYER ------" << std::endl;
+    std::cout << "- size: " << outputLayer.size() << std::endl;
+    for (size_t i = 0; i < outputLayer.size(); i++)
+    {
+        std::cout << "neuron[" << i << "]:"
+                  << " Value: (" << outputLayer[i].getValue()
+                  << ")  Bias: (" << outputLayer[i].getBias()
+                  << ")  Connections: ";
 
-    std::cout << "------ OUTPUT LAYER ------" << std::endl;
-    std::cout << "- size: " << outputLayer.size() << std::endl
-              << std::endl;
+        for (auto h : outputLayer[i].getConnectionsHeights())
+        {
+            std::cout << "(" << h << ") ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl << std::endl;
 }
 
 void NeuralNetwork::setInputLayer(InputLayerInfo layerInfo)
@@ -130,7 +141,6 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
         }
         inputLayer[i].setConnectionsHeights(weights);
     }
-
     for (size_t i = 0; i < inputLayer.size(); i++)
     {
         values.pop_front();
@@ -151,23 +161,32 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
             }
             hiddenLayer[i][j].setConnectionsHeights(weights);
         }
-        //break;
         for (size_t k = 0; k < hiddenLayer[i].size(); k++)
         {
             values.pop_front();
         }
     }
 
-    /*
-    //exit(0);
-        for(auto& value : values)
-        {
-            for(auto& v : value)
-            {
-                std::cout << v;
-            }
-            std::cout << std::endl;
-        }
+    // Camada de saida
+    for (size_t i = 0; i < outputLayer.size(); i++)
+    {
+        outputLayer[i].setValue(values[i][0]);
+        outputLayer[i].setBias(values[i][1]);
 
-    */
+        std::vector<float> weights;
+        for (size_t j = 2; j < values[i].size(); j++)
+        {
+            weights.push_back(values[i][j]);
+        }
+        outputLayer[i].setConnectionsHeights(weights);
+    }
+    for (size_t i = 0; i < outputLayer.size(); i++)
+    {
+        values.pop_front();
+    }
+
+    if (values.size() != 0)
+    {
+        std::cerr << "Warning: Possible badly formatted data in \'" << path << "\'";
+    }
 }
