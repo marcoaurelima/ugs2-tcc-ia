@@ -62,7 +62,8 @@ void NeuralNetwork::show() const
                   << " Value: (" << outputLayer[i].getValue()
                   << ")  Bias: (" << outputLayer[i].getBias()
                   << ")  Connections: ";
-
+        
+        if(outputLayer[i].getConnectionsHeights().size() <= 0) { std::cout << "--"; }
         for (auto h : outputLayer[i].getConnectionsHeights())
         {
             std::cout << "(" << h << ") ";

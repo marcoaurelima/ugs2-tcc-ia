@@ -14,25 +14,23 @@
 
 // testando commit
 
-int main() 
-{   
-/*
+int main()
+{
+
     NeuralNetwork network;
 
     network.setInputLayer(InputLayerInfo(2));
-    network.setHiddenLayer(HiddenLayerInfo({3,3}));
+    network.setHiddenLayer(HiddenLayerInfo({3, 3}));
     network.setOutputLayer(OutputLayerInfo(1));
     network.loadDataFromFile("configurations/NN/network-data.ini");
 
-
-
-    float i=0, k=0;
-    network.takeDecision({i,k});
+    float i = 0, k = 0;
+    network.takeDecision({i, k});
 
     network.show();
 
-    */
-   
+    /*
+
     Population population;
     population.createInitialPopulation(8,10);
     population.show();
@@ -43,7 +41,7 @@ int main()
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 
     population.generateNewPopulation(newGenParams);
-    
+    */
 
     return 0;
 }
