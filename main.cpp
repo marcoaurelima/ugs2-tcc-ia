@@ -14,8 +14,24 @@
 
 // testando commit
 
+
+float sigmoid(float x)
+{
+    return 1 / (1 + std::pow(std::exp(1), -x));
+}
+
+float reLU(float x)
+{
+    return (x > 0) ? x : 0;
+}
+
 int main()
 {
+
+    std::cout << "sigmoid: " << sigmoid(5) << std::endl; 
+    std::cout << "reLU: " << reLU(1) << std::endl; return 0;
+
+
 
     NeuralNetwork network;
 
