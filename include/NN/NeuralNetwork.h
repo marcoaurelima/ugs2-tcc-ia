@@ -34,6 +34,7 @@ private:
 
     float sigmoid(float x) const;
     float reLU(float x) const;
+    float normalize(float x, float xMin, float xMax, float d1, float d2) const;
 };
 
 #endif

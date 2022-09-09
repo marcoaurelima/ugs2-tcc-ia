@@ -198,6 +198,14 @@ float NeuralNetwork::reLU(float x) const
     return (x > 0) ? x : 0;
 }
 
+// [x]         valor a ser normalizado
+// [xMin xMax] variação do valor de x
+// [d1 d2]     Limite ao qual o valor de x será reduzido
+float NeuralNetwork::normalize(float x, float xMin, float xMax, float d1, float d2) const
+{
+    return (((x - xMin) * (d2 - d1)) / (xMax - xMin)) + d1;
+}
+
 std::vector<unsigned> NeuralNetwork::takeDecision(const std::initializer_list<float> inputParams)
 {
     for (auto i : inputParams)

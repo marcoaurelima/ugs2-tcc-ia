@@ -25,11 +25,21 @@ float reLU(float x)
     return (x > 0) ? x : 0;
 }
 
+
+// [x]         valor a ser normalizado
+// [xMin xMax] variação do valor de x
+// [d1 d2]     Limite ao qual o valor de x será reduzido
+float normalize(float x, float xMin, float xMax, float d1, float d2)
+{
+    return (((x - xMin) * (d2 - d1)) / (xMax - xMin)) + d1;
+}
+
 int main()
 {
 
     std::cout << "sigmoid: " << sigmoid(5) << std::endl; 
-    std::cout << "reLU: " << reLU(1) << std::endl; return 0;
+    std::cout << "reLU: " << reLU(1) << std::endl; 
+    std::cout << "normalize: " << normalize(25, 0, 1234, 0, 1) << std::endl; return 0;
 
 
 
