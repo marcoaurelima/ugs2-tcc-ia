@@ -24,8 +24,8 @@ int main()
     network.setOutputLayer(OutputLayerInfo(1));
     network.loadDataFromFile("configurations/NN/network-data.ini");
 
-    float i = 0, k = 0;
-    network.takeDecision({i, k});
+    float pontuation = 0, distance = 0;
+    network.takeDecision({pontuation, distance});
 
     network.show();
 

@@ -62,23 +62,27 @@ void NeuralNetwork::show() const
                   << " Value: (" << outputLayer[i].getValue()
                   << ")  Bias: (" << outputLayer[i].getBias()
                   << ")  Connections: ";
-        
-        if(outputLayer[i].getConnectionsHeights().size() <= 0) { std::cout << "--"; }
+
+        if (outputLayer[i].getConnectionsHeights().size() <= 0)
+        {
+            std::cout << "--";
+        }
         for (auto h : outputLayer[i].getConnectionsHeights())
         {
             std::cout << "(" << h << ") ";
         }
         std::cout << std::endl;
     }
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl
+              << std::endl;
 }
 
-void NeuralNetwork::setInputLayer(const InputLayerInfo& layerInfo)
+void NeuralNetwork::setInputLayer(const InputLayerInfo &layerInfo)
 {
     inputLayer = std::vector<Neuron>(layerInfo.qtdNeurons);
 }
 
-void NeuralNetwork::setHiddenLayer(const HiddenLayerInfo& layerInfo)
+void NeuralNetwork::setHiddenLayer(const HiddenLayerInfo &layerInfo)
 {
     for (auto groupSize : layerInfo.sizesOfNeuronsGroups)
     {
@@ -86,17 +90,9 @@ void NeuralNetwork::setHiddenLayer(const HiddenLayerInfo& layerInfo)
     }
 }
 
-void NeuralNetwork::setOutputLayer(const OutputLayerInfo& layerInfo)
+void NeuralNetwork::setOutputLayer(const OutputLayerInfo &layerInfo)
 {
     outputLayer = std::vector<Neuron>(layerInfo.qtdNeurons);
-}
-
-std::vector<unsigned> NeuralNetwork::takeDecision(const std::initializer_list<float> inputParams)
-{
-    for (auto i : inputParams)
-        return std::vector<unsigned>((unsigned)i);
-
-    return std::vector<unsigned>(0);
 }
 
 void NeuralNetwork::loadDataFromFile(const std::string path)
@@ -190,4 +186,12 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     {
         std::cerr << "Warning: Possible badly formatted data in \'" << path << "\'";
     }
+}
+
+std::vector<unsigned> NeuralNetwork::takeDecision(const std::initializer_list<float> inputParams)
+{
+    for (auto i : inputParams)
+        return std::vector<unsigned>((unsigned)i);
+
+    return std::vector<unsigned>(0);
 }
