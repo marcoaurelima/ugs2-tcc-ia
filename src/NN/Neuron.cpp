@@ -1,6 +1,6 @@
 #include "NN/Neuron.h"
 
-Neuron::Neuron(float bias, float value, std::vector<height> connectionsHeights, bool active)
+Neuron::Neuron(const float bias, const float value, const std::vector<height>& connectionsHeights, const bool active)
     : bias(bias), value(value), connectionsHeights(connectionsHeights), active(active)
     {
         //this->active = active;
@@ -25,7 +25,7 @@ void Neuron::setValue(float value)
     this->value = value;
 }
 
-void Neuron::setConnectionsHeights(std::vector<height> connectionsHeights)
+void Neuron::setConnectionsHeights(const std::vector<height>& connectionsHeights)
 {
     this->connectionsHeights = connectionsHeights;
 }

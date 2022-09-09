@@ -72,12 +72,12 @@ void NeuralNetwork::show() const
     std::cout << std::endl << std::endl;
 }
 
-void NeuralNetwork::setInputLayer(InputLayerInfo layerInfo)
+void NeuralNetwork::setInputLayer(const InputLayerInfo& layerInfo)
 {
     inputLayer = std::vector<Neuron>(layerInfo.qtdNeurons);
 }
 
-void NeuralNetwork::setHiddenLayer(HiddenLayerInfo layerInfo)
+void NeuralNetwork::setHiddenLayer(const HiddenLayerInfo& layerInfo)
 {
     for (auto groupSize : layerInfo.sizesOfNeuronsGroups)
     {
@@ -85,12 +85,12 @@ void NeuralNetwork::setHiddenLayer(HiddenLayerInfo layerInfo)
     }
 }
 
-void NeuralNetwork::setOutputLayer(OutputLayerInfo layerInfo)
+void NeuralNetwork::setOutputLayer(const OutputLayerInfo& layerInfo)
 {
     outputLayer = std::vector<Neuron>(layerInfo.qtdNeurons);
 }
 
-std::vector<unsigned> NeuralNetwork::takeDecision(std::initializer_list<float> inputParams)
+std::vector<unsigned> NeuralNetwork::takeDecision(const std::initializer_list<float> inputParams)
 {
     for (auto i : inputParams)
         return std::vector<unsigned>((unsigned)i);

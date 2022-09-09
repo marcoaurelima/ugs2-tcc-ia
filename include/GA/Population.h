@@ -17,8 +17,8 @@ public:
     Population();
     ~Population();
 
-    void createInitialPopulation(const unsigned POPULATION_SIZE, const unsigned CHROMOSSOME_SIZE);
-    void generateNewPopulation(NewGenParams newGenParams);
+    void createInitialPopulation(const unsigned populationSize, const unsigned chromossomeSize);
+    void generateNewPopulation(const NewGenParams newGenParams);
     std::vector<Chromosome> getCurrentPopulation() const;
     void show() const;
 

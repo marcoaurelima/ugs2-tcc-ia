@@ -15,11 +15,11 @@ public:
     NeuralNetwork();
     ~NeuralNetwork();
 
-    void setInputLayer(InputLayerInfo layerInfo);
-    void setHiddenLayer(HiddenLayerInfo layerInfo);
-    void setOutputLayer(OutputLayerInfo layerInfo);
+    void setInputLayer(const InputLayerInfo& layerInfo);
+    void setHiddenLayer(const HiddenLayerInfo& layerInfo);
+    void setOutputLayer(const OutputLayerInfo& layerInfo);
 
-    std::vector<unsigned> takeDecision(std::initializer_list<float> inputParams);
+    std::vector<unsigned> takeDecision(const std::initializer_list<float> inputParams);
     
     void show() const;
 

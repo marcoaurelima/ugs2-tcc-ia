@@ -16,7 +16,7 @@
 
 int main() 
 {   
-
+/*
     NeuralNetwork network;
 
     network.setInputLayer(InputLayerInfo(2));
@@ -25,13 +25,14 @@ int main()
     network.loadDataFromFile("configurations/NN/network-data.ini");
 
 
-/*
+
     float i=0, k=0;
     network.takeDecision({i,k});
-*/
+
     network.show();
 
-    /*
+    */
+   
     Population population;
     population.createInitialPopulation(8,10);
     population.show();
@@ -42,7 +43,7 @@ int main()
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 
     population.generateNewPopulation(newGenParams);
-    */
+    
 
     return 0;
 }

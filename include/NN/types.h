@@ -17,10 +17,8 @@ struct HiddenLayerInfo {
     std::initializer_list<unsigned> sizesOfNeuronsGroups;
 };
 
-
 using InputLayer = std::vector<Neuron>;
 using HiddenLayer = std::vector<std::vector<Neuron>>;
 using OutputLayer = std::vector<Neuron>;
-
 
 #endif

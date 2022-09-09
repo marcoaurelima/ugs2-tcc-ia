@@ -12,7 +12,7 @@ Chromosome::Chromosome(const std::initializer_list<float> valuesList)
 }
 
 
-Chromosome::Chromosome(const std::vector<float> valuesList)
+Chromosome::Chromosome(const std::vector<float>& valuesList)
 {
     for (auto &i : valuesList)
     {
@@ -71,7 +71,7 @@ std::vector<float> Chromosome::getAllGenes() const
 }
 
 
-void Chromosome::setAllGenes(std::vector<float> genes)
+void Chromosome::setAllGenes(const std::vector<float>& genes)
 {
     this->genes.clear();
     this->genes = genes;

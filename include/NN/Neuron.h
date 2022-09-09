@@ -11,13 +11,13 @@ class Neuron
 {
 public:
     Neuron();
-    Neuron(float bias, float value, std::vector<height> connections, bool isActive = false);
+    Neuron(const float bias, const float value, const std::vector<height>& connections, const bool isActive = false);
     ~Neuron();
 
-    void setActive(bool isActive);
-    void setBias(float bias);
-    void setValue(float value);
-    void setConnectionsHeights(std::vector<height> connectionsHeights);
+    void setActive(const bool isActive);
+    void setBias(const float bias);
+    void setValue(const float value);
+    void setConnectionsHeights(const std::vector<height>& connectionsHeights);
 
     bool isActive() const;
     float getValue() const;

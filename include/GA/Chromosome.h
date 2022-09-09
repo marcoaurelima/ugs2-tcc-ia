@@ -12,13 +12,13 @@ class Chromosome
 public:
     Chromosome();
     Chromosome(const std::initializer_list<float> valuesList);
-    Chromosome(const std::vector<float> valuesList);
+    Chromosome(const std::vector<float>& valuesList);
     
-    void setFitness(float fitness);
+    void setFitness(const float fitness);
     void setRandomFitness();
-    void setGene(float value);
-    void changeGene(unsigned index, float value);
-    void setAllGenes(std::vector<float> genes);
+    void setGene(const float value);
+    void changeGene(const unsigned index, const float value);
+    void setAllGenes(const std::vector<float>& genes);
 
 
     float getFitness() const;

@@ -13,12 +13,12 @@ float Population::getRandomFloat()
     return dist(mt);
 }
 
-void Population::createInitialPopulation(const unsigned POPULATION_SIZE, const unsigned CHROMOSSOME_SIZE)
+void Population::createInitialPopulation(const unsigned populationSize, const unsigned chromossomeSize)
 {
-    for (size_t i = 0; i < POPULATION_SIZE; i++)
+    for (size_t i = 0; i < populationSize; i++)
     {
         Chromosome c;
-        for (size_t j = 0; j < CHROMOSSOME_SIZE; j++)
+        for (size_t j = 0; j < chromossomeSize; j++)
         {
             float randFloat = getRandomFloat();
             c.setGene(randFloat);
