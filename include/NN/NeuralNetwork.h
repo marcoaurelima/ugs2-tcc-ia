@@ -7,6 +7,8 @@
 #include <vector>
 #include <fstream>
 #include <deque>
+#include <algorithm>
+#include <cmath>
 #include "NN/types.h"
 
 class NeuralNetwork
@@ -30,6 +32,8 @@ private:
     HiddenLayer hiddenLayer;
     OutputLayer outputLayer;
 
+    float sigmoid(float x) const;
+    float reLU(float x) const;
 };
 
 #endif

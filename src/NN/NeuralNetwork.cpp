@@ -188,6 +188,16 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     }
 }
 
+float NeuralNetwork::sigmoid(float x) const
+{
+    return 1 / (1 + std::pow(std::exp(1), -x));
+}
+
+float NeuralNetwork::reLU(float x) const
+{
+    return (x > 0) ? x : 0;
+}
+
 std::vector<unsigned> NeuralNetwork::takeDecision(const std::initializer_list<float> inputParams)
 {
     for (auto i : inputParams)
