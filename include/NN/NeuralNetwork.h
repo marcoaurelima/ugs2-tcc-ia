@@ -21,7 +21,7 @@ public:
     void setHiddenLayer(const HiddenLayerInfo& layerInfo);
     void setOutputLayer(const OutputLayerInfo& layerInfo);
 
-    std::vector<unsigned> takeDecision(const std::initializer_list<float> inputParams);
+    std::vector<unsigned> takeDecision(const std::vector<float>& inputParams);
     
     void show() const;
 
@@ -31,9 +31,9 @@ private:
     InputLayer inputLayer;
     HiddenLayer hiddenLayer;
     OutputLayer outputLayer;
+    ACTFUNC activationFunction;
 
-    float sigmoid(float x) const;
-    float reLU(float x) const;
+
     float normalize(float x, float xMin, float xMax, float d1, float d2) const;
 };
 

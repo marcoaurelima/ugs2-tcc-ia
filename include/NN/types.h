@@ -9,16 +9,29 @@ struct InputLayerInfo {
     unsigned qtdNeurons;
 };
 
-using OutputLayerInfo = InputLayerInfo;
+//using OutputLayerInfo = InputLayerInfo;
 
 struct HiddenLayerInfo {
-    HiddenLayerInfo(std::initializer_list<unsigned> sizesOfNeuronsGroups) 
-    : sizesOfNeuronsGroups(sizesOfNeuronsGroups) {};
+    HiddenLayerInfo(std::initializer_list<unsigned> sizesOfNeuronsGroups, ACTFUNC activationFunction) 
+    : sizesOfNeuronsGroups(sizesOfNeuronsGroups), activationFunction(activationFunction) {};
     std::initializer_list<unsigned> sizesOfNeuronsGroups;
+    ACTFUNC activationFunction;
+};
+
+struct OutputLayerInfo {
+    OutputLayerInfo(unsigned qtdNeurons, ACTFUNC activationFunction) 
+    : qtdNeurons(qtdNeurons), activationFunction(activationFunction) {};
+    unsigned qtdNeurons;
+    ACTFUNC activationFunction;
 };
 
 using InputLayer = std::vector<Neuron>;
 using HiddenLayer = std::vector<std::vector<Neuron>>;
 using OutputLayer = std::vector<Neuron>;
+
+enum class ACTFUNC {
+    SIGMOID,
+    RELU
+};
 
 #endif

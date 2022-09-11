@@ -36,22 +36,22 @@ float normalize(float x, float xMin, float xMax, float d1, float d2)
 
 int main()
 {
-
+/*
     std::cout << "sigmoid: " << sigmoid(5) << std::endl; 
     std::cout << "reLU: " << reLU(1) << std::endl; 
-    std::cout << "normalize: " << normalize(25, 0, 1234, 0, 1) << std::endl; return 0;
-
+    std::cout << "normalize: " << normalize(215, 30, 1234, 0, 1) << std::endl; return 0;
+*/
 
 
     NeuralNetwork network;
 
     network.setInputLayer(InputLayerInfo(2));
-    network.setHiddenLayer(HiddenLayerInfo({3, 3}));
-    network.setOutputLayer(OutputLayerInfo(1));
+    network.setHiddenLayer(HiddenLayerInfo({3, 3}, ACTFUNC::SIGMOID));
+    network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
     network.loadDataFromFile("configurations/NN/network-data.ini");
 
-    float pontuation = 0, distance = 0;
-    network.takeDecision({pontuation, distance});
+    float pontuation = 50, distance = 233;
+    network.takeDecision(std::vector<float>{pontuation, distance});
 
     network.show();
 

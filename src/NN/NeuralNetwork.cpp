@@ -188,16 +188,6 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     }
 }
 
-float NeuralNetwork::sigmoid(float x) const
-{
-    return 1 / (1 + std::pow(std::exp(1), -x));
-}
-
-float NeuralNetwork::reLU(float x) const
-{
-    return (x > 0) ? x : 0;
-}
-
 // [x]         valor a ser normalizado
 // [xMin xMax] variação do valor de x
 // [d1 d2]     Limite ao qual o valor de x será reduzido
@@ -206,8 +196,40 @@ float NeuralNetwork::normalize(float x, float xMin, float xMax, float d1, float 
     return (((x - xMin) * (d2 - d1)) / (xMax - xMin)) + d1;
 }
 
-std::vector<unsigned> NeuralNetwork::takeDecision(const std::initializer_list<float> inputParams)
+std::vector<unsigned> NeuralNetwork::takeDecision(const std::vector<float> &inputParams)
 {
+    std::cout << "takeDecision: " << inputParams.size() << std::endl;
+
+    // Preencher Neuronios da camada de entrada com os valores
+
+    for (unsigned int i = 0; i < inputParams.size(); i++)
+    {
+        inputLayer[i].setValue(inputParams[i]);
+    }
+
+    // Calcular os valores para a camada oculta
+
+    // Primeiro grupo de neuronios da camada oculta
+    for (unsigned int i = 0; i < hiddenLayer[0].size(); i++)
+    {
+        float result = 0.0;
+        for(unsigned int j = 0; j < inputLayer.size(); j++)
+        {
+            float value  = inputLayer[j].getValue();
+            float weight = inputLayer[j].getConnectionsHeights()[i];
+            float bias =   inputLayer[j].getBias();
+            result += (value * weight) + bias;
+        }
+        hiddenLayer[0][i].setValue(result);
+    }
+
+    for (unsigned int i = 0; i < hiddenLayer.size(); i++)
+    {
+        for (unsigned int j = 0; j < hiddenLayer[i].size(); j++)
+        {
+        }
+    }
+
     for (auto i : inputParams)
         return std::vector<unsigned>((unsigned)i);
 

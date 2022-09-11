@@ -4,6 +4,9 @@
 #pragma once
 
 #include <vector>
+#include <cmath>
+#include <vector>
+
 
 using height = float;
 
@@ -30,6 +33,8 @@ private:
     std::vector<height> connectionsHeights;
     bool active {false};
 
+    float sigmoid(float x) const;
+    float reLU(float x) const;
 };
 
 #endif
