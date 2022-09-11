@@ -4,6 +4,11 @@
 #include <initializer_list>
 #include "Neuron.h"
 
+enum class ACTFUNC {
+    SIGMOID,
+    RELU
+};
+
 struct InputLayerInfo {
     InputLayerInfo(unsigned qtdNeurons) : qtdNeurons(qtdNeurons) {};
     unsigned qtdNeurons;
@@ -29,9 +34,5 @@ using InputLayer = std::vector<Neuron>;
 using HiddenLayer = std::vector<std::vector<Neuron>>;
 using OutputLayer = std::vector<Neuron>;
 
-enum class ACTFUNC {
-    SIGMOID,
-    RELU
-};
 
 #endif
