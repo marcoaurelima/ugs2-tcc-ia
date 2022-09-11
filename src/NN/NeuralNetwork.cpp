@@ -88,11 +88,13 @@ void NeuralNetwork::setHiddenLayer(const HiddenLayerInfo &layerInfo)
     {
         hiddenLayer.push_back(std::vector<Neuron>(groupSize));
     }
+    activFuncHidden = layerInfo.activationFunction;
 }
 
 void NeuralNetwork::setOutputLayer(const OutputLayerInfo &layerInfo)
 {
     outputLayer = std::vector<Neuron>(layerInfo.qtdNeurons);
+    activFuncOutput = layerInfo.activationFunction;
 }
 
 void NeuralNetwork::loadDataFromFile(const std::string path)

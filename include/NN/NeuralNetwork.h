@@ -31,7 +31,8 @@ private:
     InputLayer inputLayer;
     HiddenLayer hiddenLayer;
     OutputLayer outputLayer;
-    ACTFUNC activationFunction;
+    ACTFUNC activFuncHidden;
+    ACTFUNC activFuncOutput;
 
 
     float normalize(float x, float xMin, float xMax, float d1, float d2) const;
