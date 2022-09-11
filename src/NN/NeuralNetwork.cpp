@@ -231,11 +231,11 @@ std::vector<unsigned> NeuralNetwork::takeDecision(const std::vector<float> &inpu
         for (unsigned int j = 0; j < hiddenLayer[i].size(); j++)
         {
             float result = 0.0;
-            float value = hiddenLayer[i - 1][j].getValue();
 
             for (unsigned int k = 0; k < hiddenLayer[i - 1].size(); k++)
             {
-                float weight = hiddenLayer[i - 1][j].getConnectionsHeights()[k];
+                float value = hiddenLayer[i - 1][k].getValue();
+                float weight = hiddenLayer[i - 1][k].getConnectionsHeights()[j];
                 float bias = hiddenLayer[i - 1][j].getBias();
                 result += (value * weight) + bias;
             }
@@ -243,8 +243,7 @@ std::vector<unsigned> NeuralNetwork::takeDecision(const std::vector<float> &inpu
         }
     }
 
-
-    // Primeiro grupo de neuronios da camada oculta
+    // Preenchimento da camada de saida
     for (unsigned int i = 0; i < outputLayer.size(); i++)
     {
         float result = 0.0;
