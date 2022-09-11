@@ -3,11 +3,7 @@
 
 #include <initializer_list>
 #include "Neuron.h"
-
-enum class ACTFUNC {
-    SIGMOID,
-    RELU
-};
+#include "enums.h"
 
 struct InputLayerInfo {
     InputLayerInfo(unsigned qtdNeurons) : qtdNeurons(qtdNeurons) {};

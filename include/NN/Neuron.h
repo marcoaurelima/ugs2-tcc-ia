@@ -6,7 +6,7 @@
 #include <vector>
 #include <cmath>
 #include <vector>
-
+#include "enums.h"
 
 using height = float;
 
@@ -19,7 +19,7 @@ public:
 
     void setActive(const bool isActive);
     void setBias(const float bias);
-    void setValue(const float value);
+    void setValue(const float value, ACTFUNC activationFunction);
     void setConnectionsHeights(const std::vector<height>& connectionsHeights);
 
     bool isActive() const;

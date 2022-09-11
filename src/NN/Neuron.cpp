@@ -20,13 +20,28 @@ void Neuron::setBias(float bias)
     this->bias = bias;
 }
 
-void Neuron::setValue(float value)
+void Neuron::setValue(float value, ACTFUNC activationFunction)
 {
-    this->value = value;
-
     // Verificar se o neuronio estará ativado a partir do valor
 
+    switch (activationFunction)
+    {
+    case ACTFUNC::RELU:
+        this->value = reLU(value);
+        break;
     
+    case ACTFUNC::SIGMOID:
+        this->value = sigmoid(value);
+        break;
+    
+    default:
+        this->value = value;
+        break;
+    }
+    this->value = value;
+
+
+
 }
 
 void Neuron::setConnectionsHeights(const std::vector<height>& connectionsHeights)

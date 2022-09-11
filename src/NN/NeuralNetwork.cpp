@@ -130,7 +130,7 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de entrada
     for (size_t i = 0; i < inputLayer.size(); i++)
     {
-        inputLayer[i].setValue(values[i][0]);
+        inputLayer[i].setValue(values[i][0], ACTFUNC::NONE);
         inputLayer[i].setBias(values[i][1]);
 
         std::vector<float> weights;
@@ -150,7 +150,7 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     {
         for (size_t j = 0; j < hiddenLayer[i].size(); j++)
         {
-            hiddenLayer[i][j].setValue(values[j][0]);
+            hiddenLayer[i][j].setValue(values[j][0], ACTFUNC::SIGMOID);
             hiddenLayer[i][j].setBias(values[j][1]);
 
             std::vector<float> weights;
@@ -169,7 +169,7 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de saida
     for (size_t i = 0; i < outputLayer.size(); i++)
     {
-        outputLayer[i].setValue(values[i][0]);
+        outputLayer[i].setValue(values[i][0], ACTFUNC::SIGMOID);
         outputLayer[i].setBias(values[i][1]);
 
         std::vector<float> weights;
@@ -206,7 +206,7 @@ std::vector<unsigned> NeuralNetwork::takeDecision(const std::vector<float> &inpu
 
     for (unsigned int i = 0; i < inputParams.size(); i++)
     {
-        inputLayer[i].setValue(inputParams[i]);
+        inputLayer[i].setValue(inputParams[i], ACTFUNC::NONE);
     }
 
     // Calcular os valores para a camada oculta
@@ -222,7 +222,7 @@ std::vector<unsigned> NeuralNetwork::takeDecision(const std::vector<float> &inpu
             float bias =   inputLayer[j].getBias();
             result += (value * weight) + bias;
         }
-        hiddenLayer[0][i].setValue(result);
+        hiddenLayer[0][i].setValue(result, activFuncHidden);
     }
 
     for (unsigned int i = 0; i < hiddenLayer.size(); i++)
