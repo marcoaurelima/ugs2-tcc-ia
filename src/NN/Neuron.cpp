@@ -32,15 +32,13 @@ void Neuron::setValue(float value, ACTFUNC activationFunction)
     
     case ACTFUNC::SIGMOID:
         this->value = sigmoid(value);
+        std::cout << "SIGMOID: " << value << " | " << this->value << std::endl;
         break;
     
     default:
         this->value = value;
         break;
     }
-    this->value = value;
-
-
 
 }
 

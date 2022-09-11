@@ -4,6 +4,7 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 #include <cmath>
 #include <vector>
 #include "enums.h"

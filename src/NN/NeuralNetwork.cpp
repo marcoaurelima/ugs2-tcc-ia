@@ -130,11 +130,11 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de entrada
     for (size_t i = 0; i < inputLayer.size(); i++)
     {
-        inputLayer[i].setValue(values[i][0], ACTFUNC::NONE);
-        inputLayer[i].setBias(values[i][1]);
+        //inputLayer[i].setValue(values[i][0], ACTFUNC::NONE);
+        inputLayer[i].setBias(values[i][0]);
 
         std::vector<float> weights;
-        for (size_t j = 2; j < values[i].size(); j++)
+        for (size_t j = 1; j < values[i].size(); j++)
         {
             weights.push_back(values[i][j]);
         }
@@ -150,11 +150,11 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     {
         for (size_t j = 0; j < hiddenLayer[i].size(); j++)
         {
-            hiddenLayer[i][j].setValue(values[j][0], ACTFUNC::SIGMOID);
-            hiddenLayer[i][j].setBias(values[j][1]);
+            //hiddenLayer[i][j].setValue(values[j][0], ACTFUNC::SIGMOID);
+            hiddenLayer[i][j].setBias(values[j][0]);
 
             std::vector<float> weights;
-            for (size_t k = 2; k < values[i].size(); k++)
+            for (size_t k = 1; k < values[i].size(); k++)
             {
                 weights.push_back(values[j][k]);
             }
@@ -169,11 +169,11 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de saida
     for (size_t i = 0; i < outputLayer.size(); i++)
     {
-        outputLayer[i].setValue(values[i][0], ACTFUNC::SIGMOID);
-        outputLayer[i].setBias(values[i][1]);
+        //outputLayer[i].setValue(values[i][0], ACTFUNC::SIGMOID);
+        outputLayer[i].setBias(values[i][0]);
 
         std::vector<float> weights;
-        for (size_t j = 2; j < values[i].size(); j++)
+        for (size_t j = 1; j < values[i].size(); j++)
         {
             weights.push_back(values[i][j]);
         }

@@ -46,14 +46,17 @@ int main()
     NeuralNetwork network;
 
     network.setInputLayer(InputLayerInfo(2));
-    network.setHiddenLayer(HiddenLayerInfo({3, 3}, ACTFUNC::SIGMOID));
+    network.setHiddenLayer(HiddenLayerInfo({3, 3}, ACTFUNC::RELU));
     network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
     network.loadDataFromFile("configurations/NN/network-data.ini");
+    
+    network.show();
 
-    float pontuation = 50, distance = 233;
+    float pontuation = 20, distance = 5;
     network.takeDecision(std::vector<float>{pontuation, distance});
 
     network.show();
+    
 
     /*
 
