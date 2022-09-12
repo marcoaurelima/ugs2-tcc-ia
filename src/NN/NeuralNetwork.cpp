@@ -88,11 +88,13 @@ void NeuralNetwork::setHiddenLayer(const HiddenLayerInfo &layerInfo)
     {
         hiddenLayer.push_back(std::vector<Neuron>(groupSize));
     }
+    activFuncHidden = layerInfo.activationFunction;
 }
 
 void NeuralNetwork::setOutputLayer(const OutputLayerInfo &layerInfo)
 {
     outputLayer = std::vector<Neuron>(layerInfo.qtdNeurons);
+    activFuncOutput = layerInfo.activationFunction;
 }
 
 void NeuralNetwork::loadDataFromFile(const std::string path)
@@ -128,11 +130,11 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de entrada
     for (size_t i = 0; i < inputLayer.size(); i++)
     {
-        inputLayer[i].setValue(values[i][0]);
-        inputLayer[i].setBias(values[i][1]);
+        // inputLayer[i].setValue(values[i][0], ACTFUNC::NONE);
+        inputLayer[i].setBias(values[i][0]);
 
         std::vector<float> weights;
-        for (size_t j = 2; j < values[i].size(); j++)
+        for (size_t j = 1; j < values[i].size(); j++)
         {
             weights.push_back(values[i][j]);
         }
@@ -148,11 +150,11 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     {
         for (size_t j = 0; j < hiddenLayer[i].size(); j++)
         {
-            hiddenLayer[i][j].setValue(values[j][0]);
-            hiddenLayer[i][j].setBias(values[j][1]);
+            // hiddenLayer[i][j].setValue(values[j][0], ACTFUNC::SIGMOID);
+            hiddenLayer[i][j].setBias(values[j][0]);
 
             std::vector<float> weights;
-            for (size_t k = 2; k < values[i].size(); k++)
+            for (size_t k = 1; k < values[i].size(); k++)
             {
                 weights.push_back(values[j][k]);
             }
@@ -167,11 +169,11 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de saida
     for (size_t i = 0; i < outputLayer.size(); i++)
     {
-        outputLayer[i].setValue(values[i][0]);
-        outputLayer[i].setBias(values[i][1]);
+        // outputLayer[i].setValue(values[i][0], ACTFUNC::SIGMOID);
+        outputLayer[i].setBias(values[i][0]);
 
         std::vector<float> weights;
-        for (size_t j = 2; j < values[i].size(); j++)
+        for (size_t j = 1; j < values[i].size(); j++)
         {
             weights.push_back(values[i][j]);
         }
@@ -188,8 +190,73 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     }
 }
 
-std::vector<unsigned> NeuralNetwork::takeDecision(const std::initializer_list<float> inputParams)
+// [x]         valor a ser normalizado
+// [xMin xMax] variação do valor de x
+// [d1 d2]     Limite ao qual o valor de x será reduzido
+float NeuralNetwork::normalize(float x, float xMin, float xMax, float d1, float d2) const
 {
+    return (((x - xMin) * (d2 - d1)) / (xMax - xMin)) + d1;
+}
+
+std::vector<unsigned> NeuralNetwork::takeDecision(const std::vector<float> &inputParams)
+{
+    std::cout << "takeDecision: " << inputParams.size() << std::endl;
+
+    // Preencher Neuronios da camada de entrada com os valores
+
+    for (unsigned int i = 0; i < inputParams.size(); i++)
+    {
+        inputLayer[i].setValue(inputParams[i], ACTFUNC::NONE);
+    }
+
+    // Calcular os valores para a camada oculta
+
+    // Primeiro grupo de neuronios da camada oculta
+    for (unsigned int i = 0; i < hiddenLayer[0].size(); i++)
+    {
+        float result = 0.0;
+        for (unsigned int j = 0; j < inputLayer.size(); j++)
+        {
+            float value = inputLayer[j].getValue();
+            float weight = inputLayer[j].getConnectionsHeights()[i];
+            float bias = inputLayer[j].getBias();
+            result += (value * weight) + bias;
+        }
+        hiddenLayer[0][i].setValue(result, activFuncHidden);
+    }
+
+    // Restante dos grupos de neuronios da camada oculta
+    for (unsigned int i = 1; i < hiddenLayer.size(); i++)
+    {
+        for (unsigned int j = 0; j < hiddenLayer[i].size(); j++)
+        {
+            float result = 0.0;
+
+            for (unsigned int k = 0; k < hiddenLayer[i - 1].size(); k++)
+            {
+                float value = hiddenLayer[i - 1][k].getValue();
+                float weight = hiddenLayer[i - 1][k].getConnectionsHeights()[j];
+                float bias = hiddenLayer[i - 1][j].getBias();
+                result += (value * weight) + bias;
+            }
+            hiddenLayer[i][j].setValue(result, activFuncHidden);
+        }
+    }
+
+    // Preenchimento da camada de saida
+    for (unsigned int i = 0; i < outputLayer.size(); i++)
+    {
+        float result = 0.0;
+        for (unsigned int j = 0; j < hiddenLayer[hiddenLayer.size()-1].size(); j++)
+        {
+            float value = hiddenLayer[hiddenLayer.size()-1][j].getValue();
+            float weight = hiddenLayer[hiddenLayer.size()-1][j].getConnectionsHeights()[i];
+            float bias = hiddenLayer[hiddenLayer.size()-1][j].getBias();
+            result += (value * weight) + bias;
+        }
+        outputLayer[i].setValue(result, activFuncOutput);
+    }
+
     for (auto i : inputParams)
         return std::vector<unsigned>((unsigned)i);
 

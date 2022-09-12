@@ -7,6 +7,8 @@
 #include <vector>
 #include <fstream>
 #include <deque>
+#include <algorithm>
+#include <cmath>
 #include "NN/types.h"
 
 class NeuralNetwork
@@ -19,7 +21,7 @@ public:
     void setHiddenLayer(const HiddenLayerInfo& layerInfo);
     void setOutputLayer(const OutputLayerInfo& layerInfo);
 
-    std::vector<unsigned> takeDecision(const std::initializer_list<float> inputParams);
+    std::vector<unsigned> takeDecision(const std::vector<float>& inputParams);
     
     void show() const;
 
@@ -29,7 +31,11 @@ private:
     InputLayer inputLayer;
     HiddenLayer hiddenLayer;
     OutputLayer outputLayer;
+    ACTFUNC activFuncHidden;
+    ACTFUNC activFuncOutput;
 
+
+    float normalize(float x, float xMin, float xMax, float d1, float d2) const;
 };
 
 #endif

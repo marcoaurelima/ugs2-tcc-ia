@@ -13,7 +13,6 @@
 #include "NN/types.h"
 #include "NN/NeuralNetwork.h"
 
-// testando commit
 
 float sigmoid(float x)
 {
@@ -35,14 +34,17 @@ int main()
     NeuralNetwork network;
 
     network.setInputLayer(InputLayerInfo(2));
-    network.setHiddenLayer(HiddenLayerInfo({3, 3}));
-    network.setOutputLayer(OutputLayerInfo(1));
+    network.setHiddenLayer(HiddenLayerInfo({4, 3}, ACTFUNC::RELU));
+    network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
     network.loadDataFromFile("configurations/NN/network-data.ini");
+    
+    network.show();
 
-    float pontuation = 0, distance = 0;
-    network.takeDecision({pontuation, distance});
+    float pontuation = 20, distance = 5;
+    network.takeDecision(std::vector<float>{pontuation, distance});
 
     network.show();
+    
 
     /*
 
