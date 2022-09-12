@@ -21,7 +21,7 @@ public:
     void setHiddenLayer(const HiddenLayerInfo& layerInfo);
     void setOutputLayer(const OutputLayerInfo& layerInfo);
 
-    std::vector<unsigned> takeDecision(const std::vector<float>& inputParams);
+    std::vector<float> takeDecision(const std::vector<float>& inputParams);
     
     void show() const;
 

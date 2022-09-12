@@ -198,7 +198,7 @@ float NeuralNetwork::normalize(float x, float xMin, float xMax, float d1, float 
     return (((x - xMin) * (d2 - d1)) / (xMax - xMin)) + d1;
 }
 
-std::vector<unsigned> NeuralNetwork::takeDecision(const std::vector<float> &inputParams)
+std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputParams)
 {
     std::cout << "takeDecision: " << inputParams.size() << std::endl;
 
@@ -257,8 +257,13 @@ std::vector<unsigned> NeuralNetwork::takeDecision(const std::vector<float> &inpu
         outputLayer[i].setValue(result, activFuncOutput);
     }
 
-    for (auto i : inputParams)
-        return std::vector<unsigned>((unsigned)i);
+    // Preparar retorno da decisão
+    std::vector<float> decision;
+    for(Neuron neuron : outputLayer)
+    {
+        decision.push_back(neuron.getValue());
+    }
 
-    return std::vector<unsigned>(0);
+    return decision;
+
 }
