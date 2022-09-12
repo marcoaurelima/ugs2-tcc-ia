@@ -26,9 +26,11 @@ int main()
     network.show();
 
     float pontuation = 20, distance = 5;
-    network.takeDecision(std::vector<float>{pontuation, distance});
+    float decision = network.takeDecision(std::vector<float>{pontuation, distance})[0];
 
     network.show();
+
+    std::cout << "Decision: " << decision << std::endl;
     
 
     /*
