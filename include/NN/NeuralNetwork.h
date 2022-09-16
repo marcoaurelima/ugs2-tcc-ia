@@ -11,6 +11,8 @@
 #include <cmath>
 #include "NN/types.h"
 #include "GA/Chromosome.h"
+#include "../utils.h"
+
 
 using std::cout;
 using std::endl;
