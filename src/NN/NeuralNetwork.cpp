@@ -247,11 +247,11 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
     for (unsigned int i = 0; i < outputLayer.size(); i++)
     {
         float result = 0.0;
-        for (unsigned int j = 0; j < hiddenLayer[hiddenLayer.size()-1].size(); j++)
+        for (unsigned int j = 0; j < hiddenLayer[hiddenLayer.size() - 1].size(); j++)
         {
-            float value = hiddenLayer[hiddenLayer.size()-1][j].getValue();
-            float weight = hiddenLayer[hiddenLayer.size()-1][j].getConnectionsHeights()[i];
-            float bias = hiddenLayer[hiddenLayer.size()-1][j].getBias();
+            float value = hiddenLayer[hiddenLayer.size() - 1][j].getValue();
+            float weight = hiddenLayer[hiddenLayer.size() - 1][j].getConnectionsHeights()[i];
+            float bias = hiddenLayer[hiddenLayer.size() - 1][j].getBias();
             result += (value * weight) + bias;
         }
         outputLayer[i].setValue(result, activFuncOutput);
@@ -259,11 +259,140 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
 
     // Preparar retorno da decisão
     std::vector<float> decision;
-    for(Neuron neuron : outputLayer)
+    for (Neuron neuron : outputLayer)
     {
         decision.push_back(neuron.getValue());
     }
 
     return decision;
+}
 
+void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
+{
+    // Cada cromossomo tem as informaçoes de pesos sinápticos e bias
+    // estas informações serão lidas e virão da seguinte maneira (exemplo ilustrativo):
+    // bias+pesos_sinapticos+bias+pesos_sinapticos+bias+pesos_sinapticos+
+
+    // calcular tamanho total esperado do cromossomo de acordo com a tolpologia atual da rede neural
+    unsigned qtdNeurons = 0;
+    unsigned qtdConnections = 0;
+
+    // Camada de entrada
+    qtdNeurons += inputLayer.size();
+    for (unsigned i = 0; i < inputLayer.size(); ++i)
+    {
+        qtdConnections += inputLayer[i].getConnectionsHeights().size();
+    }
+
+    // camada oculta
+    for (unsigned i = 0; i < hiddenLayer.size(); ++i)
+    {
+        qtdNeurons += hiddenLayer[i].size();
+        for (unsigned j = 0; j < hiddenLayer[i].size(); ++j)
+        {
+            qtdConnections += hiddenLayer[i][j].getConnectionsHeights().size();
+        }
+    }
+
+    // Camada de saida
+    qtdNeurons += outputLayer.size();
+
+    // Efetuar comparação
+    unsigned expectedChromosomeSize = (qtdConnections + qtdNeurons);
+    if (expectedChromosomeSize != chromossome.getAllGenes().size())
+    {
+        std::cerr << "\n[ERROR] Cromossomo incompatível com a topologia da rede neural atual.\n"
+                  << "Tamanho esperado: " << expectedChromosomeSize << "   Atual: " << chromossome.getAllGenes().size() << "\n\n";
+        exit(-1);
+    }
+
+    // Inserindo os valores nas suas respactivas camadas
+
+    // Primeiro, criar um vetor de indices que guardara as posições dos bias;
+    // os pesos sinápticos serão coletados entre um bias e outro
+    std::deque<unsigned> indexes(1);
+    unsigned index = 0;
+
+    // camada de entrada
+    unsigned offset = hiddenLayer[0].size();
+    for (unsigned int i = 0; i < inputLayer.size(); i++)
+    {
+        index += offset + 1;
+        indexes.push_back(index);
+    }
+
+    // camada oculta
+    for (unsigned int i = 1; i < hiddenLayer.size(); i++)
+    {
+        unsigned offset = hiddenLayer[i].size();
+        for (unsigned int j = 0; j < hiddenLayer[i - 1].size(); j++)
+        {
+            index += offset + 1;
+            indexes.push_back(index);
+        }
+    }
+
+    // Camada de saída
+    offset = outputLayer.size();
+    for (unsigned int i = 0; i < hiddenLayer[hiddenLayer.size() - 1].size(); i++)
+    {
+        index += offset + 1;
+        indexes.push_back(index);
+    }
+
+    showvalues("indexes", indexes, " ");
+
+    // Com os indices corretos mapeados, é hora de inserir os valores na rede neural
+
+    // Camada de entrada
+    for (unsigned int i = 0; i < inputLayer.size(); i++)
+    {
+        // pegar os valores dentro do intervalo; primeiro valor bias, restante é peso sináptico
+        unsigned bias = chromossome.getGene(indexes[0]);
+        std::vector<float> connections;
+        for (unsigned int j = indexes[0] + 1; j < indexes[1]; j++)
+        {
+            connections.push_back(chromossome.getGene(j));
+        }
+        inputLayer[i].setConnectionsHeights(connections);
+        inputLayer[i].setBias(bias);
+        indexes.pop_front();
+    }
+
+    // camada oculta
+    for (unsigned int i = 0; i < hiddenLayer.size(); i++)
+    {
+        for (unsigned int j = 0; j < hiddenLayer[i].size(); j++)
+        {
+            // pegar os valores dentro do intervalo; primeiro valor bias, restante é peso sináptico
+            unsigned bias = chromossome.getGene(indexes[0]);
+            std::vector<float> connections;
+            for (unsigned int j = indexes[0] + 1; j < indexes[1]; j++)
+            {
+                connections.push_back(chromossome.getGene(j));
+            }
+            hiddenLayer[i][j].setConnectionsHeights(connections);
+            hiddenLayer[i][j].setBias(bias);
+            indexes.pop_front();
+        }
+    }
+
+    // camada de saida
+    for (unsigned int i = 0; i < outputLayer.size(); i++)
+    {
+        // pegar os valores dentro do intervalo; primeiro valor bias, restante é peso sináptico
+        unsigned bias = chromossome.getGene(indexes[0]);
+        std::vector<float> connections;
+        for (unsigned int j = indexes[0] + 1; j < indexes[1]; j++)
+        {
+            connections.push_back(chromossome.getGene(j));
+        }
+        outputLayer[i].setConnectionsHeights(connections);
+        outputLayer[i].setBias(bias);
+        indexes.pop_front();
+    }
+
+    show();
+
+    exit(0);
 }

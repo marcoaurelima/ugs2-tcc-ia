@@ -10,6 +10,10 @@
 #include <algorithm>
 #include <cmath>
 #include "NN/types.h"
+#include "GA/Chromosome.h"
+
+using std::cout;
+using std::endl;
 
 class NeuralNetwork
 {
@@ -26,7 +30,7 @@ public:
     void show() const;
 
     void loadDataFromFile(const std::string path);
-
+    void loadDataFromChromosome(const Chromosome& chromossome);
 private:
     InputLayer inputLayer;
     HiddenLayer hiddenLayer;
