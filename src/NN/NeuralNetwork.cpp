@@ -277,23 +277,42 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome& chromossome)
 
     // calcular tamanho total esperado do cromossomo de acordo com a tolpologia atual da rede neural
     unsigned qtdNeurons = 0;
-    qtdNeurons = inputLayer.size();
+    unsigned qtdConnections = 0;
+
+    // Camada de entrada
+    qtdNeurons += inputLayer.size();
+    for(unsigned i = 0; i < inputLayer.size(); ++i)
+    {
+        qtdConnections += inputLayer[i].getConnectionsHeights().size();
+    }
+
+    // camada oculta
     for(unsigned i = 0; i < hiddenLayer.size(); ++i)
     {
+        qtdNeurons += hiddenLayer[i].size();
         for(unsigned j = 0; j < hiddenLayer[i].size(); ++j)
         {
-            
+            qtdConnections += hiddenLayer[i][j].getConnectionsHeights().size(); 
         }
-
     }
 
-
-
-    for(unsigned int i = 0; i < chromossome.getAllGenes().size(); ++i)
-    {
-
-    }
+    qtdNeurons += outputLayer.size();
     
+    unsigned expectedChromosomeSize = qtdConnections + qtdNeurons;
+    
+    if(expectedChromosomeSize != chromossome.getAllGenes().size())
+    {
+        std::cerr << "\n[ERROR] Cromossomo incompatível com a topologia da rede neural atual.\n"
+                  << "Tamanho esperado: " << expectedChromosomeSize << "   Atual: " << chromossome.getAllGenes().size() << "\n\n"; exit(-1);
+    }
+
+
+    cout << "qtdNeurons: " << qtdNeurons << endl;
+    cout << "qtdConnections: " << qtdConnections << endl;
+
+    exit(0);
+
+  
     
     
 

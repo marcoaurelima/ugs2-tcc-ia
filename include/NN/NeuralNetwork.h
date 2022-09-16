@@ -12,6 +12,9 @@
 #include "NN/types.h"
 #include "GA/Chromosome.h"
 
+using std::cout;
+using std::endl;
+
 class NeuralNetwork
 {
 public:
