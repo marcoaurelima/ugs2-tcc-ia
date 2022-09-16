@@ -359,6 +359,39 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
         indexes.pop_front();
     }
 
+    // camada oculta
+    for (unsigned int i = 0; i < hiddenLayer.size(); i++)
+    {
+        for (unsigned int j = 0; j < hiddenLayer[i].size(); j++)
+        {
+            // pegar os valores dentro do intervalo; primeiro valor bias, restante é peso sináptico
+            unsigned bias = chromossome.getGene(indexes[0]);
+            std::vector<float> connections;
+            for (unsigned int j = indexes[0] + 1; j < indexes[1]; j++)
+            {
+                connections.push_back(chromossome.getGene(j));
+            }
+            hiddenLayer[i][j].setConnectionsHeights(connections);
+            hiddenLayer[i][j].setBias(bias);
+            indexes.pop_front();
+        }
+    }
+
+    // camada de saida
+    for (unsigned int i = 0; i < outputLayer.size(); i++)
+    {
+        // pegar os valores dentro do intervalo; primeiro valor bias, restante é peso sináptico
+        unsigned bias = chromossome.getGene(indexes[0]);
+        std::vector<float> connections;
+        for (unsigned int j = indexes[0] + 1; j < indexes[1]; j++)
+        {
+            connections.push_back(chromossome.getGene(j));
+        }
+        outputLayer[i].setConnectionsHeights(connections);
+        outputLayer[i].setBias(bias);
+        indexes.pop_front();
+    }
+
     show();
 
     exit(0);
