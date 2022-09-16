@@ -267,3 +267,34 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
     return decision;
 
 }
+
+
+void NeuralNetwork::loadDataFromChromosome(const Chromosome& chromossome)
+{
+    // Cada cromossomo tem as informaçoes de pesos sinápticos e bias
+    // estas informações serão lidas e virão da seguinte maneira (exemplo ilustrativo):
+    // bias+pesos_sinapticos+bias+pesos_sinapticos+bias+pesos_sinapticos+
+
+    // calcular tamanho total esperado do cromossomo de acordo com a tolpologia atual da rede neural
+    unsigned qtdNeurons = 0;
+    qtdNeurons = inputLayer.size();
+    for(unsigned i = 0; i < hiddenLayer.size(); ++i)
+    {
+        for(unsigned j = 0; j < hiddenLayer[i].size(); ++j)
+        {
+            
+        }
+
+    }
+
+
+
+    for(unsigned int i = 0; i < chromossome.getAllGenes().size(); ++i)
+    {
+
+    }
+    
+    
+    
+
+}
