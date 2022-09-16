@@ -297,8 +297,8 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
     // Camada de saida
     qtdNeurons += outputLayer.size();
 
-    unsigned expectedChromosomeSize = qtdConnections + qtdNeurons;
-
+    // Efetuar comparação
+    unsigned expectedChromosomeSize = (qtdConnections + qtdNeurons);
     if (expectedChromosomeSize != chromossome.getAllGenes().size())
     {
         std::cerr << "\n[ERROR] Cromossomo incompatível com a topologia da rede neural atual.\n"
@@ -310,12 +310,11 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
 
     // Primeiro, criar um vetor de indices que guardara as posições dos bias;
     // os pesos sinápticos serão coletados entre um bias e outro
-    std::vector<unsigned> indexes;
-
-    // offset Indica de quantos em quantos valores vao ser coletados no vetor, sendo o bias o primeiro valor sempre
-    unsigned offset = hiddenLayer[0].size();
+    std::deque<unsigned> indexes(1);
     unsigned index = 0;
+
     // camada de entrada
+    unsigned offset = hiddenLayer[0].size();
     for (unsigned int i = 0; i < inputLayer.size(); i++)
     {
         index += offset + 1;
@@ -326,7 +325,7 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
     for (unsigned int i = 1; i < hiddenLayer.size(); i++)
     {
         unsigned offset = hiddenLayer[i].size();
-        for (unsigned int j = 0; j < hiddenLayer[i-1].size(); j++)
+        for (unsigned int j = 0; j < hiddenLayer[i - 1].size(); j++)
         {
             index += offset + 1;
             indexes.push_back(index);
@@ -335,7 +334,7 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
 
     // Camada de saída
     offset = outputLayer.size();
-    for (unsigned int i = 0; i < hiddenLayer[hiddenLayer.size()-1].size(); i++)
+    for (unsigned int i = 0; i < hiddenLayer[hiddenLayer.size() - 1].size(); i++)
     {
         index += offset + 1;
         indexes.push_back(index);
@@ -343,7 +342,24 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
 
     showvalues("indexes", indexes, " ");
 
-    exit(0);
+    // Com os indices corretos mapeados, é hora de inserir os valores na rede neural
 
-   
+    // Camada de entrada
+    for (unsigned int i = 0; i < inputLayer.size(); i++)
+    {
+        // pegar os valores dentro do intervalo; primeiro valor bias, restante é peso sináptico
+        unsigned bias = chromossome.getGene(indexes[0]);
+        std::vector<float> connections;
+        for (unsigned int j = indexes[0] + 1; j < indexes[1]; j++)
+        {
+            connections.push_back(chromossome.getGene(j));
+        }
+        inputLayer[i].setConnectionsHeights(connections);
+        inputLayer[i].setBias(bias);
+        indexes.pop_front();
+    }
+
+    show();
+
+    exit(0);
 }
