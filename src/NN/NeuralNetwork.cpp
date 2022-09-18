@@ -390,5 +390,5 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
 
     show();
 
-    exit(0);
+    //exit(0);
 }

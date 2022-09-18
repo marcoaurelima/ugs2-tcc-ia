@@ -23,9 +23,7 @@ void Population::createInitialPopulation(const unsigned populationSize, const un
             float randFloat = getRandomFloat();
             c.setGene(randFloat);
         }
-        #ifndef IA_DEBUG
-            c.setRandomFitness();
-        #endif
+        // c.setRandomFitness();
         chromosomes.push_back(c);
     }
 }
@@ -609,4 +607,9 @@ void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
 std::vector<Chromosome> Population::getCurrentPopulation() const
 {
     return chromosomes;
+}
+
+void Population::setFitness(const unsigned index, const float fitness)
+{
+    chromosomes[index].setFitness(fitness);
 }
