@@ -23,8 +23,17 @@ int main()
     // população inicial
     Population population;
     population.createInitialPopulation(5,27);
+    population.setNewGenerationParams(
+        NewGenParams {
+            SELECTION_TYPE::ROULLETE,
+            CROSSOVER_TYPE::SINGLE_POINT,
+            MUTATION_TYPE::INSERTION
+        }
+    );
+
     population.show(); 
 
+    exit(0);    
     // definição da topologia da rede neural
     NeuralNetwork network;
     network.setInputLayer(InputLayerInfo(2));
@@ -47,12 +56,7 @@ int main()
 
     std::cout << "================================================\n\n";
 
-    NewGenParams newGenParams;
-    newGenParams.selectionType = SELECTION_TYPE::ROULLETE;
-    newGenParams.crossoverType = CROSSOVER_TYPE::SINGLE_POINT;
-    newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
-
-    population.setNewGenerationParams(newGenParams);
+    
     population.generateNewPopulation();
     
     population.show();
