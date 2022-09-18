@@ -37,14 +37,14 @@ int main()
     float pontuation = 20, distance = 5;
 
     NeuroEvolutiveEngine engine(population, network);
-    float r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
+    //float r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
     engine.showLogs();
-    cout << "Decision1: " << r << endl;
+    //cout << "Decision1: " << r << endl;
 
     engine.nextTopology();
     engine.showLogs();
-    r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
-    cout << "Decision2: " << r << endl;
+    //r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
+    //cout << "Decision2: " << r << endl;
 
 /*
     exit(0);
