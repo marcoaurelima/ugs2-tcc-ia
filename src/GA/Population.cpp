@@ -23,7 +23,9 @@ void Population::createInitialPopulation(const unsigned populationSize, const un
             float randFloat = getRandomFloat();
             c.setGene(randFloat);
         }
-        c.setRandomFitness();
+        #ifndef IA_DEBUG
+            c.setRandomFitness();
+        #endif
         chromosomes.push_back(c);
     }
 }

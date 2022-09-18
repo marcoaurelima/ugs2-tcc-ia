@@ -277,25 +277,21 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
     unsigned qtdNeurons = 0;
     unsigned qtdConnections = 0;
 
-    // Camada de entrada
+    // camada de entrada
     qtdNeurons += inputLayer.size();
-    for (unsigned i = 0; i < inputLayer.size(); ++i)
-    {
-        qtdConnections += inputLayer[i].getConnectionsHeights().size();
-    }
+    qtdConnections += inputLayer.size() * hiddenLayer[0].size();
 
     // camada oculta
-    for (unsigned i = 0; i < hiddenLayer.size(); ++i)
+    qtdNeurons += hiddenLayer[hiddenLayer.size()-1].size();
+    for (unsigned i = 0; i < hiddenLayer.size()-1; ++i)
     {
         qtdNeurons += hiddenLayer[i].size();
-        for (unsigned j = 0; j < hiddenLayer[i].size(); ++j)
-        {
-            qtdConnections += hiddenLayer[i][j].getConnectionsHeights().size();
-        }
+        qtdConnections += hiddenLayer[i].size() * hiddenLayer[i+1].size();
     }
 
-    // Camada de saida
+    // camada de saída
     qtdNeurons += outputLayer.size();
+    qtdConnections += hiddenLayer[hiddenLayer.size()-1].size() * outputLayer.size();
 
     // Efetuar comparação
     unsigned expectedChromosomeSize = (qtdConnections + qtdNeurons);

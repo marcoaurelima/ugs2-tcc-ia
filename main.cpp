@@ -12,18 +12,37 @@
 #include "NN/types.h"
 #include "NN/NeuralNetwork.h"
 
+#define IA_DEBUG
+
+
 int main()
 {    
+
+    Population population;
+    population.createInitialPopulation(5,27);
+    
+    population.show();
+
+    NewGenParams newGenParams;
+    newGenParams.selectionType = SELECTION_TYPE::ROULLETE;
+    newGenParams.crossoverType = CROSSOVER_TYPE::SINGLE_POINT;
+    newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
+
+    population.generateNewPopulation(newGenParams);
+    
+
     NeuralNetwork network;
 
     network.setInputLayer(InputLayerInfo(2));
     network.setHiddenLayer(HiddenLayerInfo({3, 3}, ACTFUNC::RELU));
     network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
-    network.loadDataFromFile("configurations/NN/network-data.ini");
+    // network.loadDataFromFile("configurations/NN/network-data.ini");
     
-    Chromosome chromossome({1,2,3,4,5,6,7,8,9,10,
-                            11,12,13,14,15,16,17,18,19,20,
-                            21,22,23,24,25,26,27});
+    // Chromosome chromossome({1,2,3,4,5,6,7,8,9,10,
+    //                         11,12,13,14,15,16,17,18,19,20,
+    //                         21,22,23,24,25,26,27});
+
+    Chromosome chromossome = population.getCurrentPopulation()[0];
 
     network.loadDataFromChromosome(chromossome);
 
@@ -35,23 +54,6 @@ int main()
     network.show();
 
     std::cout << "Decision: " << decision << std::endl;
-    
-
-
-
-    Population population;
-    population.createInitialPopulation(8,10);
-    
-
-    
-    population.show();
-
-    NewGenParams newGenParams;
-    newGenParams.selectionType = SELECTION_TYPE::ROULLETE;
-    newGenParams.crossoverType = CROSSOVER_TYPE::SINGLE_POINT;
-    newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
-
-    population.generateNewPopulation(newGenParams);
     
 
     return 0;
