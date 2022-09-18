@@ -6,8 +6,8 @@ NeuralNetwork::~NeuralNetwork() {}
 
 void NeuralNetwork::show() const
 {
-    std::cout << std::endl;
-    std::cout << "\n------ INPUT LAYER ------" << std::endl;
+    //std::cout << std::endl;
+    std::cout << "------ INPUT LAYER ------" << std::endl;
     std::cout << "- size: " << inputLayer.size() << std::endl;
     for (size_t i = 0; i < inputLayer.size(); i++)
     {
@@ -74,7 +74,7 @@ void NeuralNetwork::show() const
         std::cout << std::endl;
     }
     std::cout << std::endl
-              << std::endl;
+              << std::endl << std::endl << std::endl << std::endl;
 }
 
 void NeuralNetwork::setInputLayer(const InputLayerInfo &layerInfo)
@@ -336,7 +336,6 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
         indexes.push_back(index);
     }
 
-    showvalues("indexes", indexes, " ");
 
     // Com os indices corretos mapeados, é hora de inserir os valores na rede neural
 
@@ -388,7 +387,4 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
         indexes.pop_front();
     }
 
-    show();
-
-    //exit(0);
 }
