@@ -3,19 +3,20 @@
 
 #pragma once
 
-#include "GA/Chromosome.h"
 #include "GA/Population.h"
-#include "NN/Neuron.h"
 #include "NN/NeuralNetwork.h"
 
 class NeuroEvolutiveEngine
 {
 public:
-    NeuroEvolutiveEngine();
+    NeuroEvolutiveEngine(Population population, NeuralNetwork neuralNetwork);
     ~NeuroEvolutiveEngine();
 
-private:
+    void showLogs() const;
 
+private:
+    Population population;
+    NeuralNetwork neuralNetwork;
 };
 
 #endif
