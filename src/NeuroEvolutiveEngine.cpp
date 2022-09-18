@@ -1,7 +1,11 @@
 #include "NeuroEvolutiveEngine.h"
 
 NeuroEvolutiveEngine::NeuroEvolutiveEngine(Population population, NeuralNetwork neuralNetwork)
-: population(population), neuralNetwork(neuralNetwork){}
+: population(population), neuralNetwork(neuralNetwork)
+{
+    int i = currentChromossomeIndex;
+    this->neuralNetwork.loadDataFromChromosome(this->population.getCurrentPopulation()[i]);
+}
 
 
 NeuroEvolutiveEngine::~NeuroEvolutiveEngine()
@@ -20,8 +24,8 @@ std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float>& 
     return neuralNetwork.takeDecision(decision);
 }
 
-void NeuroEvolutiveEngine::createInitialTopology()
+void NeuroEvolutiveEngine::nextTopology()
 {
-    int i = currentChromossomeIndex;
-    neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
+    //int i = currentChromossomeIndex;
+    //neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
 }

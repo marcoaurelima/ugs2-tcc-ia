@@ -15,7 +15,7 @@ public:
 
     void showLogs() const;
     std::vector<float> takeDecision(const std::vector<float>& decision);
-    void createInitialTopology();
+    void nextTopology();
 
 private:
     Population population;

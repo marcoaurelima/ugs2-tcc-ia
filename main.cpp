@@ -40,7 +40,7 @@ int main()
     float pontuation = 20, distance = 5;
     
     NeuroEvolutiveEngine engine(population, network);
-    engine.createInitialTopology();
+    //engine.createInitialTopology();
     float r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
     cout << "Decision: " << r << endl; 
     engine.showLogs();
