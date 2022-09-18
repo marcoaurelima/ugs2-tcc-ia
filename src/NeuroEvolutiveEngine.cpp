@@ -3,7 +3,7 @@
 NeuroEvolutiveEngine::NeuroEvolutiveEngine(Population population, NeuralNetwork neuralNetwork)
 : population(population), neuralNetwork(neuralNetwork)
 {
-    int i = currentChromossomeIndex;
+    int i = currentChromossomeIndex = 0;
     this->neuralNetwork.loadDataFromChromosome(this->population.getCurrentPopulation()[i]);
 }
 
@@ -26,12 +26,16 @@ std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float>& 
 
 void NeuroEvolutiveEngine::nextTopology()
 {
+    if(currentChromossomeIndex == population.getCurrentPopulation().size() - 1){ return; }
+
     int i = ++currentChromossomeIndex;
     neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
 }
 
 void NeuroEvolutiveEngine::prevTopology()
 {
+    if(currentChromossomeIndex == 0){ return; }
+
     int i = --currentChromossomeIndex;
     neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
 }

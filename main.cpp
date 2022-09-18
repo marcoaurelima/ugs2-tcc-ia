@@ -16,19 +16,16 @@
 
 using std::cout;
 int main()
-{    
+{
 
     // população inicial
     Population population;
-    population.createInitialPopulation(5,27);
+    population.createInitialPopulation(5, 27);
     population.setNewGenerationParams(
-        NewGenParams {
+        NewGenParams{
             SELECTION_TYPE::ROULLETE,
             CROSSOVER_TYPE::SINGLE_POINT,
-            MUTATION_TYPE::INSERTION
-        }
-    );
-
+            MUTATION_TYPE::INSERTION});
 
     // definição da topologia da rede neural
     NeuralNetwork network;
@@ -38,17 +35,20 @@ int main()
 
     // Dados do jogo em tempo real
     float pontuation = 20, distance = 5;
-    
+
     NeuroEvolutiveEngine engine(population, network);
-
-
     float r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
-    cout << "Decision: " << r << endl; 
     engine.showLogs();
+    cout << "Decision1: " << r << endl;
 
+    engine.nextTopology();
+    engine.showLogs();
+    r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
+    cout << "Decision2: " << r << endl;
 
+/*
     exit(0);
-    
+
     // unsigned errors = 0;
     // bool isPressed = false;
 
@@ -59,17 +59,13 @@ int main()
     network.show();
 
     std::cout << "Decision: " << decision << std::endl;
-    //exit(0);
+    // exit(0);
 
     std::cout << "================================================\n\n";
 
-    
     population.generateNewPopulation();
-    
+
     population.show();
-
-    
-    
-
+*/
     return 0;
 }

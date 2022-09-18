@@ -200,7 +200,6 @@ float NeuralNetwork::normalize(float x, float xMin, float xMax, float d1, float 
 
 std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputParams)
 {
-    std::cout << "takeDecision: " << inputParams.size() << std::endl;
 
     // Preencher Neuronios da camada de entrada com os valores
 
