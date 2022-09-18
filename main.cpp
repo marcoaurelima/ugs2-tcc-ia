@@ -43,16 +43,19 @@ int main()
     network.show();
 
     std::cout << "Decision: " << decision << std::endl;
-    exit(0);
+    //exit(0);
 
+    std::cout << "================================================\n\n";
 
     NewGenParams newGenParams;
     newGenParams.selectionType = SELECTION_TYPE::ROULLETE;
     newGenParams.crossoverType = CROSSOVER_TYPE::SINGLE_POINT;
     newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
 
-    population.generateNewPopulation(newGenParams);
+    population.setNewGenerationParams(newGenParams);
+    population.generateNewPopulation();
     
+    population.show();
 
     
     

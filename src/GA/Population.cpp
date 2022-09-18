@@ -46,7 +46,12 @@ void Population::show() const
               << std::endl;
 }
 
-void Population::generateNewPopulation(NewGenParams newGenParams)
+void Population::setNewGenerationParams(const NewGenParams newGenParams)
+{
+    this->newGenParams = newGenParams;
+}
+
+void Population::generateNewPopulation()
 {
     /// seleção ///
     switch (newGenParams.selectionType)

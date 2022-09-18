@@ -18,7 +18,8 @@ public:
     ~Population();
 
     void createInitialPopulation(const unsigned populationSize, const unsigned chromossomeSize);
-    void generateNewPopulation(const NewGenParams newGenParams);
+    void setNewGenerationParams(const NewGenParams newGenParams);
+    void generateNewPopulation();
     std::vector<Chromosome> getCurrentPopulation() const;
     void show() const;
 
@@ -26,6 +27,8 @@ public:
 
 private:
     std::vector<Chromosome> chromosomes;
+    NewGenParams newGenParams;
+
     std::vector<unsigned> getConfig(const std::string& path) const;
     float getRandomFloat();
 
