@@ -14,3 +14,14 @@ void NeuroEvolutiveEngine::showLogs() const
     population.show();
     neuralNetwork.show();
 }
+
+std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float>& decision)
+{
+    return neuralNetwork.takeDecision(decision);
+}
+
+void NeuroEvolutiveEngine::createInitialTopology()
+{
+    int i = currentChromossomeIndex;
+    neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
+}

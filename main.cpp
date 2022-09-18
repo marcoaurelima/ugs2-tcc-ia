@@ -14,6 +14,7 @@
 
 #include "NeuroEvolutiveEngine.h"
 
+using std::cout;
 int main()
 {    
 
@@ -28,22 +29,27 @@ int main()
         }
     );
 
+
     // definição da topologia da rede neural
     NeuralNetwork network;
     network.setInputLayer(InputLayerInfo(2));
     network.setHiddenLayer(HiddenLayerInfo({3, 3}, ACTFUNC::SIGMOID));
     network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
 
+    // Dados do jogo em tempo real
+    float pontuation = 20, distance = 5;
+    
     NeuroEvolutiveEngine engine(population, network);
+    engine.createInitialTopology();
+    float r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
+    cout << "Decision: " << r << endl; 
     engine.showLogs();
 
 
     exit(0);
     
-    // Dados do jogo em tempo real
-    float pontuation = 20, distance = 5;
-    unsigned errors = 0;
-    bool isPressed = false;
+    // unsigned errors = 0;
+    // bool isPressed = false;
 
     network.loadDataFromChromosome(population.getCurrentPopulation()[0]);
 

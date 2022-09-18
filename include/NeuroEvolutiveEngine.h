@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <vector>
 #include "GA/Population.h"
 #include "NN/NeuralNetwork.h"
 
@@ -13,10 +14,14 @@ public:
     ~NeuroEvolutiveEngine();
 
     void showLogs() const;
+    std::vector<float> takeDecision(const std::vector<float>& decision);
+    void createInitialTopology();
 
 private:
     Population population;
     NeuralNetwork neuralNetwork;
+
+    int currentChromossomeIndex {}; // indice do crmossomo atual que preencheu a rede neural 
 };
 
 #endif
