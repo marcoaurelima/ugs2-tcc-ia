@@ -15,26 +15,29 @@
 
 int main()
 {    
+    // Dados do jogo em tempo real
+    float pontuation = 20, distance = 5;
+    unsigned errors = 0;
+    bool isPressed = false;
 
+    // população inicial
     Population population;
     population.createInitialPopulation(5,27);
-    population.setFitness(0, 11);
-    population.setFitness(1, 123);
     population.show(); 
 
-    
-
-
+    // definição da topologia da rede neural
     NeuralNetwork network;
     network.setInputLayer(InputLayerInfo(2));
     network.setHiddenLayer(HiddenLayerInfo({3, 3}, ACTFUNC::SIGMOID));
     network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
-
-    network.loadDataFromChromosome(population.getCurrentPopulation()[0]);
-
     network.show();
 
-    float pontuation = 20, distance = 5;
+    // contador de cromossomos
+    unsigned count = 0;
+
+
+    network.loadDataFromChromosome(population.getCurrentPopulation()[count]);
+
     float decision = network.takeDecision(std::vector<float>{pontuation, distance})[0];
 
     network.show();
