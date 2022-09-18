@@ -7,7 +7,12 @@ NeuralNetwork::~NeuralNetwork() {}
 void NeuralNetwork::show() const
 {
     //std::cout << std::endl;
+    std::cout << std::setprecision(3);
     std::cout << "------ INPUT LAYER ------" << std::endl;
+
+    std::cout << "cout-Bias: " << inputLayer[0].getBias() << "\n";
+    printf("printf-Bias: %f", inputLayer[0].getBias()); 
+
     std::cout << "- size: " << inputLayer.size() << std::endl;
     for (size_t i = 0; i < inputLayer.size(); i++)
     {

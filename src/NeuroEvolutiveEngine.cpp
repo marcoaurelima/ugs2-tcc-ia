@@ -26,7 +26,7 @@ std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float>& 
 
 void NeuroEvolutiveEngine::nextTopology()
 {
-    if(currentChromossomeIndex == population.getCurrentPopulation().size() - 1){ return; }
+    if(currentChromossomeIndex == (int)population.getCurrentPopulation().size() - 1){ return; }
 
     int i = ++currentChromossomeIndex;
     neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
