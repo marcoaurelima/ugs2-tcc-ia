@@ -38,7 +38,7 @@ int main()
     NeuroEvolutiveEngine engine(population, network);
     engine.showInternalStatus();
 
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < 20; i++)
     {
         value += 0.01;
         auto r = engine.takeDecision({pontuation, distance});

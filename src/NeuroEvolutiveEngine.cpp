@@ -31,7 +31,7 @@ void NeuroEvolutiveEngine::useNextTopology()
 {
     if (currentChromossomeIndex == (int)population.getCurrentPopulation().size() - 1)
     {
-        std::cout << "======== CRIANDO NOVA POPULAÇÃO ========\n\n";
+        std::cout << "======== CRIANDO NOVA POPULAÇÃO ========\n\n\n\n";
         population.generateNewPopulation();
 
         int i = currentChromossomeIndex = 0;
@@ -58,7 +58,7 @@ void NeuroEvolutiveEngine::createNewGeneration()
 {
     population.generateNewPopulation();
     int i = currentChromossomeIndex = 0;
-    this->neuralNetwork.loadDataFromChromosome(this->population.getCurrentPopulation()[i]);
+    neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
 }
 
 void NeuroEvolutiveEngine::setCurrentChromossomeFitness(const float fitness)
