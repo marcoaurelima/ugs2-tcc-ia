@@ -18,7 +18,7 @@ public:
     void nextTopology();
     void prevTopology();
     void createNewGeneration();
-
+    void setCurrentChromossomeFitness(const float fitness);
 private:
     Population population;
     NeuralNetwork neuralNetwork;

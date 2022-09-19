@@ -23,7 +23,7 @@ public:
     std::vector<Chromosome> getCurrentPopulation() const;
     void show() const;
 
-    void setFitness(const unsigned index, const float fitness);
+    void setChromossomeFitness(const unsigned index, const float fitness);
 
 private:
     std::vector<Chromosome> chromosomes;

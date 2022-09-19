@@ -46,3 +46,9 @@ void NeuroEvolutiveEngine::createNewGeneration()
     int i = currentChromossomeIndex = 0;
     this->neuralNetwork.loadDataFromChromosome(this->population.getCurrentPopulation()[i]);
 }
+
+void NeuroEvolutiveEngine::setCurrentChromossomeFitness(const float fitness)
+{
+    int i = currentChromossomeIndex;
+    population.setChromossomeFitness(i, fitness); 
+}

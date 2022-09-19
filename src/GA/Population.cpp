@@ -614,7 +614,7 @@ std::vector<Chromosome> Population::getCurrentPopulation() const
     return chromosomes;
 }
 
-void Population::setFitness(const unsigned index, const float fitness)
+void Population::setChromossomeFitness(const unsigned index, const float fitness)
 {
     chromosomes[index].setFitness(fitness);
 }
