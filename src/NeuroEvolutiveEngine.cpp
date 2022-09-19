@@ -13,7 +13,7 @@ NeuroEvolutiveEngine::~NeuroEvolutiveEngine()
 
 }
 
-void NeuroEvolutiveEngine::showLogs() const
+void NeuroEvolutiveEngine::showInternalStatus() const
 {
     population.show();
     neuralNetwork.show();

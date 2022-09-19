@@ -13,7 +13,7 @@ public:
     NeuroEvolutiveEngine(Population population, NeuralNetwork neuralNetwork);
     ~NeuroEvolutiveEngine();
 
-    void showLogs() const;
+    void showInternalStatus() const;
     std::vector<float> takeDecision(const std::vector<float>& decision);
     void nextTopology();
     void prevTopology();
