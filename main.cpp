@@ -36,20 +36,18 @@ int main()
     float pontuation = 20.0, distance = 5.0;
 
     NeuroEvolutiveEngine engine(population, network);
-
-    //engine.setCurrentChromossomeFitness(5.55);
-
     engine.showLogs();
-    float r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
-    cout << "Decision1: " << r << endl;
+
+    auto r = engine.takeDecision({pontuation, distance});
+    cout << "Decision1: " << r[0] << endl;
     engine.setCurrentChromossomeFitness(6.66);
+    engine.showLogs();
 
     engine.nextTopology();
-    engine.showLogs();
-    r = engine.takeDecision(std::vector<float>{pontuation, distance})[0];
-    engine.setCurrentChromossomeFitness(7.77);
-    cout << "Decision2: " << r << endl;
 
+    r = engine.takeDecision({pontuation, distance});
+    engine.setCurrentChromossomeFitness(7.77);
+    cout << "Decision2: " << r[0] << endl;
     engine.showLogs();
 
     return 0;
