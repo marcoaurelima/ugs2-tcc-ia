@@ -33,22 +33,21 @@ int main()
     network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
 
     // Dados do jogo em tempo real
-    float pontuation = 20.0, distance = 5.0;
+    float pontuation = 20.0, distance = 5.0, value = 0.0;
 
     NeuroEvolutiveEngine engine(population, network);
     engine.showInternalStatus();
 
-    auto r = engine.takeDecision({pontuation, distance});
-    cout << "Decision1: " << r[0] << endl;
-    engine.setCurrentChromossomeFitness(6.66);
-    engine.showInternalStatus();
+    for (int i = 0; i < 12; i++)
+    {
+        value += 0.01;
+        auto r = engine.takeDecision({pontuation, distance});
+        cout << "Decision1: " << r[0] << endl;
+        engine.setCurrentChromossomeFitness(value);
+        engine.showInternalStatus();
 
-    engine.nextTopology();
-
-    r = engine.takeDecision({pontuation, distance});
-    engine.setCurrentChromossomeFitness(7.77);
-    cout << "Decision2: " << r[0] << endl;
-    engine.showInternalStatus();
+        engine.useNextTopology();
+    }
 
     return 0;
 }

@@ -1,16 +1,14 @@
 #include "NeuroEvolutiveEngine.h"
 
 NeuroEvolutiveEngine::NeuroEvolutiveEngine(Population population, NeuralNetwork neuralNetwork)
-: population(population), neuralNetwork(neuralNetwork)
+    : population(population), neuralNetwork(neuralNetwork)
 {
     int i = currentChromossomeIndex = 0;
     this->neuralNetwork.loadDataFromChromosome(this->population.getCurrentPopulation()[i]);
 }
 
-
 NeuroEvolutiveEngine::~NeuroEvolutiveEngine()
 {
-
 }
 
 void NeuroEvolutiveEngine::showInternalStatus() const
@@ -19,22 +17,38 @@ void NeuroEvolutiveEngine::showInternalStatus() const
     neuralNetwork.show();
 }
 
-std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float>& decision)
+std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float> &decision)
 {
     return neuralNetwork.takeDecision(decision);
 }
 
-void NeuroEvolutiveEngine::nextTopology()
+// Preenche a rede com a proxima topologia presente no cromossomo
+// quando não chegar no ultimo cromossomo e esta função for chamada
+// significa que todas as topologias foram testadas, mas não obtiveram
+// uma performance aceitável. Por isso, será criado uma nova população
+// de cromossomos baseadas em elitismo.
+void NeuroEvolutiveEngine::useNextTopology()
 {
-    if(currentChromossomeIndex == (int)population.getCurrentPopulation().size() - 1){ return; }
+    if (currentChromossomeIndex == (int)population.getCurrentPopulation().size() - 1)
+    {
+        std::cout << "======== CRIANDO NOVA POPULAÇÃO ========\n\n";
+        population.generateNewPopulation();
 
-    int i = ++currentChromossomeIndex;
-    neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
+        int i = currentChromossomeIndex = 0;
+        neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
+        return;
+    }
+
+    int j = ++currentChromossomeIndex;
+    neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[j]);
 }
 
-void NeuroEvolutiveEngine::prevTopology()
+void NeuroEvolutiveEngine::usePrevTopology()
 {
-    if(currentChromossomeIndex == 0){ return; }
+    if (currentChromossomeIndex == 0)
+    {
+        return;
+    }
 
     int i = --currentChromossomeIndex;
     neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
@@ -50,5 +64,5 @@ void NeuroEvolutiveEngine::createNewGeneration()
 void NeuroEvolutiveEngine::setCurrentChromossomeFitness(const float fitness)
 {
     int i = currentChromossomeIndex;
-    population.setChromossomeFitness(i, fitness); 
+    population.setChromossomeFitness(i, fitness);
 }

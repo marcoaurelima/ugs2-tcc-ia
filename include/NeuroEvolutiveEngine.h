@@ -15,8 +15,8 @@ public:
 
     void showInternalStatus() const;
     std::vector<float> takeDecision(const std::vector<float>& decision);
-    void nextTopology();
-    void prevTopology();
+    void useNextTopology();
+    void usePrevTopology();
     void createNewGeneration();
     void setCurrentChromossomeFitness(const float fitness);
 private:
