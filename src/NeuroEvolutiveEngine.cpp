@@ -2,7 +2,7 @@
 
 NeuroEvolutiveEngine::NeuroEvolutiveEngine(){}
 
-NeuroEvolutiveEngine::NeuroEvolutiveEngine(Population population, NeuralNetwork neuralNetwork)
+NeuroEvolutiveEngine::NeuroEvolutiveEngine(Population& population, NeuralNetwork& neuralNetwork)
     : population(population), neuralNetwork(neuralNetwork)
 {
     int i = currentChromossomeIndex = 0;

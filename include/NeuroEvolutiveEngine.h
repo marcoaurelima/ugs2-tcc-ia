@@ -11,7 +11,7 @@ class NeuroEvolutiveEngine
 {
 public:
     NeuroEvolutiveEngine();
-    NeuroEvolutiveEngine(Population population, NeuralNetwork neuralNetwork);
+    NeuroEvolutiveEngine(Population& population, NeuralNetwork& neuralNetwork);
     ~NeuroEvolutiveEngine();
 
     void showInternalStatus() const;
