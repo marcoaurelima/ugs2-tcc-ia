@@ -10,6 +10,7 @@
 class NeuroEvolutiveEngine
 {
 public:
+    NeuroEvolutiveEngine();
     NeuroEvolutiveEngine(Population population, NeuralNetwork neuralNetwork);
     ~NeuroEvolutiveEngine();
 

@@ -1,5 +1,7 @@
 #include "NeuroEvolutiveEngine.h"
 
+NeuroEvolutiveEngine::NeuroEvolutiveEngine(){}
+
 NeuroEvolutiveEngine::NeuroEvolutiveEngine(Population population, NeuralNetwork neuralNetwork)
     : population(population), neuralNetwork(neuralNetwork)
 {
