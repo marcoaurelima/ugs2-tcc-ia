@@ -25,6 +25,7 @@ int main()
         SELECTION_TYPE::ROULLETE,
         CROSSOVER_TYPE::SINGLE_POINT,
         MUTATION_TYPE::INSERTION});
+    //population.enablePrintLogs(false);
 
     // definição da topologia da rede neural
     NeuralNetwork network;
@@ -36,7 +37,7 @@ int main()
     float pontuation = 20.0, distance = 5.0, value = 0.0;
 
     NeuroEvolutiveEngine engine(population, network);
-    engine.showInternalStatus();
+    //engine.showInternalStatus();
 
     for (int i = 0; i < 20; i++)
     {
@@ -44,7 +45,7 @@ int main()
         auto r = engine.takeDecision({pontuation, distance});
         cout << "Decision1: " << r[0] << endl;
         engine.setCurrentChromossomeFitness(value);
-        engine.showInternalStatus();
+        //engine.showInternalStatus();
 
         engine.useNextTopology();
     }
