@@ -19,9 +19,10 @@ void NeuroEvolutiveEngine::showInternalStatus() const
     neuralNetwork.show();
 }
 
-std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float> &decision)
+std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float> inputParams)
 {
-    return neuralNetwork.takeDecision(decision);
+    return neuralNetwork.takeDecision(inputParams);
+
 }
 
 // Preenche a rede com a proxima topologia presente no cromossomo
@@ -33,7 +34,8 @@ void NeuroEvolutiveEngine::useNextTopology()
 {
     if (currentChromossomeIndex == (int)population.getCurrentPopulation().size() - 1)
     {
-        std::cout << "======== CRIANDO NOVA POPULAÇÃO ========\n\n\n\n";
+        puts("[+] Nova Populacao ---");
+
         population.generateNewPopulation();
 
         int i = currentChromossomeIndex = 0;

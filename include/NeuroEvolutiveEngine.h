@@ -15,7 +15,7 @@ public:
     ~NeuroEvolutiveEngine();
 
     void showInternalStatus() const;
-    std::vector<float> takeDecision(const std::vector<float>& decision);
+    std::vector<float> takeDecision(const std::vector<float> decision);
     void useNextTopology();
     void usePrevTopology();
     void createNewGeneration();
