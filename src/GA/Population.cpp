@@ -140,6 +140,7 @@ std::vector<unsigned> Population::getConfig(const std::string &path) const
     {
         values.push_back(std::stoi(v));
     }
+    stream.close();
 
     return values;
 }

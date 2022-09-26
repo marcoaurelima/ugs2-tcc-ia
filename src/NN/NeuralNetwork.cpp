@@ -113,6 +113,7 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
 
     std::string v;
     file >> v;
+    file.close();
 
     std::deque<std::vector<float>> values;
     std::vector<float> value;
