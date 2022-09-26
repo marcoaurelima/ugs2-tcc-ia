@@ -37,8 +37,12 @@ int main()
     float pontuation = 20.0, distance = 5.0, value = 0.0;
 
     NeuroEvolutiveEngine engine(population, network);
-    //engine.showInternalStatus();
+    engine.showInternalStatus();
 
+
+    auto r = engine.takeDecision({pontuation, distance});
+
+exit(0);
     for (int i = 0; i < 20; i++)
     {
         value += 0.01;

@@ -6,15 +6,20 @@ Population::~Population() {}
 
 float Population::getRandomFloat()
 {
+    /*
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<float> dist(0.0, 10.0);
 
     return dist(mt);
+    */
+   
+    return ((float)(rand()%1000))/1000;
 }
 
 void Population::createInitialPopulation(const unsigned populationSize, const unsigned chromossomeSize)
 {
+    srand(time(NULL));
     for (size_t i = 0; i < populationSize; i++)
     {
         Chromosome c;
@@ -22,6 +27,7 @@ void Population::createInitialPopulation(const unsigned populationSize, const un
         {
             float randFloat = getRandomFloat();
             c.setGene(randFloat);
+            //std::cout << randFloat << "--------------------------------" << std::endl;
         }
         // c.setRandomFitness();
         chromosomes.push_back(c);
