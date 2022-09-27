@@ -41,11 +41,14 @@ void NeuroEvolutiveEngine::useNextTopology()
         int i = currentChromossomeIndex = 0;
         neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
 
+        currentGenerationCount = 1;
+        newGenerationCount++;
         return;
     }
 
     int j = ++currentChromossomeIndex;
     neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[j]);
+    currentGenerationCount++;
 }
 
 void NeuroEvolutiveEngine::usePrevTopology()
@@ -70,4 +73,20 @@ void NeuroEvolutiveEngine::setCurrentChromossomeFitness(const float fitness)
 {
     int i = currentChromossomeIndex;
     population.setChromossomeFitness(i, fitness);
+}
+
+
+unsigned NeuroEvolutiveEngine::getCurrentGenerationIndex() const
+{
+    return currentGenerationCount;
+}
+
+unsigned NeuroEvolutiveEngine::getCurrentChromossomeIndex() const
+{
+    return newGenerationCount;
+}
+
+unsigned NeuroEvolutiveEngine::getCurrentGenerationSize() const
+{
+    return population.getCurrentPopulation().size();
 }

@@ -20,11 +20,17 @@ public:
     void usePrevTopology();
     void createNewGeneration();
     void setCurrentChromossomeFitness(const float fitness);
+
+    unsigned getCurrentGenerationIndex() const;
+    unsigned getCurrentGenerationSize() const;
+    unsigned getCurrentChromossomeIndex() const;
 private:
     Population population;
     NeuralNetwork neuralNetwork;
 
     int currentChromossomeIndex {}; // indice do crmossomo atual que preencheu a rede neural 
+    int currentGenerationCount  {1}; 
+    int newGenerationCount {1}; 
 };
 
 #endif
