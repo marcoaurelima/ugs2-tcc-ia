@@ -80,22 +80,22 @@ void Population::generateNewPopulation()
     {
     case SELECTION_TYPE::FITNESS:
         if (enabledLogs)
-            std::cout << "ETAPA: Selection    MÉTODO: Fitness" << std::endl;
+            std::cout << "STEP: Selection    METHOD: Fitness" << std::endl;
         break;
     case SELECTION_TYPE::TOURNAMENT:
         if (enabledLogs)
-            std::cout << "ETAPA: Selection    MÉTODO: Tournament" << std::endl;
+            std::cout << "STEP: Selection    METHOD: Tournament" << std::endl;
         break;
     case SELECTION_TYPE::ROULLETE:
         if (enabledLogs)
-            std::cout << "ETAPA: Selection    MÉTODO: Roullete" << std::endl;
+            std::cout << "STEP: Selection    METHOD: Roullete" << std::endl;
         
         selectionRoulette();
         
         break;
     case SELECTION_TYPE::STOCHASTIC_US:
         if (enabledLogs)
-            std::cout << "ETAPA: Selection    MÉTODO: Stochastic Universal Sampling" << std::endl;
+            std::cout << "STEP: Selection    METHOD: Stochastic Universal Sampling" << std::endl;
         selectionEstocastic();
         break;
     default:
@@ -107,16 +107,16 @@ void Population::generateNewPopulation()
     {
     case CROSSOVER_TYPE::SINGLE_POINT:
         if (enabledLogs)
-            std::cout << "ETAPA: Crossover    MÉTODO: Single-Point" << std::endl;
+            std::cout << "STEP: Crossover    METHOD: Single-Point" << std::endl;
         crossoverSinglePoint();
         break;
     case CROSSOVER_TYPE::MULTI_POINT:
         if (enabledLogs)
-            std::cout << "ETAPA: Crossover    MÉTODO: Multi-Point MULTI_POINT" << std::endl;
+            std::cout << "STEP: Crossover    METHOD: Multi-Point MULTI_POINT" << std::endl;
         break;
     case CROSSOVER_TYPE::UNIFORM:
         if (enabledLogs)
-            std::cout << "ETAPA: Crossover    MÉTODO: Uniform" << std::endl;
+            std::cout << "STEP: Crossover    METHOD: Uniform" << std::endl;
         crossoverUniform();
         break;
     default:
@@ -128,16 +128,16 @@ void Population::generateNewPopulation()
     {
     case MUTATION_TYPE::INSERTION:
         if (enabledLogs)
-            std::cout << "ETAPA: Mutation    MÉTODO: Inserção" << std::endl;
+            std::cout << "STEP: Mutation    METHOD: Inserção" << std::endl;
         mutationInsertion();
         break;
     case MUTATION_TYPE::INVERSION:
         if (enabledLogs)
-            std::cout << "ETAPA: Mutation    MÉTODO: Inverção" << std::endl;
+            std::cout << "STEP: Mutation    METHOD: Inverção" << std::endl;
         break;
     case MUTATION_TYPE::UNIFORM:
         if (enabledLogs)
-            std::cout << "ETAPA: Mutation    MÉTODO: Uniform" << std::endl;
+            std::cout << "STEP: Mutation    METHOD: Uniform" << std::endl;
         mutationUniform();
         break;
     default:
