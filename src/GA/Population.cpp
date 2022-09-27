@@ -181,7 +181,11 @@ void Population::selectionEstocastic(int qtdNidles)
         std::mt19937 mt(rd());
         std::uniform_int_distribution<int> dist(1, 99);
     */
-    const unsigned spin = generateRandomInt(1, 100);
+    
+    // Eu comecei com precisão de 100, mas não é suficiente. 
+    // Definirei a precisão em 10000 
+
+    const unsigned spin = generateRandomInt(1, 10000);
 
     float fitnessSum = 0;
     for (Chromosome &c : chromosomes)
@@ -197,7 +201,7 @@ void Population::selectionEstocastic(int qtdNidles)
     std::vector<unsigned> percents;
     for (unsigned i = 0; i < chromosomes.size(); i++)
     {
-        unsigned value = (chromosomes[i].getFitness() / fitnessSum) * 100;
+        unsigned value = (chromosomes[i].getFitness() / fitnessSum) * 10000;
         percents.push_back(value);
     }
 
@@ -228,7 +232,7 @@ void Population::selectionEstocastic(int qtdNidles)
     std::vector<unsigned> indexNidles{};
     for (size_t i = 0; i < static_cast<size_t>(qtdNidles); i++)
     {
-        unsigned index = ((100 / qtdNidles) * i) + ((100 / qtdNidles) / 2);
+        unsigned index = ((10000 / qtdNidles) * i) + ((10000 / qtdNidles) / 2);
         indexNidles.push_back(index);
     }
 
@@ -294,7 +298,7 @@ void Population::selectionRoulette()
         std::cout << "Selection: ";
     for (size_t i = 0; i < qtdTurns; i++)
     {
-        const unsigned spin = generateRandomInt(1, 100);
+        const unsigned spin = generateRandomInt(1, 10000);
 
         float fitnessSum = 0;
         for (Chromosome &c : chromosomes)
@@ -310,7 +314,7 @@ void Population::selectionRoulette()
         std::vector<unsigned> percents;
         for (unsigned i = 0; i < chromosomes.size(); i++)
         {
-            unsigned value = (chromosomes[i].getFitness() / fitnessSum) * 100;
+            unsigned value = (chromosomes[i].getFitness() / fitnessSum) * 10000;
             percents.push_back(value);
         }
         // Preencher a roleta com blocos de valores
