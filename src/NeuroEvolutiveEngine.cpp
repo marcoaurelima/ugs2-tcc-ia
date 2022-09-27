@@ -34,12 +34,13 @@ void NeuroEvolutiveEngine::useNextTopology()
 {
     if (currentChromossomeIndex == (int)population.getCurrentPopulation().size() - 1)
     {
-        puts("[+] Nova Populacao ---");
+        puts("[+] Nova Populacao ---\n");
 
         population.generateNewPopulation();
 
         int i = currentChromossomeIndex = 0;
         neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
+
         return;
     }
 

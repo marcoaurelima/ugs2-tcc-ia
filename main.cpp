@@ -20,11 +20,12 @@ int main()
 
     // população inicial
     Population population;
-    population.createInitialPopulation(5, 27);
+    population.enablePrintLogs();
+    population.createInitialPopulation(4, 27);
     population.setNewGenerationParams(NewGenParams{
         SELECTION_TYPE::ROULLETE,
-        CROSSOVER_TYPE::SINGLE_POINT,
-        MUTATION_TYPE::INSERTION});
+        CROSSOVER_TYPE::UNIFORM,
+        MUTATION_TYPE::UNIFORM});
     //population.enablePrintLogs(false);
 
     // definição da topologia da rede neural
@@ -42,8 +43,8 @@ int main()
 
     auto r = engine.takeDecision({pontuation, distance});
 
-exit(0);
-    for (int i = 0; i < 20; i++)
+
+    for (int i = 0; i < 15; i++)
     {
         value += 0.01;
         auto r = engine.takeDecision({pontuation, distance});
