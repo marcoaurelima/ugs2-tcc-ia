@@ -14,21 +14,23 @@ public:
     Chromosome(const std::initializer_list<float> valuesList);
     Chromosome(const std::vector<float>& valuesList);
     
-    void setFitness(const float fitness);
+    void setFitness(const unsigned fitness);
     void setRandomFitness();
     void setGene(const float value);
     void changeGene(const unsigned index, const float value);
     void setAllGenes(const std::vector<float>& genes);
 
 
-    float getFitness() const;
+    unsigned getFitness() const;
     float getGene(const unsigned index) const;
     std::vector<float> getAllGenes() const;
     size_t getSize() const;
     void show() const;
 
+    bool haveFitness() const;
 private:
-    float fitness {}; 
+    bool fitnessWasDefined {false};
+    unsigned fitness {}; // O fitness varia de 0 a 10000
     std::vector<float> genes;
 };
 

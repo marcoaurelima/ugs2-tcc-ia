@@ -8,7 +8,8 @@ OBJS =  $(OBJ)/main.o \
  		$(OBJ)/Chromosome.o \
 		$(OBJ)/NeuralNetwork.o \
 		$(OBJ)/Neuron.o \
-		$(OBJ)/Population.o 
+		$(OBJ)/Population.o \
+		$(OBJ)/NeuroEvolutiveEngine.o 
 
 all: $(OBJS)
 	@$(CXX) $(OBJS) -o $(BIN)/main
@@ -29,6 +30,10 @@ $(OBJ)/Neuron.o: $(SRC)/NN/Neuron.cpp
 
 $(OBJ)/NeuralNetwork.o: $(SRC)/NN/NeuralNetwork.cpp
 	$(CXX) -c $(SRC)/NN/NeuralNetwork.cpp -I $(INCLUDE) -o $(OBJ)/NeuralNetwork.o
+
+$(OBJ)/NeuroEvolutiveEngine.o: $(SRC)/NeuroEvolutiveEngine.cpp
+	$(CXX) -c $(SRC)/NeuroEvolutiveEngine.cpp -I $(INCLUDE) -o $(OBJ)/NeuroEvolutiveEngine.o
+
 
 
 run: 

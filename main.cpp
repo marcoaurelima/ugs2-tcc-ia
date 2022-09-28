@@ -12,51 +12,51 @@
 #include "NN/types.h"
 #include "NN/NeuralNetwork.h"
 
+#include "NeuroEvolutiveEngine.h"
 
+using std::cout;
 int main()
 {
 
-    
-    NeuralNetwork network;
-
-    network.setInputLayer(InputLayerInfo(2));
-    network.setHiddenLayer(HiddenLayerInfo({3, 3}, ACTFUNC::RELU));
-    network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
-    network.loadDataFromFile("configurations/NN/network-data.ini");
-    
-    Chromosome chromossome({1,2,3,4,5,6,7,8,9,10,
-                            11,12,13,14,15,16,17,18,19,20,
-                            21,22,23,24,25,26,27});
-
-
-    network.loadDataFromChromosome(chromossome);
-
-    network.show();
-
-    float pontuation = 20, distance = 5;
-    float decision = network.takeDecision(std::vector<float>{pontuation, distance})[0];
-
-    network.show();
-
-    std::cout << "Decision: " << decision << std::endl;
-    
-
-
-
+    // população inicial
     Population population;
-    population.createInitialPopulation(8,10);
-    
-
-    
+    population.enablePrintLogs();
+    population.createInitialPopulation(4, 27);
+    population.setNewGenerationParams(NewGenParams{
+        SELECTION_TYPE::ROULLETE,
+        CROSSOVER_TYPE::UNIFORM,
+        MUTATION_TYPE::UNIFORM});
     population.show();
+    population.generateNewPopulation();
 
-    NewGenParams newGenParams;
-    newGenParams.selectionType = SELECTION_TYPE::ROULLETE;
-    newGenParams.crossoverType = CROSSOVER_TYPE::SINGLE_POINT;
-    newGenParams.mutationType  = MUTATION_TYPE::INSERTION;
+    // definição da topologia da rede neural
+    NeuralNetwork network;
+    network.setInputLayer(InputLayerInfo(2));
+    network.setHiddenLayer(HiddenLayerInfo({3, 3}, ACTFUNC::SIGMOID));
+    network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
 
-    population.generateNewPopulation(newGenParams);
-    
 
+    /*
+    // Dados do jogo em tempo real
+    float pontuation = 20.0, distance = 5.0, value = 0.0;
+
+    NeuroEvolutiveEngine engine(population, network);
+    engine.showInternalStatus();
+
+
+    auto r = engine.takeDecision({pontuation, distance});
+
+
+    for (int i = 0; i < 15; i++)
+    {
+        value += 0.01;
+        auto r = engine.takeDecision({pontuation, distance});
+        cout << "Decision1: " << r[0] << endl;
+        engine.setCurrentChromossomeFitness(value);
+        //engine.showInternalStatus();
+
+        engine.useNextTopology();
+    }
+    */
     return 0;
 }

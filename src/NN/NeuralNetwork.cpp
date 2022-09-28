@@ -6,8 +6,8 @@ NeuralNetwork::~NeuralNetwork() {}
 
 void NeuralNetwork::show() const
 {
-    std::cout << std::endl;
-    std::cout << "\n------ INPUT LAYER ------" << std::endl;
+    std::cout << std::setprecision(3);
+    std::cout << "------ INPUT LAYER ------" << std::endl;
     std::cout << "- size: " << inputLayer.size() << std::endl;
     for (size_t i = 0; i < inputLayer.size(); i++)
     {
@@ -74,6 +74,9 @@ void NeuralNetwork::show() const
         std::cout << std::endl;
     }
     std::cout << std::endl
+              << std::endl
+              << std::endl
+              << std::endl
               << std::endl;
 }
 
@@ -110,6 +113,7 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
 
     std::string v;
     file >> v;
+    file.close();
 
     std::deque<std::vector<float>> values;
     std::vector<float> value;
@@ -130,7 +134,6 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de entrada
     for (size_t i = 0; i < inputLayer.size(); i++)
     {
-        // inputLayer[i].setValue(values[i][0], ACTFUNC::NONE);
         inputLayer[i].setBias(values[i][0]);
 
         std::vector<float> weights;
@@ -150,7 +153,6 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     {
         for (size_t j = 0; j < hiddenLayer[i].size(); j++)
         {
-            // hiddenLayer[i][j].setValue(values[j][0], ACTFUNC::SIGMOID);
             hiddenLayer[i][j].setBias(values[j][0]);
 
             std::vector<float> weights;
@@ -169,7 +171,6 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de saida
     for (size_t i = 0; i < outputLayer.size(); i++)
     {
-        // outputLayer[i].setValue(values[i][0], ACTFUNC::SIGMOID);
         outputLayer[i].setBias(values[i][0]);
 
         std::vector<float> weights;
@@ -200,7 +201,6 @@ float NeuralNetwork::normalize(float x, float xMin, float xMax, float d1, float 
 
 std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputParams)
 {
-    std::cout << "takeDecision: " << inputParams.size() << std::endl;
 
     // Preencher Neuronios da camada de entrada com os valores
 
@@ -277,25 +277,21 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
     unsigned qtdNeurons = 0;
     unsigned qtdConnections = 0;
 
-    // Camada de entrada
+    // camada de entrada
     qtdNeurons += inputLayer.size();
-    for (unsigned i = 0; i < inputLayer.size(); ++i)
-    {
-        qtdConnections += inputLayer[i].getConnectionsHeights().size();
-    }
+    qtdConnections += inputLayer.size() * hiddenLayer[0].size();
 
     // camada oculta
-    for (unsigned i = 0; i < hiddenLayer.size(); ++i)
+    qtdNeurons += hiddenLayer[hiddenLayer.size() - 1].size();
+    for (unsigned i = 0; i < hiddenLayer.size() - 1; ++i)
     {
         qtdNeurons += hiddenLayer[i].size();
-        for (unsigned j = 0; j < hiddenLayer[i].size(); ++j)
-        {
-            qtdConnections += hiddenLayer[i][j].getConnectionsHeights().size();
-        }
+        qtdConnections += hiddenLayer[i].size() * hiddenLayer[i + 1].size();
     }
 
-    // Camada de saida
+    // camada de saída
     qtdNeurons += outputLayer.size();
+    qtdConnections += hiddenLayer[hiddenLayer.size() - 1].size() * outputLayer.size();
 
     // Efetuar comparação
     unsigned expectedChromosomeSize = (qtdConnections + qtdNeurons);
@@ -340,7 +336,7 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
         indexes.push_back(index);
     }
 
-    showvalues("indexes", indexes, " ");
+
 
     // Com os indices corretos mapeados, é hora de inserir os valores na rede neural
 
@@ -348,7 +344,7 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
     for (unsigned int i = 0; i < inputLayer.size(); i++)
     {
         // pegar os valores dentro do intervalo; primeiro valor bias, restante é peso sináptico
-        unsigned bias = chromossome.getGene(indexes[0]);
+        float bias = chromossome.getGene(indexes[0]);
         std::vector<float> connections;
         for (unsigned int j = indexes[0] + 1; j < indexes[1]; j++)
         {
@@ -359,13 +355,14 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
         indexes.pop_front();
     }
 
+
     // camada oculta
     for (unsigned int i = 0; i < hiddenLayer.size(); i++)
     {
         for (unsigned int j = 0; j < hiddenLayer[i].size(); j++)
         {
             // pegar os valores dentro do intervalo; primeiro valor bias, restante é peso sináptico
-            unsigned bias = chromossome.getGene(indexes[0]);
+            float bias = chromossome.getGene(indexes[0]);
             std::vector<float> connections;
             for (unsigned int j = indexes[0] + 1; j < indexes[1]; j++)
             {
@@ -377,22 +374,21 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
         }
     }
 
+ 
     // camada de saida
     for (unsigned int i = 0; i < outputLayer.size(); i++)
     {
-        // pegar os valores dentro do intervalo; primeiro valor bias, restante é peso sináptico
-        unsigned bias = chromossome.getGene(indexes[0]);
-        std::vector<float> connections;
-        for (unsigned int j = indexes[0] + 1; j < indexes[1]; j++)
-        {
-            connections.push_back(chromossome.getGene(j));
-        }
-        outputLayer[i].setConnectionsHeights(connections);
+        // A camada de saida não tem conecções, então será setado apenas o bias
+        float bias = chromossome.getGene(indexes[0]);
         outputLayer[i].setBias(bias);
         indexes.pop_front();
     }
 
-    show();
+    // Neste ponto o vetor indexes não terá mais nenhuma valor. se ainda existir algum, aconteceu um erro
+    if(!indexes.empty())
+    {
+        std::cerr << "[ERROR]] Ocorreu um erro na definição de pessos da RN" << std::endl;
+    }
 
-    exit(0);
+
 }
