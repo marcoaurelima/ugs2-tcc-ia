@@ -26,7 +26,8 @@ int main()
         SELECTION_TYPE::ROULLETE,
         CROSSOVER_TYPE::UNIFORM,
         MUTATION_TYPE::UNIFORM});
-    //population.enablePrintLogs(false);
+    population.show();
+    population.generateNewPopulation();
 
     // definição da topologia da rede neural
     NeuralNetwork network;
@@ -34,6 +35,8 @@ int main()
     network.setHiddenLayer(HiddenLayerInfo({3, 3}, ACTFUNC::SIGMOID));
     network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
 
+
+    /*
     // Dados do jogo em tempo real
     float pontuation = 20.0, distance = 5.0, value = 0.0;
 
@@ -54,22 +57,6 @@ int main()
 
         engine.useNextTopology();
     }
-
-    /*
-    * o algoritmo foi testado e está funcionando sem erros
-    * obs. depois que é criado uma nova geração de cromossomos
-    * a população obviamente fica maior. Então o chromossomo current
-    * volta ao indice 0, e então é reiniciado os testes de topologia
-    * a fim de definir o fitness de todos. 
-    * no caso do laço 'for' acima, depois dessa de gerado essa nova população,
-    * começa-se a preencher os cromossomos com seu respsctivo fitness a partir
-    * do indice 0, mas o valor usado será o da variável 'value', que é um
-    * acumulador de valores. Não se deve estranhar se a segunda geração de
-    * cromossomos possuir fitness com valores grandes no começo, pois
-    * o valor de 'value' continua a partir de onde parou na geração passada.
     */
-
-
-
     return 0;
 }

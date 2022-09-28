@@ -10,7 +10,6 @@ struct InputLayerInfo {
     unsigned qtdNeurons;
 };
 
-//using OutputLayerInfo = InputLayerInfo;
 
 struct HiddenLayerInfo {
     HiddenLayerInfo(std::initializer_list<unsigned> sizesOfNeuronsGroups, ACTFUNC activationFunction) 

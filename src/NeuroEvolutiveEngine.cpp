@@ -1,8 +1,8 @@
 #include "NeuroEvolutiveEngine.h"
 
-NeuroEvolutiveEngine::NeuroEvolutiveEngine(){}
+NeuroEvolutiveEngine::NeuroEvolutiveEngine() {}
 
-NeuroEvolutiveEngine::NeuroEvolutiveEngine(Population& population, NeuralNetwork& neuralNetwork)
+NeuroEvolutiveEngine::NeuroEvolutiveEngine(Population &population, NeuralNetwork &neuralNetwork)
     : population(population), neuralNetwork(neuralNetwork)
 {
     int i = currentChromossomeIndex = 0;
@@ -22,7 +22,6 @@ void NeuroEvolutiveEngine::showInternalStatus() const
 std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float> inputParams)
 {
     return neuralNetwork.takeDecision(inputParams);
-
 }
 
 // Preenche a rede com a proxima topologia presente no cromossomo
@@ -34,15 +33,28 @@ void NeuroEvolutiveEngine::useNextTopology()
 {
     if (currentChromossomeIndex == (int)population.getCurrentPopulation().size() - 1)
     {
-        puts("[+] Nova Populacao ---\n");
+        puts("\n[+] Nova Populacao ---\n");
 
         population.generateNewPopulation();
-
         int i = currentChromossomeIndex = 0;
         neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
-
-        currentGenerationCount = 1;
+        currentGenerationCount = 0;
         newGenerationCount++;
+        return;
+    }
+
+    // todos os cromossomos começam com valor 0 no fitness
+    // isto significa que se há um lvalor de fitness em um cromossomo diferente
+    // de 0, ele já foi testado e tem un fitness válido e não precisará de treinamento.
+
+    // pular cromossomos já treinados.
+    int i = currentGenerationCount;
+    if (population.getCurrentPopulation()[i].haveFitness())
+    {
+        ++currentChromossomeIndex;
+        currentGenerationCount++;
+
+        std::cout << "Cromossomo [" << i << "] Fitness: " << population.getCurrentPopulation()[i].getFitness() << std::endl;
         return;
     }
 
@@ -75,6 +87,11 @@ void NeuroEvolutiveEngine::setCurrentChromossomeFitness(const float fitness)
     population.setChromossomeFitness(i, fitness);
 }
 
+float NeuroEvolutiveEngine::getCurrentChromossomeFitness() const
+{
+    unsigned i = currentGenerationCount;
+    return population.getCurrentPopulation()[i].getFitness();
+}
 
 unsigned NeuroEvolutiveEngine::getCurrentGenerationIndex() const
 {
@@ -89,4 +106,10 @@ unsigned NeuroEvolutiveEngine::getCurrentChromossomeIndex() const
 unsigned NeuroEvolutiveEngine::getCurrentGenerationSize() const
 {
     return population.getCurrentPopulation().size();
+}
+
+bool NeuroEvolutiveEngine::currentChromossomeHaveFitness() const
+{
+    unsigned i = currentGenerationCount;
+    return population.getCurrentPopulation()[i].haveFitness();
 }

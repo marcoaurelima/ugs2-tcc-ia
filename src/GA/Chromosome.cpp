@@ -1,8 +1,6 @@
 #include "GA/Chromosome.h"
 
-Chromosome::Chromosome() {
-    srand(time(NULL));
-}
+Chromosome::Chromosome() {}
 
 
 Chromosome::Chromosome(const std::initializer_list<float> valuesList)
@@ -11,7 +9,6 @@ Chromosome::Chromosome(const std::initializer_list<float> valuesList)
     {
         genes.push_back(i);
     }
-    srand(time(NULL));
 }
 
 
@@ -21,7 +18,6 @@ Chromosome::Chromosome(const std::vector<float>& valuesList)
     {
         genes.push_back(i);
     }
-    srand(time(NULL));
 }
 
 
@@ -41,6 +37,7 @@ void Chromosome::show() const
 void Chromosome::setFitness(unsigned fitness)
 {
     this->fitness = fitness;
+    fitnessWasDefined = true;
 }
 
 
@@ -65,6 +62,7 @@ float Chromosome::getGene(const unsigned index) const
 void Chromosome::setRandomFitness()
 {
     fitness = rand() % 99;
+    fitnessWasDefined = true;
 }
 
 
@@ -89,4 +87,9 @@ size_t Chromosome::getSize() const
 void Chromosome::changeGene(unsigned index, float value)
 {
     genes[index] = value;
+}
+
+bool Chromosome::haveFitness() const
+{
+    return fitnessWasDefined;
 }

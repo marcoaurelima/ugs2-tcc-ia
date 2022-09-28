@@ -134,7 +134,6 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de entrada
     for (size_t i = 0; i < inputLayer.size(); i++)
     {
-        // inputLayer[i].setValue(values[i][0], ACTFUNC::NONE);
         inputLayer[i].setBias(values[i][0]);
 
         std::vector<float> weights;
@@ -154,7 +153,6 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     {
         for (size_t j = 0; j < hiddenLayer[i].size(); j++)
         {
-            // hiddenLayer[i][j].setValue(values[j][0], ACTFUNC::SIGMOID);
             hiddenLayer[i][j].setBias(values[j][0]);
 
             std::vector<float> weights;
@@ -173,7 +171,6 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     // Camada de saida
     for (size_t i = 0; i < outputLayer.size(); i++)
     {
-        // outputLayer[i].setValue(values[i][0], ACTFUNC::SIGMOID);
         outputLayer[i].setBias(values[i][0]);
 
         std::vector<float> weights;

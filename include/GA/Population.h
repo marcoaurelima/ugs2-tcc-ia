@@ -6,7 +6,6 @@
 #include <set>
 #include <deque>
 #include <algorithm>
-//#include <random>
 #include <fstream>
 #include "Chromosome.h"
 #include "types.h"
@@ -32,8 +31,8 @@ private:
     NewGenParams newGenParams;
 
     std::vector<unsigned> getConfig(const std::string& path) const;
-    int generateRandomInt(int min, int max);
-    float generateRandomFloat(float min, float max);
+    int generateRandomInt(const int min, const int max, std::string  local);
+    float generateRandomFloat(const float min, const float max);
     void  shuffleVector(std::vector<bool> & vec);
 
     void selectionEstocastic(int qtdNidles = 0);

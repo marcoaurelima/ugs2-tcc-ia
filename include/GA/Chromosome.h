@@ -27,8 +27,10 @@ public:
     size_t getSize() const;
     void show() const;
 
+    bool haveFitness() const;
 private:
-    unsigned fitness {}; // O fitness varia de 0 a 100
+    bool fitnessWasDefined {false};
+    unsigned fitness {}; // O fitness varia de 0 a 10000
     std::vector<float> genes;
 };
 
