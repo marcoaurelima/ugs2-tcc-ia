@@ -9,6 +9,7 @@
 
 #include <chrono>
 #include <ctime> 
+#include <fstream>
 
 class NeuroEvolutiveEngine
 {

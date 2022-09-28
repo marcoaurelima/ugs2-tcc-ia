@@ -116,24 +116,46 @@ bool NeuroEvolutiveEngine::currentChromossomeHaveFitness() const
 
 void NeuroEvolutiveEngine::saveCurrentChromossomeInFile() const
 {
-    // Chromossome x -[fitness] - dd-mm-yyyy hh:mm:ss.log 
-    // G-0  C-3-10 - Wed Sep 28 004847 2022 - F-39.log
-
     std::time_t result = std::time(nullptr);
-
     std::string now(std::ctime(&result));
 
     std::stringstream filename;
-    filename << "G-" 
-    << getCurrentChromossomeIndex() << "  C-" 
+    filename << "logs/G-" 
+    << getCurrentChromossomeIndex() << " C-" 
     << getCurrentGenerationIndex() << "-" 
-    << getCurrentGenerationSize()  << "  F-" 
-    << getCurrentChromossomeFitness() << " - "
+    << getCurrentGenerationSize()  << " F-" 
+    << getCurrentChromossomeFitness() << " "
     << now.substr(0, now.size()-1) 
     << ".log";
 
-    std::cout << filename.str() << std::endl;
+    std::stringstream fileContents;
+    
+    unsigned index = currentGenerationCount;
+    for(unsigned i = 0; i < population.getCurrentPopulation()[index].getAllGenes().size(); i++)
+    {
+        fileContents << population.getCurrentPopulation()[index].getAllGenes()[i] << " ";
+    }
 
+    std::string filenameCorr;
+    for(unsigned i=0; i < filename.str().size(); i++)
+    {
+        if(filename.str()[i] == ' ')
+        {
+            filenameCorr += R"(   )";
+            continue;
+        } else if(filename.str()[i] == ':')
+        {
+            filenameCorr += '-';
+            continue;  
+        }
 
+        filenameCorr += filename.str()[i];
+    }
 
+    std::ofstream file;
+    file.open(filenameCorr, std::ofstream::out);
+    if(!file.is_open()){ std::cerr << "Error: " << filenameCorr << std::endl; }
+
+    file << fileContents.str();
+    file.close();
 }
