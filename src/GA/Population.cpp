@@ -673,3 +673,4 @@ void Population::enablePrintLogs(bool enable)
 {
     enabledLogs = enable;
 }
+

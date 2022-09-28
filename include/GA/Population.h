@@ -7,6 +7,7 @@
 #include <deque>
 #include <algorithm>
 #include <fstream>
+#include <sstream>
 #include "Chromosome.h"
 #include "types.h"
 

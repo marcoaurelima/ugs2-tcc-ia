@@ -7,6 +7,9 @@
 #include "GA/Population.h"
 #include "NN/NeuralNetwork.h"
 
+#include <chrono>
+#include <ctime> 
+
 class NeuroEvolutiveEngine
 {
 public:
@@ -27,6 +30,8 @@ public:
     unsigned getCurrentChromossomeIndex() const;
     bool currentChromossomeHaveFitness() const;
     
+    void saveCurrentChromossomeInFile() const;
+
 private:
     Population population;
     NeuralNetwork neuralNetwork;

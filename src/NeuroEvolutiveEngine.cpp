@@ -113,3 +113,27 @@ bool NeuroEvolutiveEngine::currentChromossomeHaveFitness() const
     unsigned i = currentGenerationCount;
     return population.getCurrentPopulation()[i].haveFitness();
 }
+
+void NeuroEvolutiveEngine::saveCurrentChromossomeInFile() const
+{
+    // Chromossome x -[fitness] - dd-mm-yyyy hh:mm:ss.log 
+    // G-0  C-3-10 - Wed Sep 28 004847 2022 - F-39.log
+
+    std::time_t result = std::time(nullptr);
+
+    std::string now(std::ctime(&result));
+
+    std::stringstream filename;
+    filename << "G-" 
+    << getCurrentChromossomeIndex() << "  C-" 
+    << getCurrentGenerationIndex() << "-" 
+    << getCurrentGenerationSize()  << "  F-" 
+    << getCurrentChromossomeFitness() << " - "
+    << now.substr(0, now.size()-1) 
+    << ".log";
+
+    std::cout << filename.str() << std::endl;
+
+
+
+}
