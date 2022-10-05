@@ -680,11 +680,27 @@ void Population::executeElitism()
     // no elitismo será 65% dos melhores
     const float FINAL_PERCENT = 65;
 
-    std::vector<Chromosome> elitistGen;
+    //std::vector<Chromosome> elitistGen;
+
+    std::cout << "\n----------------------\n";
+    for(Chromosome c : chromosomes)
+    {
+        std::cout << c.getFitness() << " ";
+    }
+    std::cout << "\n----------------------\n";
+
 
     std::sort(chromosomes.begin(), chromosomes.end(),
               [](Chromosome &c1, Chromosome &c2)
-              { return c1.getFitness() < c2.getFitness(); });
+              { return c1.getFitness() > c2.getFitness(); });
+
+    std::cout << "\n----------------------\n";
+    for(Chromosome c : chromosomes)
+    {
+        std::cout << c.getFitness() << " ";
+    }
+    std::cout << "\n----------------------\n";
+
 
     // calcular a porcentagem do tamanho do vector final;
     const float VECTOR_SIZE = chromosomes.size();
@@ -698,6 +714,14 @@ void Population::executeElitism()
     {
         chromosomes.pop_back();
     }
-    std::cout << "Chromosomes: " << chromosomes.size() << std::endl;
+
+    std::cout << "\n----------------------\n";
+    for(Chromosome c : chromosomes)
+    {
+        std::cout << c.getFitness() << " ";
+    }
+    std::cout << "\n----------------------\n";
+
+    std::cout << "chromosomes.size(): " << chromosomes.size() << std::endl;
     
 }
