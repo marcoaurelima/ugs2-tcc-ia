@@ -21,6 +21,8 @@ void NeuroEvolutiveEngine::showInternalStatus() const
 
 std::vector<float> NeuroEvolutiveEngine::takeDecision(const std::vector<float> inputParams)
 {
+    //std::cout << "NeuroEvolutiveEngine::takeDecision" << std::endl;
+
     return neuralNetwork.takeDecision(inputParams);
 }
 
@@ -38,7 +40,7 @@ void NeuroEvolutiveEngine::useNextTopology()
         population.generateNewPopulation();
         int i = currentChromossomeIndex = 0;
         neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
-        currentGenerationCount = 0;
+        // currentGenerationCount = 0;
         newGenerationCount++;
         return;
     }
@@ -48,19 +50,27 @@ void NeuroEvolutiveEngine::useNextTopology()
     // de 0, ele já foi testado e tem un fitness válido e não precisará de treinamento.
 
     // pular cromossomos já treinados.
-    int i = currentGenerationCount;
-    if (population.getCurrentPopulation()[i].haveFitness())
+    // int i = currentGenerationCount++;
+    int j = currentChromossomeIndex++;
+
+    //std::cout << "   j: " << j << std::endl;
+
+    /*
+    if (population.getCurrentPopulation()[j].haveFitness())
     {
-        ++currentChromossomeIndex;
+        //++currentChromossomeIndex;
         currentGenerationCount++;
 
-        std::cout << "Cromossomo [" << i << "] Fitness: " << population.getCurrentPopulation()[i].getFitness() << std::endl;
+        std::cout << "Cromossomo [" << i << "] Fitness: " << population.getCurrentPopulation()[j].getFitness() << std::endl;
+        neuralNetwork.show();
         return;
     }
+    */
 
-    int j = ++currentChromossomeIndex;
+    ///neuralNetwork.show();
+
     neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[j]);
-    currentGenerationCount++;
+    // currentGenerationCount++;
 }
 
 void NeuroEvolutiveEngine::usePrevTopology()
@@ -89,13 +99,13 @@ void NeuroEvolutiveEngine::setCurrentChromossomeFitness(const float fitness)
 
 float NeuroEvolutiveEngine::getCurrentChromossomeFitness() const
 {
-    unsigned i = currentGenerationCount;
+    unsigned i = currentChromossomeIndex;
     return population.getCurrentPopulation()[i].getFitness();
 }
 
 unsigned NeuroEvolutiveEngine::getCurrentGenerationIndex() const
 {
-    return currentGenerationCount;
+    return currentChromossomeIndex;
 }
 
 unsigned NeuroEvolutiveEngine::getCurrentChromossomeIndex() const
@@ -110,7 +120,7 @@ unsigned NeuroEvolutiveEngine::getCurrentGenerationSize() const
 
 bool NeuroEvolutiveEngine::currentChromossomeHaveFitness() const
 {
-    unsigned i = currentGenerationCount;
+    unsigned i = currentChromossomeIndex;
     return population.getCurrentPopulation()[i].haveFitness();
 }
 
@@ -120,33 +130,34 @@ void NeuroEvolutiveEngine::saveCurrentChromossomeInFile() const
     std::string now(std::ctime(&result));
 
     std::stringstream filename;
-    filename << "logs/G-" 
-    << getCurrentChromossomeIndex() << " C-" 
-    << getCurrentGenerationIndex() << "-" 
-    << getCurrentGenerationSize()  << " F-" 
-    << getCurrentChromossomeFitness() << " "
-    << now.substr(0, now.size()-1) 
-    << ".log";
+    filename << "logs/G-"
+             << getCurrentChromossomeIndex() << " C-"
+             << getCurrentGenerationIndex() << "-"
+             << getCurrentGenerationSize() << " F-"
+             << getCurrentChromossomeFitness() << " "
+             << now.substr(0, now.size() - 1)
+             << ".log";
 
     std::stringstream fileContents;
-    
-    unsigned index = currentGenerationCount;
-    for(unsigned i = 0; i < population.getCurrentPopulation()[index].getAllGenes().size(); i++)
+
+    unsigned index = currentChromossomeIndex;
+    for (unsigned i = 0; i < population.getCurrentPopulation()[index].getAllGenes().size(); i++)
     {
         fileContents << population.getCurrentPopulation()[index].getAllGenes()[i] << " ";
     }
 
     std::string filenameCorr;
-    for(unsigned i=0; i < filename.str().size(); i++)
+    for (unsigned i = 0; i < filename.str().size(); i++)
     {
-        if(filename.str()[i] == ' ')
+        if (filename.str()[i] == ' ')
         {
             filenameCorr += R"(   )";
             continue;
-        } else if(filename.str()[i] == ':')
+        }
+        else if (filename.str()[i] == ':')
         {
             filenameCorr += '-';
-            continue;  
+            continue;
         }
 
         filenameCorr += filename.str()[i];
@@ -154,7 +165,10 @@ void NeuroEvolutiveEngine::saveCurrentChromossomeInFile() const
 
     std::ofstream file;
     file.open(filenameCorr, std::ofstream::out);
-    if(!file.is_open()){ std::cerr << "Error: " << filenameCorr << std::endl; }
+    if (!file.is_open())
+    {
+        std::cerr << "Error: " << filenameCorr << std::endl;
+    }
 
     file << fileContents.str();
     file.close();
