@@ -33,6 +33,8 @@ public:
     
     void saveCurrentChromossomeInFile() const;
 
+    unsigned getRecordFitness() const;
+
 private:
     Population population;
     NeuralNetwork neuralNetwork;

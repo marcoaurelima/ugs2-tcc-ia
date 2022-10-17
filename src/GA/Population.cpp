@@ -7,6 +7,10 @@ Population::Population()
 
 Population::~Population() {}
 
+unsigned Population::getRecordFitness() const
+{
+    return recordFitness;
+}
 int Population::generateRandomInt(const int min, const int max, std::string local)
 {
     int number = ((rand() % (max - min)) + min);
@@ -59,6 +63,8 @@ void debugNumber(int number)
 
 void Population::show() const
 {
+    return;
+
     std::cout << "------------------------------- Population: ------------------------------- " << std::endl;
     for (auto &c : chromosomes)
     {
@@ -75,8 +81,8 @@ void Population::setNewGenerationParams(const NewGenParams newGenParams)
 
 void Population::generateNewPopulation()
 {
-    ///executeElitism();
-    
+    /// executeElitism();
+
     /// seleção ///
     switch (newGenParams.selectionType)
     {
@@ -143,8 +149,6 @@ void Population::generateNewPopulation()
     default:
         break;
     }
-
-    
 }
 
 std::vector<unsigned> Population::getConfig(const std::string &path) const
@@ -255,7 +259,7 @@ void Population::selectionEstocastic(int qtdNidles)
             std::cout << i << " ";
         }
         std::cout << "   ";
-        std::cout << "spin " << spin << std::endl;
+        //std::cout << "spin " << spin << std::endl;
         std::cout << "selectionIndexes ";
         for (auto &i : selectionIndexes)
         {
@@ -269,16 +273,19 @@ void Population::selectionEstocastic(int qtdNidles)
 }
 
 // Roleta: mesmo algorítmo do estocastico, so que com apenas 1 agulha
+// Manter o vetor de cromossomos atual e atualizar o vetor de cromossomos selecionados para efetuar cruzamento e mutação
+// depois de definido esse vetor auxiliar, concatenar com o vetor oficial
 void Population::selectionRoulette()
 {
     unsigned qtdTurns = getConfig("configurations/GA/selection/roullete/qtdturns")[0];
+    std::cout << "qtdTurns: " << qtdTurns << std::endl;
     if (enabledLogs)
         std::cout << "qtdTurns: " << qtdTurns << std::endl;
 
     // Efetuar a quantidade de turnos definida; em cada turno guardar o indice escolhido.
     // Estes indices serão guardados no set para evitar repetidos.
 
-    std::set<unsigned> indexesSelection;
+    std::vector<unsigned> indexesSelection;
 
     if (enabledLogs)
         std::cout << "Selection: ";
@@ -316,7 +323,7 @@ void Population::selectionRoulette()
         }
 
         /// girar a roleta
-        std::cout << "spin " << spin << std::endl;
+        //std::cout << "spin " << spin << std::endl;
         for (unsigned i = 0; i < spin; i++)
         {
             roulette.push_back(roulette[i]);
@@ -327,22 +334,23 @@ void Population::selectionRoulette()
         }
 
         // A agulha está definida para ser estática na posição 0 da roleta
-        indexesSelection.insert(roulette[0]);
+        indexesSelection.push_back(roulette[0]);
         if (enabledLogs)
             std::cout << "[" << roulette[0] << "] ";
     }
 
-    std::vector<Chromosome> chromosomesTEMP = chromosomes;
-    chromosomes.clear();
+    //std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    chromosomesSelected.clear();
 
     for (auto i : indexesSelection)
     {
-        chromosomes.push_back(chromosomesTEMP[i]);
+        chromosomesSelected.push_back(chromosomes[i]);
+        //std::cout << "indexesSelection: " << i << std::endl;
     }
 
     if (enabledLogs)
     {
-        std::cout << "\nPopulation size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
+        std::cout << "\nSelectioned size [total: " << chromosomes.size() << "] - [select: " << chromosomesSelected.size() << ']' << std::endl;
         show();
     }
 }
@@ -363,78 +371,80 @@ void Population::crossoverUniform()
     }
 
     // verificar se o vetor de cromossomos tem mais de 1 cromossomo
-    if (chromosomes.size() < 2)
-        return;
-
-    std::vector<Chromosome> chromosomeTEMP = chromosomes;
-
-    for (size_t i = 0; i < chromosomeTEMP.size(); i++)
+    if (chromosomesSelected.size() < 2)
     {
-        for (size_t j = i; j < chromosomeTEMP.size(); j++)
+        return;
+    }
+
+    // verificar se vetor de cromossomos tem quantidade impar
+    // se for, selecionar algum cromossomo aleatorio do mesmo vetor e colocar no final
+    if (chromosomesSelected.size() % 2 == 1)
+    {
+        chromosomesSelected.push_back(chromosomesSelected[generateRandomInt(0, chromosomesSelected.size() - 1, "")]);
+    }
+
+    //std::vector<Chromosome> chromosomeTEMP = chromosomes;
+
+    for (size_t i = 0; i < chromosomesSelected.size(); i += 2)
+    {
+        Chromosome parent1 = chromosomesSelected[i];
+        Chromosome parent2 = chromosomesSelected[i+1];
+        Chromosome child{};
+
+        if (parent1.getAllGenes().size() != parent1.getAllGenes().size())
         {
-            if (i == j)
+            std::cerr << "Error: parent1 and parent2 must have the same size." << std::endl;
+        }
+
+        if (taxParent1 + taxParent2 != 100)
+        {
+            std::cerr << "Error: Invalid number of taxParent1." << std::endl;
+        }
+
+        size_t chromossomeSize = (parent1.getAllGenes().size() + parent2.getAllGenes().size()) / 2;
+        unsigned parent1size = (chromossomeSize * taxParent1) / 100;
+        unsigned parent2size = chromossomeSize - parent1size;
+
+        // Produzir a mascara binária;
+        // Será gerado trues de acordo com a porcentagem do pai 1;
+        // Será gerado falses com a quantidade que faltar para completar a mascara;
+
+        std::vector<bool> mask{};
+        for (size_t i = 0; i < parent1size; i++)
+        {
+            mask.push_back(true);
+        }
+        for (size_t i = 0; i < parent2size; i++)
+        {
+            mask.push_back(false);
+        }
+
+        // Embaralhar mascara de forma aleatória
+        shuffleVector(mask);
+
+        // Efetuar cruzamento a partir da mascara
+
+        for (size_t i = 0; i < mask.size(); i++)
+        {
+            if (mask[i] == false)
             {
-                continue;
+                child.setGene(parent1.getGene(i));
             }
-            Chromosome parent1 = chromosomeTEMP[i];
-            Chromosome parent2 = chromosomeTEMP[j];
-            Chromosome child{};
-
-            if (parent1.getAllGenes().size() != parent1.getAllGenes().size())
+            else
             {
-                std::cerr << "Error: parent1 and parent2 must have the same size." << std::endl;
+                child.setGene(parent2.getGene(i));
             }
+        }
 
-            if (taxParent1 + taxParent2 != 100)
+        chromosomes.push_back(child);
+
+        if (enabledLogs)
+        {
+            for (auto i : mask)
             {
-                std::cerr << "Error: Invalid number of taxParent1." << std::endl;
+                std::cout << i;
             }
-
-            size_t chromossomeSize = (parent1.getAllGenes().size() + parent2.getAllGenes().size()) / 2;
-            unsigned parent1size = (chromossomeSize * taxParent1) / 100;
-            unsigned parent2size = chromossomeSize - parent1size;
-
-            // Produzir a mascara binária;
-            // Será gerado trues de acordo com a porcentagem do pai 1;
-            // Será gerado falses com a quantidade que faltar para completar a mascara;
-
-            std::vector<bool> mask{};
-            for (size_t i = 0; i < parent1size; i++)
-            {
-                mask.push_back(true);
-            }
-            for (size_t i = 0; i < parent2size; i++)
-            {
-                mask.push_back(false);
-            }
-
-            // Embaralhar mascara de forma aleatória
-            shuffleVector(mask);
-
-            // Efetuar cruzamento a partir da mascara
-
-            for (size_t i = 0; i < mask.size(); i++)
-            {
-                if (mask[i] == false)
-                {
-                    child.setGene(parent1.getGene(i));
-                }
-                else
-                {
-                    child.setGene(parent2.getGene(i));
-                }
-            }
-
-            chromosomes.push_back(child);
-
-            if (enabledLogs)
-            {
-                for (auto i : mask)
-                {
-                    std::cout << i;
-                }
-                std::cout << "    ";
-            }
+            std::cout << "    ";
         }
     }
 
@@ -640,8 +650,10 @@ void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
         unsigned index = generateRandomInt(0, chromosomes[i].getAllGenes().size(), "mutationUniform bbb");
 
         Chromosome mutation = chromosomes[i];
-        ;
+        
         mutation.changeGene(index, valueToInsert);
+        mutation.setFitness(0);
+        mutation.resetFitness();
         chromosomes.push_back(mutation);
 
         count++;
@@ -665,6 +677,12 @@ std::vector<Chromosome> Population::getCurrentPopulation() const
 
 void Population::setChromossomeFitness(const unsigned index, const float fitness)
 {
+    
+    //std::cout << "recorde: " << recordFitness << "  chromosomes[0].getFitness(): " << chromosomes[0].getFitness() << std::endl;
+
+    // Guardar o recorde de fitness dos cromossomos gerados
+    recordFitness = (recordFitness < fitness) ? fitness : recordFitness;
+
     chromosomes[index].setFitness(fitness);
 }
 
@@ -673,32 +691,65 @@ void Population::enablePrintLogs(bool enable)
     enabledLogs = enable;
 }
 
-void Population::executeElitism()
+void Population::executeElitism(unsigned initialPopulationSize)
 {
+    std::cout << "--- EXECUTANDO ELITISMO ---\n";
+    // Para uma população de k indivíduos, pegar os k melhores cromossomos
+    // efetuar ordenação de fitness e pegar apenas os k melhores dentre a população
+
+    
+    std::cout << "\nTam. Antes do elitismo: " << chromosomes.size() << std::endl;
+    std::cout << "Fitness da população antes do elitismo:\n";
+    for(unsigned int i = 0; i < chromosomes.size(); i++)
+    {
+        std::cout << "[" << chromosomes[i].getFitness() << "] ";
+    }
+    puts("\n\n");
+
+    std::sort(chromosomes.begin(), chromosomes.end(),
+              [](Chromosome &c1, Chromosome &c2)
+              { return c1.getFitness() > c2.getFitness(); });
+
+    // Obter quantidade de cromossomos que serão subtraidos da ponta do vertor de cromossomos
+
+    unsigned cut = chromosomes.size() - initialPopulationSize;
+
+    for(unsigned i = 0; i < cut; i++)
+    {
+        chromosomes.pop_back();
+    }
+
+    std::cout << "\nTam. Pos elitismo: " << chromosomes.size() << std::endl;
+    std::cout << "Melhores fitness: ";
+    for(unsigned int i = 0; i < chromosomes.size(); i++)
+    {
+        std::cout << "[" << chromosomes[i].getFitness() << "] ";
+    }
+    puts("\n");
+
+/*
     // no elitismo será 65% dos melhores
     const float FINAL_PERCENT = 65;
 
-    //std::vector<Chromosome> elitistGen;
+    // std::vector<Chromosome> elitistGen;
 
     std::cout << "\n----------------------\n";
-    for(Chromosome c : chromosomes)
+    for (Chromosome c : chromosomes)
     {
         std::cout << c.getFitness() << " ";
     }
     std::cout << "\n----------------------\n";
-
 
     std::sort(chromosomes.begin(), chromosomes.end(),
               [](Chromosome &c1, Chromosome &c2)
               { return c1.getFitness() > c2.getFitness(); });
 
     std::cout << "\n----------------------\n";
-    for(Chromosome c : chromosomes)
+    for (Chromosome c : chromosomes)
     {
         std::cout << c.getFitness() << " ";
     }
     std::cout << "\n----------------------\n";
-
 
     // calcular a porcentagem do tamanho do vector final;
     const float VECTOR_SIZE = chromosomes.size();
@@ -708,18 +759,18 @@ void Population::executeElitism()
     std::cout << "LIMIT_INDEX: " << LIMIT_INDEX << std::endl;
 
     // retirar do vetor valores da ponta
-    for(unsigned i=0; i < chromosomes.size() - LIMIT_INDEX; i++)
+    for (unsigned i = 0; i < chromosomes.size() - LIMIT_INDEX; i++)
     {
         chromosomes.pop_back();
     }
 
     std::cout << "\n----------------------\n";
-    for(Chromosome c : chromosomes)
+    for (Chromosome c : chromosomes)
     {
         std::cout << c.getFitness() << " ";
     }
     std::cout << "\n----------------------\n";
 
     std::cout << "chromosomes.size(): " << chromosomes.size() << std::endl;
-    
+    */
 }

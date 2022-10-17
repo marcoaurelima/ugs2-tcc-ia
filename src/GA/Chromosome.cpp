@@ -93,3 +93,7 @@ bool Chromosome::haveFitness() const
 {
     return fitnessWasDefined;
 }
+void Chromosome::resetFitness()
+{
+    fitnessWasDefined = false;
+}

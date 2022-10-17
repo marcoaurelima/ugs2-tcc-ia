@@ -27,8 +27,12 @@ public:
 
     void enablePrintLogs(bool enable = true);
 
+    void executeElitism(unsigned initialPopulationSize = 100);
+
+    unsigned getRecordFitness() const;
 private:
     std::vector<Chromosome> chromosomes;
+    std::vector<Chromosome> chromosomesSelected;
     NewGenParams newGenParams;
 
     std::vector<unsigned> getConfig(const std::string& path) const;
@@ -45,9 +49,9 @@ private:
     void mutationInsertion(); 
     void mutationUniform(const float MIN_VALUE = 0.0, const float MAX_VALUE = 1.0); 
 
-    void executeElitism();
-
     bool enabledLogs {false};
+
+    unsigned recordFitness {};
 };
 
 #endif

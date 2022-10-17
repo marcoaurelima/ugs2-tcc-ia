@@ -28,6 +28,7 @@ public:
     void show() const;
 
     bool haveFitness() const;
+    void resetFitness();
 private:
     bool fitnessWasDefined {false};
     unsigned fitness {}; // O fitness varia de 0 a 10000
