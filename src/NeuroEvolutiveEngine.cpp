@@ -126,6 +126,9 @@ bool NeuroEvolutiveEngine::currentChromossomeHaveFitness() const
 
 void NeuroEvolutiveEngine::saveCurrentChromossomeInFile() const
 {
+    unsigned relevantFitnessValue = 100;
+    if(getCurrentChromossomeFitness() < relevantFitnessValue){ return; }
+
     std::time_t result = std::time(nullptr);
     std::string now(std::ctime(&result));
 
@@ -133,9 +136,9 @@ void NeuroEvolutiveEngine::saveCurrentChromossomeInFile() const
     filename << "logs/G-"
              << getCurrentChromossomeIndex() << " C-"
              << getCurrentGenerationIndex() << "-"
+             << now.substr(0, now.size() - 1)
              << getCurrentGenerationSize() << " F-"
              << getCurrentChromossomeFitness() << " "
-             << now.substr(0, now.size() - 1)
              << ".log";
 
     std::stringstream fileContents;

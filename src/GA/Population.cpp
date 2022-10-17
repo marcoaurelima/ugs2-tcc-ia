@@ -75,7 +75,7 @@ void Population::setNewGenerationParams(const NewGenParams newGenParams)
 
 void Population::generateNewPopulation()
 {
-    executeElitism();
+    ///executeElitism();
     
     /// seleção ///
     switch (newGenParams.selectionType)
@@ -91,9 +91,7 @@ void Population::generateNewPopulation()
     case SELECTION_TYPE::ROULLETE:
         if (enabledLogs)
             std::cout << "STEP: Selection    METHOD: Roullete" << std::endl;
-
         selectionRoulette();
-
         break;
     case SELECTION_TYPE::STOCHASTIC_US:
         if (enabledLogs)

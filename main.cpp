@@ -21,18 +21,24 @@ int main()
     // população inicial
     Population population;
     population.enablePrintLogs();
-    population.createInitialPopulation(4, 27);
+    population.createInitialPopulation(10, 27);
     population.show();
     population.setNewGenerationParams(NewGenParams{
         SELECTION_TYPE::ROULLETE,
         CROSSOVER_TYPE::UNIFORM,
         MUTATION_TYPE::UNIFORM});
-
+/*
     population.setChromossomeFitness(0, 500);
     population.setChromossomeFitness(1, 70);
     population.setChromossomeFitness(2, 853);
     population.setChromossomeFitness(3, 1230);
-
+    population.setChromossomeFitness(4, 35553);
+    population.setChromossomeFitness(5, 45454);
+    population.setChromossomeFitness(6, 345);
+    population.setChromossomeFitness(7, 56);
+    population.setChromossomeFitness(8, 2345);
+    population.setChromossomeFitness(9, 7063);
+*/
     //population.generateNewPopulation();
     population.show();
 
@@ -46,39 +52,30 @@ int main()
     float pontuation = 0.5, distance = 0.1; int value = 0.1;
 
     NeuroEvolutiveEngine engine(population, network);
-    //engine.showInternalStatus();
+    engine.showInternalStatus();
 
-    for (int i = 0; i < 104; i++)
+    srand(time(NULL));
+
+    for(;;)
     {
-        std::cout << "--------------------------------\n";
-        value += 0.1;
-        pontuation += value;
-        distance += value;
-        //engine.showInternalStatus();
-        auto r = engine.takeDecision({pontuation, distance});
-        cout << "Decision1: " << r[0] << endl;
-        engine.setCurrentChromossomeFitness(value);
-        //engine.showInternalStatus();
+        auto d = engine.takeDecision({10, 20});
 
-        //engine.useNextTopology();
-        std::cout << "--------------------------------\n";
+        std::cout << "decision: " << d[0] << std::endl;
+        
+        engine.setCurrentChromossomeFitness(rand()%100);
+
+        engine.useNextTopology();
     }
 
-    /*
-    */
 /*
-    for (unsigned i = 0; i < population.getCurrentPopulation().size(); i++)
+    for (unsigned i = 0; i < population.getCurrentPopulation().size()+2; i++)
     {
         network.loadDataFromChromosome(population.getCurrentPopulation()[i]);
         //network.show();
         auto d = network.takeDecision({10, 20});
 
         std::cout << "decision: " << d[0] << std::endl;
-    }
-*/
-    // network.loadDataFromChromosome({0,1,2,3, 0,4,5,6,   0,1,2,3, 0,4,5,6, 0,1,2,3, 0,1, 0,2, 0,3, 0});
-    // network.loadDataFromChromosome({1,2,3,4, 5,6,7,8, 9,0,1,2, 3,4,5,6, 7,8,9,0, 1,2, 3,4, 5,6, 7});
-    // network.show();
+    }*/
 
     return 0;
 }
