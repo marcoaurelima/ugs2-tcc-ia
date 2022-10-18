@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 #include "Chromosome.h"
 #include "types.h"
 
@@ -42,6 +43,7 @@ private:
     int generateRandomInt(const int min, const int max);
     float generateRandomFloat(const float min, const float max);
     void  shuffleVector(std::vector<bool> & vec);
+    void  shuffleChromossomes(std::vector<Chromosome>& chr);
 
     void selectionEstocastic(int qtdNidles = 0);
     void selectionRoulette();
