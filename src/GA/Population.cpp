@@ -686,9 +686,9 @@ void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
         // Gerar um valor válido e inserir em um indice aleatório
 
         float valueToInsert = generateRandomFloat(MIN_VALUE, MAX_VALUE); // dist3(mt);
-        unsigned index = generateRandomInt(0, chromosomesSelected[i].getAllGenes().size());
+        unsigned index = generateRandomInt(0, chromosomesTEMP[i].getAllGenes().size());
 
-        Chromosome mutation = chromosomesSelected[i];
+        Chromosome mutation = chromosomesTEMP[i];
 
         mutation.changeGene(index, valueToInsert);
         mutation.setFitness(0);
