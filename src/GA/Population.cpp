@@ -367,6 +367,13 @@ void Population::selectionRoulette()
         // std::cout << "indexesSelection: " << i << std::endl;
     }
 
+    // resetar valor de fitness dos cromossomos seleconados
+    for(unsigned i = 0; i < chromosomesSelected.size(); i++)
+    {
+        chromosomesSelected[i].setFitness(0);
+        chromosomesSelected[i].resetFitness();
+    }
+    
     if (enabledLogs)
     {
         std::cout << "\nSelectioned size [total: " << chromosomes.size() << "] - [select: " << chromosomesSelected.size() << ']' << std::endl;
@@ -405,9 +412,9 @@ void Population::crossoverUniform()
         chromosomesSelected.push_back(chromosomesSelected[generateRandomInt(0, chromosomesSelected.size() - 1)]);
     }
 
-    // std::vector<Chromosome> chromosomeTEMP = chromosomes;
+    std::vector<Chromosome> chromosomesSelectedTEMP = chromosomesSelected;
 
-    for (size_t i = 0; i < chromosomesSelected.size(); i += 2)
+    for (size_t i = 0; i < chromosomesSelectedTEMP.size(); i += 2)
     {
         // Decidir se o cruzamento altual ocorerá de acordo com a probabilidade
         if (!getDecisionProb(probability))
@@ -416,8 +423,8 @@ void Population::crossoverUniform()
             std::cout << "[Cruz.Rec|" << i << "] ";
         }
 
-        Chromosome parent1 = chromosomesSelected[i];
-        Chromosome parent2 = chromosomesSelected[i + 1];
+        Chromosome parent1 = chromosomesSelectedTEMP[i];
+        Chromosome parent2 = chromosomesSelectedTEMP[i + 1];
         Chromosome child{};
 
         if (parent1.getAllGenes().size() != parent1.getAllGenes().size())
@@ -465,7 +472,7 @@ void Population::crossoverUniform()
             }
         }
 
-        chromosomes.push_back(child);
+        chromosomesSelected.push_back(child);
 
         if (enabledLogs)
         {
@@ -508,12 +515,15 @@ void Population::crossoverSinglePoint(int indexPointDivision)
 
     // Efetuar cruzamento da população
     // std::vector<Chromosome> chromosomesTEMP = chromosomes;
-    chromosomesSelected.clear();
-    for (unsigned i = 0; i < chromosomes.size(); i+=2)
+    //chromosomesSelected.clear();
+
+    std::vector<Chromosome> chromosomesSelectedTEMP = chromosomesSelected;
+
+    for (unsigned i = 0; i < chromosomesSelectedTEMP.size(); i+=2)
     {
 
-        const Chromosome &parent1 = chromosomes[i];
-        const Chromosome &parent2 = chromosomes[i+1];
+        const Chromosome &parent1 = chromosomesSelectedTEMP[i];
+        const Chromosome &parent2 = chromosomesSelectedTEMP[i+1];
 
         Chromosome child;
 
@@ -531,7 +541,7 @@ void Population::crossoverSinglePoint(int indexPointDivision)
 
     if (enabledLogs)
     {
-        // std::cout << "Population size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
+        std::cout << "chromosomesSelected size [initial: " << chromosomesSelected.size() << "] - [chromosomes.size(): " << chromosomes.size() << ']' << std::endl;
 
         show();
     }
@@ -567,7 +577,7 @@ void Population::mutationInsertion()
         }
     */
     unsigned count = 0;
-    std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    std::vector<Chromosome> chromosomesTEMP = chromosomesSelected;
     for (unsigned i = 0; i < chromosomesTEMP.size(); ++i)
     {
         // Calcular probabilidade (porcentagens inteiras ex.: 1%)
@@ -629,10 +639,17 @@ void Population::mutationInsertion()
             mutation.setGene(chromosomesTEMP[i].getGene(k));
         }
 
-        chromosomes.push_back(mutation);
+        chromosomesSelected.push_back(mutation);
 
         count++;
     }
+
+    // juntar a população selecionada com a população oficial
+    for(unsigned i = 0; i < chromosomesSelected.size(); i++)
+    {
+        chromosomes.push_back(chromosomesSelected[i]);
+    }
+
 
     if (enabledLogs)
     {
@@ -650,7 +667,7 @@ void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
         std::cout << "Ocorrency probability: " << probability << "%   \n";
 
     unsigned count = 0;
-    std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    std::vector<Chromosome> chromosomesTEMP = chromosomesSelected;
     for (unsigned i = 0; i < chromosomesTEMP.size(); ++i)
     {
         bool makeMutation = !getDecisionProb(probability);
@@ -669,16 +686,22 @@ void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
         // Gerar um valor válido e inserir em um indice aleatório
 
         float valueToInsert = generateRandomFloat(MIN_VALUE, MAX_VALUE); // dist3(mt);
-        unsigned index = generateRandomInt(0, chromosomes[i].getAllGenes().size());
+        unsigned index = generateRandomInt(0, chromosomesSelected[i].getAllGenes().size());
 
-        Chromosome mutation = chromosomes[i];
+        Chromosome mutation = chromosomesSelected[i];
 
         mutation.changeGene(index, valueToInsert);
         mutation.setFitness(0);
         mutation.resetFitness();
-        chromosomes.push_back(mutation);
+        chromosomesSelected.push_back(mutation);
 
         count++;
+    }
+
+    // juntar a população selecionada com a população oficial
+    for(unsigned i = 0; i < chromosomesSelected.size(); i++)
+    {
+        chromosomes.push_back(chromosomesSelected[i]);
     }
 
     if (enabledLogs)
