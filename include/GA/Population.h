@@ -7,6 +7,8 @@
 #include <deque>
 #include <algorithm>
 #include <fstream>
+#include <sstream>
+#include <chrono>
 #include "Chromosome.h"
 #include "types.h"
 
@@ -26,14 +28,22 @@ public:
 
     void enablePrintLogs(bool enable = true);
 
+    void executeElitism();
+
+    unsigned getRecordFitness() const;
+
+    unsigned getInitialPopulationSize() const;
+
 private:
     std::vector<Chromosome> chromosomes;
+    std::vector<Chromosome> chromosomesSelected;
     NewGenParams newGenParams;
 
     std::vector<unsigned> getConfig(const std::string& path) const;
-    int generateRandomInt(const int min, const int max, std::string  local);
+    int generateRandomInt(const int min, const int max);
     float generateRandomFloat(const float min, const float max);
     void  shuffleVector(std::vector<bool> & vec);
+    void  shuffleChromossomes(std::vector<Chromosome>& chr);
 
     void selectionEstocastic(int qtdNidles = 0);
     void selectionRoulette();
@@ -45,6 +55,11 @@ private:
     void mutationUniform(const float MIN_VALUE = 0.0, const float MAX_VALUE = 1.0); 
 
     bool enabledLogs {false};
+
+    unsigned recordFitness {};
+    unsigned initialPopulationSize {};
+
+    bool getDecisionProb(unsigned percent);
 };
 
 #endif

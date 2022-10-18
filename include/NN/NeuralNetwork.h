@@ -33,15 +33,16 @@ public:
 
     void loadDataFromFile(const std::string path);
     void loadDataFromChromosome(const Chromosome& chromossome);
+    
+    static float normalize(float x, float xMin, float xMax, float d1, float d2);
 private:
     InputLayer inputLayer;
     HiddenLayer hiddenLayer;
     OutputLayer outputLayer;
-    ACTFUNC activFuncHidden;
-    ACTFUNC activFuncOutput;
+    ACTFUNC ACTIVFUNC_HIDDEN;
+    ACTFUNC ACTIVFUNC_OUTPUT;
 
 
-    float normalize(float x, float xMin, float xMax, float d1, float d2) const;
 };
 
 #endif

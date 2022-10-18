@@ -20,7 +20,7 @@ void Neuron::setBias(float bias)
 void Neuron::setValue(float value, ACTFUNC activationFunction)
 {
     // Verificar se o neuronio estará ativado a partir do valor
-
+    ///std::cout << "Neuron::setValue: " << value << std::endl;
     switch (activationFunction)
     {
     case ACTFUNC::RELU:

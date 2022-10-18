@@ -7,7 +7,11 @@ Population::Population()
 
 Population::~Population() {}
 
-int Population::generateRandomInt(const int min, const int max, std::string local)
+unsigned Population::getRecordFitness() const
+{
+    return recordFitness;
+}
+int Population::generateRandomInt(const int min, const int max)
 {
     int number = ((rand() % (max - min)) + min);
     return number;
@@ -17,7 +21,7 @@ float Population::generateRandomFloat(const float min, const float max)
 {
     int iMin = (int)(min * 1000);
     int iMax = (int)(max * 1000);
-    float number (((float)((rand() % (iMin - iMax)) + min)) / 1000);
+    float number(((float)((rand() % (iMin - iMax)) + min)) / 1000);
     return number;
 }
 
@@ -25,27 +29,41 @@ void Population::shuffleVector(std::vector<bool> &vec)
 {
     for (unsigned i = 0; i < vec.size() * 2; i++)
     {
-        unsigned j = generateRandomInt(0, vec.size(), "shuffleVector");
-        unsigned k = generateRandomInt(0, vec.size(), "shuffleVector");
+        unsigned j = generateRandomInt(0, vec.size());
+        unsigned k = generateRandomInt(0, vec.size());
         bool temp = vec[j];
         vec[j] = vec[k];
         vec[k] = temp;
     }
 }
 
+void Population::shuffleChromossomes(std::vector<Chromosome> &chr)
+{
+    for (unsigned i = 0; i < chr.size() * 2; i++)
+    {
+        unsigned j = generateRandomInt(0, chr.size());
+        unsigned k = generateRandomInt(0, chr.size());
+        Chromosome temp = chr[j];
+        chr[j] = chr[k];
+        chr[k] = temp;
+    }
+}
+
 void Population::createInitialPopulation(const unsigned populationSize, const unsigned chromossomeSize)
 {
+    initialPopulationSize = populationSize;
+
     srand(time(NULL));
     for (size_t i = 0; i < populationSize; i++)
     {
         Chromosome c;
         for (size_t j = 0; j < chromossomeSize; j++)
         {
-            float randFloat = generateRandomFloat(0, 1);
+            float randFloat = generateRandomFloat(0, 0.6);
             c.setGene(randFloat);
         }
-        //unsigned fitness = generateRandomInt(0, 10000);
-        //c.setFitness(fitness);
+        // unsigned fitness = generateRandomInt(0, 10000);
+        // c.setFitness(fitness);
         chromosomes.push_back(c);
     }
 }
@@ -57,8 +75,15 @@ void debugNumber(int number)
     std::cout << "\n";
 }
 
+unsigned Population::getInitialPopulationSize() const
+{
+    return initialPopulationSize;
+}
+
 void Population::show() const
 {
+    return;
+
     std::cout << "------------------------------- Population: ------------------------------- " << std::endl;
     for (auto &c : chromosomes)
     {
@@ -75,7 +100,8 @@ void Population::setNewGenerationParams(const NewGenParams newGenParams)
 
 void Population::generateNewPopulation()
 {
-   
+    /// executeElitism();
+
     /// seleção ///
     switch (newGenParams.selectionType)
     {
@@ -90,9 +116,7 @@ void Population::generateNewPopulation()
     case SELECTION_TYPE::ROULLETE:
         if (enabledLogs)
             std::cout << "STEP: Selection    METHOD: Roullete" << std::endl;
-        
         selectionRoulette();
-        
         break;
     case SELECTION_TYPE::STOCHASTIC_US:
         if (enabledLogs)
@@ -102,7 +126,7 @@ void Population::generateNewPopulation()
     default:
         break;
     }
-    
+
     /// cruzamento ///
     switch (newGenParams.crossoverType)
     {
@@ -123,7 +147,7 @@ void Population::generateNewPopulation()
     default:
         break;
     }
-    
+
     /// mutação ///
     switch (newGenParams.mutationType)
     {
@@ -144,8 +168,6 @@ void Population::generateNewPopulation()
     default:
         break;
     }
-
-    
 }
 
 std::vector<unsigned> Population::getConfig(const std::string &path) const
@@ -174,13 +196,13 @@ void Population::selectionEstocastic(int qtdNidles)
     // Se não for definido uma quantidade por parametro, este será lido no arquivo de conf.
     if (qtdNidles == 0)
     {
-        qtdNidles = getConfig("configurations/GA/selection/estocastic/qtdneedles")[0];
+        qtdNidles = initialPopulationSize;
     }
 
-    // Eu comecei com precisão de 100, mas não é suficiente. 
-    // Definirei a precisão em 10000 
+    // Eu comecei com precisão de 100, mas não é suficiente.
+    // Definirei a precisão em 10000
 
-    const unsigned spin = generateRandomInt(1, 9999, "selectionEstocastic 000");
+    const unsigned spin = generateRandomInt(1, 9999);
 
     float fitnessSum = 0;
     for (Chromosome &c : chromosomes)
@@ -233,18 +255,19 @@ void Population::selectionEstocastic(int qtdNidles)
 
     // Efetuar seleção dos indices dos cromossomos que as agulhas apontam
 
-    std::set<unsigned> selectionIndexes{};
+    std::vector<unsigned> selectionIndexes{};
     for (unsigned &i : indexNidles)
     {
-        selectionIndexes.insert(roulette[i]);
+        selectionIndexes.push_back(roulette[i]);
     }
 
-    std::vector<Chromosome> chromosomesTEMP = chromosomes;
-    chromosomes.clear();
+    // std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    // chromosomes.clear();
 
+    chromosomesSelected.clear();
     for (const unsigned &i : selectionIndexes)
     {
-        chromosomes.push_back(chromosomesTEMP[i]);
+        chromosomesSelected.push_back(chromosomes[i]);
     }
 
     if (enabledLogs)
@@ -256,7 +279,7 @@ void Population::selectionEstocastic(int qtdNidles)
             std::cout << i << " ";
         }
         std::cout << "   ";
-        std::cout << "spin " << spin << std::endl;
+        // std::cout << "spin " << spin << std::endl;
         std::cout << "selectionIndexes ";
         for (auto &i : selectionIndexes)
         {
@@ -264,30 +287,31 @@ void Population::selectionEstocastic(int qtdNidles)
         }
         std::cout << "    \n";
 
-        std::cout << "Population size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
+        std::cout << "\nSelectioned size [total: " << chromosomes.size() << "] - [select: " << chromosomesSelected.size() << ']' << std::endl;
         show();
-        
     }
 }
 
 // Roleta: mesmo algorítmo do estocastico, so que com apenas 1 agulha
+// Manter o vetor de cromossomos atual e atualizar o vetor de cromossomos selecionados para efetuar cruzamento e mutação
+// depois de definido esse vetor auxiliar, concatenar com o vetor oficial
 void Population::selectionRoulette()
 {
-    unsigned qtdTurns = getConfig("configurations/GA/selection/roullete/qtdturns")[0];
+    unsigned qtdTurns = initialPopulationSize; // getConfig("configurations/GA/selection/roullete/qtdturns")[0];
     if (enabledLogs)
         std::cout << "qtdTurns: " << qtdTurns << std::endl;
 
     // Efetuar a quantidade de turnos definida; em cada turno guardar o indice escolhido.
     // Estes indices serão guardados no set para evitar repetidos.
 
-    std::set<unsigned> indexesSelection;
+    std::vector<unsigned> indexesSelection;
 
     if (enabledLogs)
         std::cout << "Selection: ";
 
     for (size_t i = 0; i < qtdTurns; i++)
     {
-        const unsigned spin = generateRandomInt(1, 9999, "selectionRoulette 111");
+        const unsigned spin = generateRandomInt(1, 9999);
 
         float fitnessSum = 0;
         for (Chromosome &c : chromosomes)
@@ -318,7 +342,7 @@ void Population::selectionRoulette()
         }
 
         /// girar a roleta
-
+        // std::cout << "spin " << spin << std::endl;
         for (unsigned i = 0; i < spin; i++)
         {
             roulette.push_back(roulette[i]);
@@ -329,23 +353,23 @@ void Population::selectionRoulette()
         }
 
         // A agulha está definida para ser estática na posição 0 da roleta
-        indexesSelection.insert(roulette[0]);
+        indexesSelection.push_back(roulette[0]);
         if (enabledLogs)
             std::cout << "[" << roulette[0] << "] ";
-
     }
 
-    std::vector<Chromosome> chromosomesTEMP = chromosomes;
-    chromosomes.clear();
+    // std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    chromosomesSelected.clear();
 
     for (auto i : indexesSelection)
     {
-        chromosomes.push_back(chromosomesTEMP[i]);
+        chromosomesSelected.push_back(chromosomes[i]);
+        // std::cout << "indexesSelection: " << i << std::endl;
     }
 
     if (enabledLogs)
     {
-        std::cout << "\nPopulation size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
+        std::cout << "\nSelectioned size [total: " << chromosomes.size() << "] - [select: " << chromosomesSelected.size() << ']' << std::endl;
         show();
     }
 }
@@ -358,83 +382,98 @@ void Population::crossoverUniform()
     const unsigned taxParent1 = getConfig("configurations/GA/crossover/uniform/contrib")[0];
     const unsigned taxParent2 = getConfig("configurations/GA/crossover/uniform/contrib")[1];
 
+    const unsigned probability = getConfig("configurations/GA/crossover/uniform/probability")[0];
+
     if (enabledLogs)
     {
         std::cout << "taxParent1 " << taxParent1 << "%    "
-                  << "taxParent2 " << taxParent2 << "%" << std::endl;
+                  << "taxParent2 " << taxParent2 << "%    "
+                  << "Probability " << probability << "%" << std::endl;
         std::cout << "masks ";
     }
 
     // verificar se o vetor de cromossomos tem mais de 1 cromossomo
-    if (chromosomes.size() < 2)
-        return;
-
-    std::vector<Chromosome> chromosomeTEMP = chromosomes;
-
-    for (size_t i = 0; i < chromosomeTEMP.size(); i++)
+    if (chromosomesSelected.size() < 2)
     {
-        for (size_t j = i; j < chromosomeTEMP.size(); j++)
+        return;
+    }
+
+    // verificar se vetor de cromossomos tem quantidade impar
+    // se for, selecionar algum cromossomo aleatorio do mesmo vetor e colocar no final
+    if (chromosomesSelected.size() % 2 == 1)
+    {
+        chromosomesSelected.push_back(chromosomesSelected[generateRandomInt(0, chromosomesSelected.size() - 1)]);
+    }
+
+    // std::vector<Chromosome> chromosomeTEMP = chromosomes;
+
+    for (size_t i = 0; i < chromosomesSelected.size(); i += 2)
+    {
+        // Decidir se o cruzamento altual ocorerá de acordo com a probabilidade
+        if (!getDecisionProb(probability))
         {
-            if(i == j) { continue; }
-            Chromosome parent1 = chromosomeTEMP[i];
-            Chromosome parent2 = chromosomeTEMP[j];
-            Chromosome child{};
+            continue;
+            std::cout << "[Cruz.Rec|" << i << "] ";
+        }
 
-            if (parent1.getAllGenes().size() != parent1.getAllGenes().size())
+        Chromosome parent1 = chromosomesSelected[i];
+        Chromosome parent2 = chromosomesSelected[i + 1];
+        Chromosome child{};
+
+        if (parent1.getAllGenes().size() != parent1.getAllGenes().size())
+        {
+            std::cerr << "Error: parent1 and parent2 must have the same size." << std::endl;
+        }
+
+        if (taxParent1 + taxParent2 != 100)
+        {
+            std::cerr << "Error: Invalid number of taxParent1." << std::endl;
+        }
+
+        size_t chromossomeSize = (parent1.getAllGenes().size() + parent2.getAllGenes().size()) / 2;
+        unsigned parent1size = (chromossomeSize * taxParent1) / 100;
+        unsigned parent2size = chromossomeSize - parent1size;
+
+        // Produzir a mascara binária;
+        // Será gerado trues de acordo com a porcentagem do pai 1;
+        // Será gerado falses com a quantidade que faltar para completar a mascara;
+
+        std::vector<bool> mask{};
+        for (size_t i = 0; i < parent1size; i++)
+        {
+            mask.push_back(true);
+        }
+        for (size_t i = 0; i < parent2size; i++)
+        {
+            mask.push_back(false);
+        }
+
+        // Embaralhar mascara de forma aleatória
+        shuffleVector(mask);
+
+        // Efetuar cruzamento a partir da mascara
+
+        for (size_t i = 0; i < mask.size(); i++)
+        {
+            if (mask[i] == false)
             {
-                std::cerr << "Error: parent1 and parent2 must have the same size." << std::endl;
+                child.setGene(parent1.getGene(i));
             }
-
-            if (taxParent1 + taxParent2 != 100)
+            else
             {
-                std::cerr << "Error: Invalid number of taxParent1." << std::endl;
+                child.setGene(parent2.getGene(i));
             }
+        }
 
-            size_t chromossomeSize = (parent1.getAllGenes().size() + parent2.getAllGenes().size()) / 2;
-            unsigned parent1size = (chromossomeSize * taxParent1) / 100;
-            unsigned parent2size = chromossomeSize - parent1size;
+        chromosomes.push_back(child);
 
-            // Produzir a mascara binária;
-            // Será gerado trues de acordo com a porcentagem do pai 1;
-            // Será gerado falses com a quantidade que faltar para completar a mascara;
-
-            std::vector<bool> mask{};
-            for (size_t i = 0; i < parent1size; i++)
+        if (enabledLogs)
+        {
+            for (auto i : mask)
             {
-                mask.push_back(true);
+                std::cout << i;
             }
-            for (size_t i = 0; i < parent2size; i++)
-            {
-                mask.push_back(false);
-            }
-
-            // Embaralhar mascara de forma aleatória
-            shuffleVector(mask);
-
-            // Efetuar cruzamento a partir da mascara
-
-            for (size_t i = 0; i < mask.size(); i++)
-            {
-                if (mask[i] == false)
-                {
-                    child.setGene(parent1.getGene(i));
-                }
-                else
-                {
-                    child.setGene(parent2.getGene(i));
-                }
-            }
-
-            chromosomes.push_back(child);
-
-            if (enabledLogs)
-            {
-                for (auto i : mask)
-                {
-                    std::cout << i;
-                }
-                std::cout << "    ";
-            }
+            std::cout << "    ";
         }
     }
 
@@ -444,7 +483,6 @@ void Population::crossoverUniform()
 
         show();
     }
-
 }
 
 void Population::crossoverSinglePoint(int indexPointDivision)
@@ -453,15 +491,15 @@ void Population::crossoverSinglePoint(int indexPointDivision)
     if (indexPointDivision == -1)
     {
         const unsigned SIZE = chromosomes[0].getAllGenes().size();
- 
-        indexPointDivision = generateRandomInt(0, SIZE-1, "crossoverSinglePoint 222");
+
+        indexPointDivision = generateRandomInt(0, SIZE);
 
         // Evitar que o ponto seja o indice máximo do cromossomo.
         // Se o o indice for esse, não haverá cruzamento pois a primeira parte da
         // divisão do cromossomo tem tamanho igual ao tamanho dele.
         while (indexPointDivision < 1)
         {
-            indexPointDivision = generateRandomInt(0, SIZE-1, "crossoverSinglePoint 333");
+            indexPointDivision = generateRandomInt(0, SIZE);
         }
     }
 
@@ -469,40 +507,46 @@ void Population::crossoverSinglePoint(int indexPointDivision)
         std::cout << "indexPointDivision " << indexPointDivision << std::endl;
 
     // Efetuar cruzamento da população
-    std::vector<Chromosome> chromosomesTEMP = chromosomes;
-    for (unsigned i = 0; i < chromosomes.size(); i++)
+    // std::vector<Chromosome> chromosomesTEMP = chromosomes;
+    chromosomesSelected.clear();
+    for (unsigned i = 0; i < chromosomes.size(); i+=2)
     {
-        for (unsigned j = i; j < chromosomesTEMP.size(); j++)
+
+        const Chromosome &parent1 = chromosomes[i];
+        const Chromosome &parent2 = chromosomes[i+1];
+
+        Chromosome child;
+
+        for (int i = 0; i < indexPointDivision; i++)
         {
-            if (i == j)
-            {
-                continue;
-            }
-
-            const Chromosome &parent1 = chromosomesTEMP[i];
-            const Chromosome &parent2 = chromosomesTEMP[j];
-
-            Chromosome child;
-
-            for (int i = 0; i < indexPointDivision; i++)
-            {
-                child.setGene(parent1.getGene(i));
-            }
-
-            for (unsigned i = indexPointDivision; i < parent2.getSize(); i++)
-            {
-                child.setGene(parent2.getGene(i));
-            }
-            chromosomes.push_back(child);
+            child.setGene(parent1.getGene(i));
         }
+
+        for (unsigned i = indexPointDivision; i < parent2.getSize(); i++)
+        {
+            child.setGene(parent2.getGene(i));
+        }
+        chromosomesSelected.push_back(child);
     }
 
     if (enabledLogs)
     {
-        std::cout << "Population size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
+        // std::cout << "Population size [initial: " << chromosomesTEMP.size() << "] - [final: " << chromosomes.size() << ']' << std::endl;
 
         show();
     }
+}
+
+bool Population::getDecisionProb(unsigned percent)
+{
+    std::vector<bool> range(100);
+    for (unsigned i = 0; i < percent; i++)
+    {
+        range[i] = true;
+    }
+
+    int randIndex = generateRandomInt(0, 100);
+    return (range[randIndex]);
 }
 
 // Efetuar mutações na população atual
@@ -515,20 +559,21 @@ void Population::mutationInsertion()
     if (enabledLogs)
         std::cout << "Ocorrency probability: " << probability << "%   \n";
 
-    std::vector<bool> range(100);
-    for (unsigned i = 0; i < probability; i++)
-    {
-        range[i] = true;
-    }
-
+    /*
+        std::vector<bool> range(100);
+        for (unsigned i = 0; i < probability; i++)
+        {
+            range[i] = true;
+        }
+    */
     unsigned count = 0;
     std::vector<Chromosome> chromosomesTEMP = chromosomes;
     for (unsigned i = 0; i < chromosomesTEMP.size(); ++i)
     {
         // Calcular probabilidade (porcentagens inteiras ex.: 1%)
 
-        int randIndex = generateRandomInt(0, 100, "mutationInsertion 444");
-        bool makeMutation = !(range[randIndex]);
+        // int randIndex = generateRandomInt(0, 100);
+        bool makeMutation = !getDecisionProb(probability); // !(range[randIndex]);
         if (makeMutation)
         {
             if (enabledLogs)
@@ -546,8 +591,8 @@ void Population::mutationInsertion()
         unsigned index1 = 0, index2 = 0;
         while (index1 == index2)
         {
-            index1 = generateRandomInt(0, chromosomeSize-1, "mutationInsertion 555");
-            index2 = generateRandomInt(0, chromosomeSize-1, "mutationInsertion 666");
+            index1 = generateRandomInt(0, chromosomeSize);
+            index2 = generateRandomInt(0, chromosomeSize);
         }
 
         // Ordenar indices - index1 deve conter menor valor dos dois
@@ -604,25 +649,11 @@ void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
     if (enabledLogs)
         std::cout << "Ocorrency probability: " << probability << "%   \n";
 
-    // Calcular probabilidade (porcentagens inteiras ex.: 1%)
-    // Ficará separado de acordo com a prob. Ex.: 1111100000 -> 50%
-    std::vector<bool> range(100);
-    for (unsigned int i = 0; i < probability; ++i)
-    {
-        range[i] = true;
-    }
-
     unsigned count = 0;
     std::vector<Chromosome> chromosomesTEMP = chromosomes;
     for (unsigned i = 0; i < chromosomesTEMP.size(); ++i)
     {
-        /*
-                std::random_device rd;
-                std::mt19937 mt(rd());
-                std::uniform_int_distribution<unsigned> dist(0, 100);
-        */
-        int randIndex = generateRandomInt(0, 100, "mutationUniform aaa");
-        bool makeMutation = !(range[randIndex]);
+        bool makeMutation = !getDecisionProb(probability);
         if (makeMutation)
         {
             if (enabledLogs)
@@ -638,10 +669,13 @@ void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
         // Gerar um valor válido e inserir em um indice aleatório
 
         float valueToInsert = generateRandomFloat(MIN_VALUE, MAX_VALUE); // dist3(mt);
-        unsigned index = generateRandomInt(0, chromosomes[i].getAllGenes().size()-1, "mutationUniform bbb"); 
-        
-        Chromosome mutation = chromosomes[i];;
+        unsigned index = generateRandomInt(0, chromosomes[i].getAllGenes().size());
+
+        Chromosome mutation = chromosomes[i];
+
         mutation.changeGene(index, valueToInsert);
+        mutation.setFitness(0);
+        mutation.resetFitness();
         chromosomes.push_back(mutation);
 
         count++;
@@ -656,7 +690,6 @@ void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
 
         show();
     }
- 
 }
 
 std::vector<Chromosome> Population::getCurrentPopulation() const
@@ -666,10 +699,54 @@ std::vector<Chromosome> Population::getCurrentPopulation() const
 
 void Population::setChromossomeFitness(const unsigned index, const float fitness)
 {
+
+    // std::cout << "recorde: " << recordFitness << "  chromosomes[0].getFitness(): " << chromosomes[0].getFitness() << std::endl;
+
+    // Guardar o recorde de fitness dos cromossomos gerados
+    recordFitness = (recordFitness < fitness) ? fitness : recordFitness;
+
     chromosomes[index].setFitness(fitness);
 }
 
 void Population::enablePrintLogs(bool enable)
 {
     enabledLogs = enable;
+}
+
+void Population::executeElitism()
+{
+    std::cout << "--- EXECUTANDO ELITISMO ---\n";
+    // Para uma população de k indivíduos, pegar os k melhores cromossomos
+    // efetuar ordenação de fitness e pegar apenas os k melhores dentre a população
+
+    std::cout << "\nTam. Antes do elitismo: " << chromosomes.size() << std::endl;
+    std::cout << "Fitness da populacao antes do elitismo:\n";
+    for (unsigned int i = 0; i < chromosomes.size(); i++)
+    {
+        std::cout << "[" << chromosomes[i].getFitness() << "] ";
+    }
+    puts("\n\n");
+
+    shuffleChromossomes(chromosomes);
+
+    std::sort(chromosomes.begin(), chromosomes.end(),
+              [](Chromosome &c1, Chromosome &c2)
+              { return c1.getFitness() > c2.getFitness(); });
+
+    // Obter quantidade de cromossomos que serão subtraidos da ponta do vertor de cromossomos
+
+    unsigned cut = chromosomes.size() - initialPopulationSize;
+
+    for (unsigned i = 0; i < cut; i++)
+    {
+        chromosomes.pop_back();
+    }
+
+    std::cout << "\nTam. Pos elitismo: " << chromosomes.size() << std::endl;
+    std::cout << "Melhores fitness: ";
+    for (unsigned int i = 0; i < chromosomes.size(); i++)
+    {
+        std::cout << "[" << chromosomes[i].getFitness() << "] ";
+    }
+    puts("\n");
 }

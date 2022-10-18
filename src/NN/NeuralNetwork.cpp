@@ -91,13 +91,13 @@ void NeuralNetwork::setHiddenLayer(const HiddenLayerInfo &layerInfo)
     {
         hiddenLayer.push_back(std::vector<Neuron>(groupSize));
     }
-    activFuncHidden = layerInfo.activationFunction;
+    ACTIVFUNC_HIDDEN = layerInfo.activationFunction;
 }
 
 void NeuralNetwork::setOutputLayer(const OutputLayerInfo &layerInfo)
 {
     outputLayer = std::vector<Neuron>(layerInfo.qtdNeurons);
-    activFuncOutput = layerInfo.activationFunction;
+    ACTIVFUNC_OUTPUT = layerInfo.activationFunction;
 }
 
 void NeuralNetwork::loadDataFromFile(const std::string path)
@@ -194,7 +194,7 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
 // [x]         valor a ser normalizado
 // [xMin xMax] variação do valor de x
 // [d1 d2]     Limite ao qual o valor de x será reduzido
-float NeuralNetwork::normalize(float x, float xMin, float xMax, float d1, float d2) const
+float NeuralNetwork::normalize(float x, float xMin, float xMax, float d1, float d2)
 {
     return (((x - xMin) * (d2 - d1)) / (xMax - xMin)) + d1;
 }
@@ -203,7 +203,7 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
 {
 
     // Preencher Neuronios da camada de entrada com os valores
-
+  
     for (unsigned int i = 0; i < inputParams.size(); i++)
     {
         inputLayer[i].setValue(inputParams[i], ACTFUNC::NONE);
@@ -222,9 +222,10 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
             float bias = inputLayer[j].getBias();
             result += (value * weight) + bias;
         }
-        hiddenLayer[0][i].setValue(result, activFuncHidden);
+        hiddenLayer[0][i].setValue(result, ACTFUNC::NONE/*activFuncHidden*/);
     }
 
+  
     // Restante dos grupos de neuronios da camada oculta
     for (unsigned int i = 1; i < hiddenLayer.size(); i++)
     {
@@ -239,9 +240,10 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
                 float bias = hiddenLayer[i - 1][j].getBias();
                 result += (value * weight) + bias;
             }
-            hiddenLayer[i][j].setValue(result, activFuncHidden);
+            hiddenLayer[i][j].setValue(result, ACTIVFUNC_HIDDEN/*activFuncHidden*/);
         }
     }
+
 
     // Preenchimento da camada de saida
     for (unsigned int i = 0; i < outputLayer.size(); i++)
@@ -254,9 +256,10 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
             float bias = hiddenLayer[hiddenLayer.size() - 1][j].getBias();
             result += (value * weight) + bias;
         }
-        outputLayer[i].setValue(result, activFuncOutput);
+        outputLayer[i].setValue(result, ACTIVFUNC_OUTPUT/*activFuncOutput*/ );
     }
-
+    
+   
     // Preparar retorno da decisão
     std::vector<float> decision;
     for (Neuron neuron : outputLayer)
@@ -264,6 +267,7 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
         decision.push_back(neuron.getValue());
     }
 
+ 
     return decision;
 }
 

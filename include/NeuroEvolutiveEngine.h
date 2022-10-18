@@ -7,6 +7,10 @@
 #include "GA/Population.h"
 #include "NN/NeuralNetwork.h"
 
+#include <chrono>
+#include <ctime> 
+#include <fstream>
+
 class NeuroEvolutiveEngine
 {
 public:
@@ -27,13 +31,19 @@ public:
     unsigned getCurrentChromossomeIndex() const;
     bool currentChromossomeHaveFitness() const;
     
+    void saveCurrentChromossomeInFile() const;
+
+    unsigned getRecordFitness() const;
+
+    unsigned getInitialPopulationSize() const;
+
 private:
     Population population;
     NeuralNetwork neuralNetwork;
 
-    int currentChromossomeIndex {}; // indice do cromossomo atual que preencheu a rede neural 
-    int currentGenerationCount  {0}; 
-    int newGenerationCount {0}; 
+    int currentChromossomeIndex {0}; // indice do cromossomo atual que preencheu a rede neural 
+    //int currentGenerationCount  {0}; // contador de cromossomos testados na geração atual
+    int newGenerationCount {0}; // contador de novas gerações
 };
 
 #endif
