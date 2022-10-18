@@ -37,7 +37,7 @@ void NeuroEvolutiveEngine::useNextTopology()
     {
         puts("\n[+] Nova Populacao ---\n");
 
-        population.executeElitism(100);
+        population.executeElitism();
         population.generateNewPopulation();
         int i = currentChromossomeIndex = 0;
         neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
@@ -87,7 +87,7 @@ void NeuroEvolutiveEngine::usePrevTopology()
 
 void NeuroEvolutiveEngine::createNewGeneration()
 {
-    population.executeElitism(100);
+    population.executeElitism();
     population.generateNewPopulation();
     int i = currentChromossomeIndex = 0;
     neuralNetwork.loadDataFromChromosome(population.getCurrentPopulation()[i]);
@@ -124,6 +124,11 @@ bool NeuroEvolutiveEngine::currentChromossomeHaveFitness() const
 {
     unsigned i = currentChromossomeIndex;
     return population.getCurrentPopulation()[i].haveFitness();
+}
+
+unsigned NeuroEvolutiveEngine::getInitialPopulationSize() const
+{
+    return population.getInitialPopulationSize(); 
 }
 
 void NeuroEvolutiveEngine::saveCurrentChromossomeInFile() const

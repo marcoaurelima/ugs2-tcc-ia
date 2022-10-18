@@ -27,16 +27,19 @@ public:
 
     void enablePrintLogs(bool enable = true);
 
-    void executeElitism(unsigned initialPopulationSize = 100);
+    void executeElitism();
 
     unsigned getRecordFitness() const;
+
+    unsigned getInitialPopulationSize() const;
+
 private:
     std::vector<Chromosome> chromosomes;
     std::vector<Chromosome> chromosomesSelected;
     NewGenParams newGenParams;
 
     std::vector<unsigned> getConfig(const std::string& path) const;
-    int generateRandomInt(const int min, const int max, std::string  local);
+    int generateRandomInt(const int min, const int max);
     float generateRandomFloat(const float min, const float max);
     void  shuffleVector(std::vector<bool> & vec);
 
@@ -52,6 +55,9 @@ private:
     bool enabledLogs {false};
 
     unsigned recordFitness {};
+    unsigned initialPopulationSize {};
+
+    bool getDecisionProb(unsigned percent);
 };
 
 #endif

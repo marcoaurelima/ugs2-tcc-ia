@@ -35,6 +35,8 @@ public:
 
     unsigned getRecordFitness() const;
 
+    unsigned getInitialPopulationSize() const;
+
 private:
     Population population;
     NeuralNetwork neuralNetwork;
