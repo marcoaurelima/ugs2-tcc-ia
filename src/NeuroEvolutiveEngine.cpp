@@ -145,15 +145,15 @@ void NeuroEvolutiveEngine::saveCurrentChromossomeInFile() const
              << getCurrentGenerationIndex() << "-"
              << now.substr(0, now.size() - 1)
              << getCurrentGenerationSize() << " F-"
-             << getCurrentChromossomeFitness() << " "
-             << ".log";
+             << getCurrentChromossomeFitness() << ".log";
+             
 
     std::stringstream fileContents;
 
     unsigned index = currentChromossomeIndex;
     for (unsigned i = 0; i < population.getCurrentPopulation()[index].getAllGenes().size(); i++)
     {
-        fileContents << population.getCurrentPopulation()[index].getAllGenes()[i] << " ";
+        fileContents << population.getCurrentPopulation()[index].getAllGenes()[i] << ", ";
     }
 
     std::string filenameCorr;

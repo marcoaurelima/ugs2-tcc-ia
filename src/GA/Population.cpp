@@ -59,7 +59,8 @@ void Population::createInitialPopulation(const unsigned populationSize, const un
         Chromosome c;
         for (size_t j = 0; j < chromossomeSize; j++)
         {
-            float randFloat = generateRandomFloat(0, 0.6);
+            float min = 0, max = 0.4;//0.6;
+            float randFloat = generateRandomFloat(min, max);
             c.setGene(randFloat);
         }
         // unsigned fitness = generateRandomInt(0, 10000);
@@ -290,6 +291,8 @@ void Population::selectionEstocastic(int qtdNidles)
         std::cout << "\nSelectioned size [total: " << chromosomes.size() << "] - [select: " << chromosomesSelected.size() << ']' << std::endl;
         show();
     }
+
+    std::cout << "\n\n[selec.estoc] Selectioned size [" << chromosomesSelected.size() << "]\n\n";
 }
 
 // Roleta: mesmo algorítmo do estocastico, so que com apenas 1 agulha
@@ -376,9 +379,11 @@ void Population::selectionRoulette()
     
     if (enabledLogs)
     {
-        std::cout << "\nSelectioned size [total: " << chromosomes.size() << "] - [select: " << chromosomesSelected.size() << ']' << std::endl;
+        std::cout << "\nSelectioned size [total: " << chromosomesSelected.size() << "]";
         show();
     }
+
+    std::cout << "\n\n[selec.roulle] Selectioned size [" << chromosomesSelected.size() << "]\n\n";
 }
 
 // No cruzamento, serão selecionados pares de cromossomos:
@@ -490,6 +495,8 @@ void Population::crossoverUniform()
 
         show();
     }
+
+    std::cout << "\n\n[cros.uni] Selectioned size [" << chromosomesSelected.size() << "]\n\n";
 }
 
 void Population::crossoverSinglePoint(int indexPointDivision)
@@ -545,6 +552,8 @@ void Population::crossoverSinglePoint(int indexPointDivision)
 
         show();
     }
+
+    std::cout << "\n\n[selec.single] Selectioned size [" << chromosomesSelected.size() << "]\n\n";
 }
 
 bool Population::getDecisionProb(unsigned percent)
@@ -657,6 +666,8 @@ void Population::mutationInsertion()
 
         show();
     }
+
+    std::cout << "\n\n[mut.inse] Selectioned size [" << chromosomesSelected.size() << "]\n\n";
 }
 
 void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
@@ -713,6 +724,8 @@ void Population::mutationUniform(const float MIN_VALUE, const float MAX_VALUE)
 
         show();
     }
+
+    std::cout << "\n\n[mut.unif] Selectioned size [" << chromosomesSelected.size() << "]\n\n";
 }
 
 std::vector<Chromosome> Population::getCurrentPopulation() const
