@@ -133,19 +133,20 @@ unsigned NeuroEvolutiveEngine::getInitialPopulationSize() const
 
 void NeuroEvolutiveEngine::saveCurrentChromossomeInFile() const
 {
-    unsigned relevantFitnessValue = 100;
+    unsigned relevantFitnessValue = 45;
     if(getCurrentChromossomeFitness() < relevantFitnessValue){ return; }
 
     std::time_t result = std::time(nullptr);
     std::string now(std::ctime(&result));
 
     std::stringstream filename;
-    filename << "logs/G-"
-             << getCurrentChromossomeIndex() << " C-"
-             << getCurrentGenerationIndex() << "-"
-             << now.substr(0, now.size() - 1)
-             << getCurrentGenerationSize() << " F-"
-             << getCurrentChromossomeFitness() << ".log";
+    filename << "logs/"
+             << "F-" << getCurrentChromossomeFitness() 
+             << " G-" << getCurrentChromossomeIndex()
+             << " C-" << getCurrentGenerationIndex() 
+             << " - " << now.substr(0, now.size() - 1)
+             //<< getCurrentGenerationSize()
+             << ".log";
              
 
     std::stringstream fileContents;
