@@ -59,7 +59,7 @@ void Population::createInitialPopulation(const unsigned populationSize, const un
         Chromosome c;
         for (size_t j = 0; j < chromossomeSize; j++)
         {
-            float min = 0, max = 0.4;//0.6;
+            float min = 0, max = 0.35;//0.6;
             float randFloat = generateRandomFloat(min, max);
             c.setGene(randFloat);
         }
@@ -418,7 +418,7 @@ void Population::crossoverUniform()
     }
 
     std::vector<Chromosome> chromosomesSelectedTEMP = chromosomesSelected;
-
+    chromosomesSelected.clear();
     for (size_t i = 0; i < chromosomesSelectedTEMP.size(); i += 2)
     {
         // Decidir se o cruzamento altual ocorerá de acordo com a probabilidade
@@ -525,7 +525,7 @@ void Population::crossoverSinglePoint(int indexPointDivision)
     //chromosomesSelected.clear();
 
     std::vector<Chromosome> chromosomesSelectedTEMP = chromosomesSelected;
-
+    chromosomesSelected.clear();
     for (unsigned i = 0; i < chromosomesSelectedTEMP.size(); i+=2)
     {
 
