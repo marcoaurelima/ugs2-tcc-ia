@@ -764,7 +764,7 @@ void Population::executeElitism()
     puts("\n\n");
 
     // misturar cromossomos
-    //shuffleChromossomes(chromosomes);
+    shuffleChromossomes(chromosomes);
 
     std::sort(chromosomes.begin(), chromosomes.end(),
               [](Chromosome &c1, Chromosome &c2)
