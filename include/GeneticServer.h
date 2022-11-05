@@ -4,6 +4,7 @@
 #pragma once
 
 #include "GA/Population.h"
+#include <SFML/Graphics.hpp>
 
 class GeneticServer
 {

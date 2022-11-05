@@ -1,4 +1,9 @@
-CXX = g++ -std=c++11 -Wall -Wextra
+CXX = g++ -std=c++11 -Wall -Wextra -DSFML_STATIC
+
+SFML = -lsfml-graphics-s -lsfml-window-s -lsfml-audio-s -lsfml-network-s -lsfml-system-s 
+DEPEND = -lgdi32 -lopengl32 -lfreetype -lopenal32 -lflac -lvorbisenc -lvorbisfile -lvorbis -logg -lws2_32 -lwinmm 
+
+LIB = ./lib
 SRC = ./src
 INCLUDE = ./include
 BIN = ./bin
@@ -13,7 +18,7 @@ OBJS =  $(OBJ)/main.o \
 		$(OBJ)/GeneticServer.o 
 
 all: $(OBJS)
-	@$(CXX) $(OBJS) -o $(BIN)/main
+	@$(CXX) $(OBJS) -L $(LIB) -o $(BIN)/main -s $(SFML) $(DEPEND)
 	@$(BIN)/main
 
 

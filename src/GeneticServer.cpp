@@ -18,5 +18,5 @@ void GeneticServer::setAddress(std::string address, unsigned port)
 
 void GeneticServer::start()
 {
-
+    
 }
