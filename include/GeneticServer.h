@@ -4,7 +4,7 @@
 #pragma once
 
 #include "GA/Population.h"
-#include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 
 class GeneticServer
 {
@@ -15,6 +15,8 @@ public:
 
     void setAddress(std::string address, unsigned port);
     void start();
+
+    void test();
 
 private:
     std::string address;

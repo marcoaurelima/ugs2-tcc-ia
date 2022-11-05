@@ -19,8 +19,18 @@
 using std::cout;
 int main()
 {
+    std::string c;
+    std::cout << "[c] ClientServer   [s] Server\n";
+    std::cin >> c;
+
     GeneticServer server;
-    
+
+    if (c == "s")
+        server.start();
+
+    server.test();
+
+    /*
     // população inicial
     Population population;
     population.enablePrintLogs();
@@ -38,7 +48,7 @@ int main()
     network.setInputLayer(InputLayerInfo(3));
     network.setHiddenLayer(HiddenLayerInfo({4, 4}, ACTFUNC::SIGMOID));
     network.setOutputLayer(OutputLayerInfo(1, ACTFUNC::SIGMOID));
-   
+
     // Dados do jogo em tempo real
     float pontuation = 0.5, distance = 0.1; int value = 0.1;
 
@@ -48,19 +58,19 @@ int main()
     srand(time(NULL));
 
     exit(0);
-    
+
     for(;;)
     {
         auto d = engine.takeDecision({10, 20});
 
         std::cout << "decision: " << d[0] << std::endl;
-        
+
         engine.setCurrentChromossomeFitness(rand()%100);
 
         engine.useNextTopology();
     }
 
-/*
+
     for (unsigned i = 0; i < population.getCurrentPopulation().size()+2; i++)
     {
         network.loadDataFromChromosome(population.getCurrentPopulation()[i]);
