@@ -2,12 +2,10 @@
 
 GeneticServer::GeneticServer()
 {
-
 }
 
 GeneticServer::~GeneticServer()
 {
-
 }
 
 void GeneticServer::setAddress(std::string address, unsigned port)
@@ -26,24 +24,23 @@ void GeneticServer::start()
 
     std::cout << "Esperando conexoes...\n";
     auto res = listener.accept(socket);
-    if(res == sf::Socket::Done)
+    if (res == sf::Socket::Done)
     {
         std::cout << "  -Connection established" << std::endl;
     }
 
-    const std::size_t size = 100;
-    char data[size];
-    std::size_t readSize = 0;
+    sf::Packet packet;
 
     std::cout << "Recebendo dados...\n";
-    res = socket.receive(data, size, readSize);
-    if(res == sf::Socket::Done)
+    res = socket.receive(packet);
+    if (res == sf::Socket::Done)
     {
-        std::cout << "  -Received " << readSize << " bytes from client." << std::endl;
+        sf::Uint32 a, b, c;
+
+        packet >> a >> b >> c;
+
+        std::cout << a << " " << b << " " << c << std::endl;
     }
-
-    std::cout << "  -Data: " << data << "\n";
-
 
 }
 
@@ -52,18 +49,20 @@ void GeneticServer::test()
     sf::TcpSocket socket;
 
     auto res = socket.connect("localhost", 45000);
-    if(res == sf::Socket::Done)
+    if (res == sf::Socket::Done)
     {
         std::cout << "Connection server established.\n";
     }
 
-    const int msgSize = 100;
-    char msg[msgSize] = "Testando conexao!\n";
+    sf::Packet packet;
 
-    res = socket.send(msg, msgSize);
-    if(res == sf::Socket::Done)
+    sf::Uint32 a=2, b=44, c=230;
+    packet << a << b << c;
+
+    res = socket.send(packet);
+
+    if (res == sf::Socket::Done)
     {
         std::cout << "Message sent!\n";
     }
-
 }
