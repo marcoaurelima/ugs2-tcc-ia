@@ -9,7 +9,8 @@ OBJS =  $(OBJ)/main.o \
 		$(OBJ)/NeuralNetwork.o \
 		$(OBJ)/Neuron.o \
 		$(OBJ)/Population.o \
-		$(OBJ)/NeuroEvolutiveEngine.o 
+		$(OBJ)/NeuroEvolutiveEngine.o \
+		$(OBJ)/GeneticServer.o 
 
 all: $(OBJS)
 	@$(CXX) $(OBJS) -o $(BIN)/main
@@ -33,6 +34,10 @@ $(OBJ)/NeuralNetwork.o: $(SRC)/NN/NeuralNetwork.cpp
 
 $(OBJ)/NeuroEvolutiveEngine.o: $(SRC)/NeuroEvolutiveEngine.cpp
 	$(CXX) -c $(SRC)/NeuroEvolutiveEngine.cpp -I $(INCLUDE) -o $(OBJ)/NeuroEvolutiveEngine.o
+
+$(OBJ)/GeneticServer.o: $(SRC)/GeneticServer.cpp
+	$(CXX) -c $(SRC)/GeneticServer.cpp -I $(INCLUDE) -o $(OBJ)/GeneticServer.o
+
 
 
 
