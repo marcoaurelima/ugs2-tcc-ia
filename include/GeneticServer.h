@@ -22,8 +22,10 @@ private:
     Population* population;
     unsigned port;
     Chromosome currentChromossome;
-    unsigned generationCount {};
-    unsigned chromosomeCount {};
+    
+    sf::Int32 generationCount {};
+    sf::Int32 generationSize {};
+    sf::Int32 chromosomeCount {};
 
     void next();
 };

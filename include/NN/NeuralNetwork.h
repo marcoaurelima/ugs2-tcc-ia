@@ -13,9 +13,17 @@
 #include "GA/Chromosome.h"
 #include "../utils.h"
 
+#include <SFML/Network.hpp>
 
 using std::cout;
 using std::endl;
+
+struct ServerRequest
+{
+    sf::Int32 generationID {-1};
+    sf::Int32 chromossomeID {-1};
+    sf::Int32 fitnessValue {-1};
+};
 
 class NeuralNetwork
 {
@@ -33,8 +41,15 @@ public:
 
     void loadDataFromFile(const std::string path);
     void loadDataFromChromosome(const Chromosome& chromossome);
-    
+    void getNewChromossomeFromServer(ServerRequest request);
+    void setServerAddress(std::string ip, unsigned short port);
+
     static float normalize(float x, float xMin, float xMax, float d1, float d2);
+
+    int getCurrentGenerationID() const;
+    int getCurrentGenerationSIZE() const;
+    int getCurrentChromossomeID() const;
+
 private:
     InputLayer inputLayer;
     HiddenLayer hiddenLayer;
@@ -42,7 +57,12 @@ private:
     ACTFUNC ACTIVFUNC_HIDDEN;
     ACTFUNC ACTIVFUNC_OUTPUT;
 
+    std::string serverIP;
+    unsigned short serverPORT;
 
+    sf::Int32 currentGenerationID {};
+    sf::Int32 currentGenerationSIZE {};
+    sf::Int32 currentChromossomeID {};
 };
 
 #endif

@@ -191,6 +191,78 @@ void NeuralNetwork::loadDataFromFile(const std::string path)
     }
 }
 
+void NeuralNetwork::setServerAddress(std::string ip, unsigned short port)
+{
+    serverIP = ip;
+    serverPORT = port;
+}
+
+int NeuralNetwork::getCurrentGenerationID() const
+{
+    return currentGenerationID;
+}
+
+int NeuralNetwork::getCurrentGenerationSIZE() const
+{
+    return currentGenerationSIZE;
+}
+
+int NeuralNetwork::getCurrentChromossomeID() const
+{
+    return currentChromossomeID;
+}
+
+void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
+{
+    std::cout << "Trying to connect to server [" << serverIP << ":" << serverPORT << "]..." << std::endl;
+    sf::TcpSocket socket;
+
+    auto res = socket.connect(serverIP, serverPORT);
+    if (res == sf::Socket::Done)
+    {
+        std::cout << "Connection server stablished.\n";
+    }
+
+    sf::Packet packet;
+    packet << request.generationID << request.chromossomeID << request.fitnessValue;
+
+    res = socket.send(packet);
+    if (res != sf::Socket::Done)
+    {
+        std::cout << "Message not sent!\n";
+    }
+
+    packet.clear();
+    res = socket.receive(packet);
+    std::vector<float> genes;
+    if (res != sf::Socket::Done)
+    {
+        std::cout << "Message not received!\n";
+    }
+
+    // Salvar IDs de geração e cromossomo atual
+    packet >> currentGenerationID >> currentChromossomeID >> currentGenerationSIZE;
+
+    // Pegar os valores para montar o cromossomo
+    float gene = 0;
+    while (packet >> gene)
+    {
+        genes.push_back(gene);
+    }
+
+    std::cout << "Data: ";
+
+    for (unsigned int i = 0; i < genes.size(); ++i)
+    {
+        std::cout << genes[i] << " ";
+    }
+    std::cout << std::endl;
+
+    socket.disconnect();
+
+    exit(0);
+}
+
 // [x]         valor a ser normalizado
 // [xMin xMax] variação do valor de x
 // [d1 d2]     Limite ao qual o valor de x será reduzido
@@ -203,7 +275,7 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
 {
 
     // Preencher Neuronios da camada de entrada com os valores
-  
+
     for (unsigned int i = 0; i < inputParams.size(); i++)
     {
         inputLayer[i].setValue(inputParams[i], ACTFUNC::NONE);
@@ -222,10 +294,9 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
             float bias = inputLayer[j].getBias();
             result += (value * weight) + bias;
         }
-        hiddenLayer[0][i].setValue(result, ACTFUNC::NONE/*activFuncHidden*/);
+        hiddenLayer[0][i].setValue(result, ACTFUNC::NONE /*activFuncHidden*/);
     }
 
-  
     // Restante dos grupos de neuronios da camada oculta
     for (unsigned int i = 1; i < hiddenLayer.size(); i++)
     {
@@ -240,10 +311,9 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
                 float bias = hiddenLayer[i - 1][j].getBias();
                 result += (value * weight) + bias;
             }
-            hiddenLayer[i][j].setValue(result, ACTIVFUNC_HIDDEN/*activFuncHidden*/);
+            hiddenLayer[i][j].setValue(result, ACTIVFUNC_HIDDEN /*activFuncHidden*/);
         }
     }
-
 
     // Preenchimento da camada de saida
     for (unsigned int i = 0; i < outputLayer.size(); i++)
@@ -256,10 +326,9 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
             float bias = hiddenLayer[hiddenLayer.size() - 1][j].getBias();
             result += (value * weight) + bias;
         }
-        outputLayer[i].setValue(result, ACTIVFUNC_OUTPUT/*activFuncOutput*/ );
+        outputLayer[i].setValue(result, ACTIVFUNC_OUTPUT /*activFuncOutput*/);
     }
-    
-   
+
     // Preparar retorno da decisão
     std::vector<float> decision;
     for (Neuron neuron : outputLayer)
@@ -267,7 +336,6 @@ std::vector<float> NeuralNetwork::takeDecision(const std::vector<float> &inputPa
         decision.push_back(neuron.getValue());
     }
 
- 
     return decision;
 }
 
@@ -340,8 +408,6 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
         indexes.push_back(index);
     }
 
-
-
     // Com os indices corretos mapeados, é hora de inserir os valores na rede neural
 
     // Camada de entrada
@@ -358,7 +424,6 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
         inputLayer[i].setBias(bias);
         indexes.pop_front();
     }
-
 
     // camada oculta
     for (unsigned int i = 0; i < hiddenLayer.size(); i++)
@@ -378,7 +443,6 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
         }
     }
 
- 
     // camada de saida
     for (unsigned int i = 0; i < outputLayer.size(); i++)
     {
@@ -389,10 +453,8 @@ void NeuralNetwork::loadDataFromChromosome(const Chromosome &chromossome)
     }
 
     // Neste ponto o vetor indexes não terá mais nenhuma valor. se ainda existir algum, aconteceu um erro
-    if(!indexes.empty())
+    if (!indexes.empty())
     {
         std::cerr << "[ERROR]] Ocorreu um erro na definição de pessos da RN" << std::endl;
     }
-
-
 }

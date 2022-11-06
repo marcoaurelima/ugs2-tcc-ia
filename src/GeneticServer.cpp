@@ -57,14 +57,20 @@ void GeneticServer::start()
         // Valores -1 indicam primeira requisição de instancia do jogo
         if (gen == -1 && chrom == -1 && fit == -1)
         {
-            std::cout << "req: " << gen << " " << chrom << " " << fit << std::endl;
+            std::cout << "req: " << gen << " " << chrom << " " << fit << "\nData: ";
 
             packet.clear();
+            
+            // Inserir IDs de geração e população
+            packet << generationCount << chromosomeCount << generationSize;
+
+
             for (float i : currentChromossome.getAllGenes())
             {
+                std::cout << i << " ";
                 packet << i;
             }
-
+            std::cout << std::endl;
             socket.send(packet);
         }
 
