@@ -23,8 +23,20 @@ int main()
     std::cout << "[c] ClientServer   [s] Server\n";
     std::cin >> c;
 
-    GeneticServer server;
+    // população inicial
+    Population population;
+    population.enablePrintLogs();
+    population.createInitialPopulation(100, 44);
+    population.show();
+    population.setNewGenerationParams(
+        NewGenParams{
+            SELECTION_TYPE::ROULLETE,
+            CROSSOVER_TYPE::UNIFORM,
+            MUTATION_TYPE::UNIFORM});
+
+    GeneticServer server(&population);
     server.setPort(45000);
+
 
     if (c == "s")
         server.start();

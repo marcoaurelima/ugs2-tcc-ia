@@ -4,6 +4,8 @@ GeneticServer::GeneticServer()
 {
 }
 
+GeneticServer::GeneticServer(Population* population) : population(population){};
+
 GeneticServer::~GeneticServer()
 {
 }
@@ -21,7 +23,6 @@ void GeneticServer::start()
 
     sf::TcpSocket socket;
 
-    std::cout << "Esperando conexoes...\n";
     auto res = listener.accept(socket);
     if (res == sf::Socket::Done)
     {
@@ -34,11 +35,11 @@ void GeneticServer::start()
     res = socket.receive(packet);
     if (res == sf::Socket::Done)
     {
-        sf::Uint32 a, b, c;
+        sf::Uint32 gen, chrom, fit;
 
-        packet >> a >> b >> c;
+        packet >> gen >> chrom >> fit;
 
-        std::cout << a << " " << b << " " << c << std::endl;
+        std::cout << gen << " " << chrom << " " << fit << std::endl;
     }
 
 }
