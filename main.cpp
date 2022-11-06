@@ -35,13 +35,12 @@ int main()
             MUTATION_TYPE::UNIFORM});
 
     GeneticServer server(&population);
-    server.setPort(45000);
+    server.setPort(45001);
 
+    if (c == "c")
+        server.test();
 
-    if (c == "s")
-        server.start();
-
-    server.test();
+    server.start();
 
     /*
     // população inicial

@@ -21,6 +21,11 @@ public:
 private:
     Population* population;
     unsigned port;
+    Chromosome currentChromossome;
+    unsigned generationCount {};
+    unsigned chromosomeCount {};
+
+    void next();
 };
 
 #endif

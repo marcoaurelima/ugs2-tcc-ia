@@ -4,7 +4,10 @@ GeneticServer::GeneticServer()
 {
 }
 
-GeneticServer::GeneticServer(Population *population) : population(population){};
+GeneticServer::GeneticServer(Population *population) : population(population)
+{
+    currentChromossome = population->getCurrentPopulation()[0];
+};
 
 GeneticServer::~GeneticServer()
 {
@@ -13,6 +16,11 @@ GeneticServer::~GeneticServer()
 void GeneticServer::setPort(unsigned port)
 {
     this->port = port;
+}
+
+void GeneticServer::next()
+{
+    currentChromossome = population->getCurrentPopulation()[chromosomeCount++];
 }
 
 void GeneticServer::start()
@@ -24,63 +32,102 @@ void GeneticServer::start()
         listener.listen(port);
 
         sf::TcpSocket socket;
-
         auto res = listener.accept(socket);
-        if (res == sf::Socket::Done)
+        if (res != sf::Socket::Done)
         {
-            std::cout << "  -Connection established" << std::endl;
+            std::cout << "  -Connection failed" << std::endl;
+        }
+        else
+        {
+            std::cout << "  -Connected" << std::endl;
         }
 
         sf::Packet packet;
 
-        std::cout << "Recebendo dados...\n";
         res = socket.receive(packet);
-        if (res == sf::Socket::Done)
+        if (res != sf::Socket::Done)
         {
-            sf::Uint32 gen, chrom, fit;
-
-            packet >> gen >> chrom >> fit;
-
-            std::cout << gen << " " << chrom << " " << fit << std::endl;
+            std::cout << "  -Receive failed" << std::endl;
         }
 
-        packet.clear();
-        packet << "chromo[1,2,3,4,5]";
-        socket.send(packet);
-        
+        // Recebendo dados do cliente / requisição
+        sf::Int32 gen, chrom, fit;
+        packet >> gen >> chrom >> fit;
+
+        // Valores -1 indicam primeira requisição de instancia do jogo
+        if (gen == -1 && chrom == -1 && fit == -1)
+        {
+            std::cout << "req: " << gen << " " << chrom << " " << fit << std::endl;
+
+            packet.clear();
+            for (float i : currentChromossome.getAllGenes())
+            {
+                packet << i;
+            }
+
+            socket.send(packet);
+        }
+
         listener.close();
     }
 }
 
 void GeneticServer::test()
 {
+
+    puts("111");
     sf::TcpSocket socket;
 
-    auto res = socket.connect("localhost", 45000);
-    if (res == sf::Socket::Done)
+    auto res = socket.connect("localhost", 45001);
+    if (res != sf::Socket::Done)
     {
-        std::cout << "Connection server established.\n";
+        std::cout << "Connection server not established.\n";
     }
 
+    puts("222");
     sf::Packet packet;
 
-    sf::Uint32 a = 2, b = 44, c = 230;
+    sf::Int32 a = -1, b = -1, c = -1;
     packet << a << b << c;
 
     res = socket.send(packet);
 
-    if (res == sf::Socket::Done)
+    puts("333");
+    if (res != sf::Socket::Done)
     {
-        std::cout << "Message sent!\n";
+        std::cout << "Message not sent!\n";
     }
 
     packet.clear();
     res = socket.receive(packet);
-    if (res == sf::Socket::Done)
+    puts("444");
+    std::vector<float> genes;
+    if (res != sf::Socket::Done)
     {
-        std::string message;
-        packet >> message;
-        std::cout << "Received from server: " << message << std::endl;
+        std::cout << "Message not received!\n";
     }
 
+    /*
+    std::cout << "Received from server:\n";
+    float x = 0;
+    packet >> x;
+    std::cout << x << "\n";
+    */
+
+    for (unsigned int i = 0; i < currentChromossome.getAllGenes().size(); i++)
+    {
+        float gene = 0;
+        packet >> gene;
+        genes.push_back(gene);
+    }
+
+    std::cout << "Received from server:\n";
+
+    for (unsigned int i = 0; i < genes.size(); ++i)
+    {
+        std::cout << genes[i] << " ";
+    }
+    std::cout << std::endl;
+
+    socket.disconnect();
 }
