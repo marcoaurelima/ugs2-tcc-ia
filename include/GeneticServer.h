@@ -10,16 +10,16 @@ class GeneticServer
 {
 public:
     GeneticServer();
-    GeneticServer(Population& population);
+    GeneticServer(Population* population);
     ~GeneticServer();
 
-    void setAddress(std::string address, unsigned port);
+    void setPort(unsigned port);
     void start();
 
     void test();
 
 private:
-    std::string address;
+    Population* population;
     unsigned port;
 };
 

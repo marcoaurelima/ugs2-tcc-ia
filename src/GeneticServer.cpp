@@ -8,17 +8,16 @@ GeneticServer::~GeneticServer()
 {
 }
 
-void GeneticServer::setAddress(std::string address, unsigned port)
+void GeneticServer::setPort(unsigned port)
 {
-    this->address = address;
     this->port = port;
 }
 
 void GeneticServer::start()
 {
-    std::cout << "Iniciando server...\n";
+    std::cout << "Initializing server: [" << sf::IpAddress::getLocalAddress() << ":" << port << "]\n";
     sf::TcpListener listener;
-    listener.listen(45000);
+    listener.listen(port);
 
     sf::TcpSocket socket;
 

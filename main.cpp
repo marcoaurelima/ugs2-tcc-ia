@@ -24,6 +24,7 @@ int main()
     std::cin >> c;
 
     GeneticServer server;
+    server.setPort(45000);
 
     if (c == "s")
         server.start();
