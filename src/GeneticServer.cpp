@@ -20,12 +20,12 @@ void GeneticServer::setPort(unsigned port)
 
 void GeneticServer::next()
 {
-    currentChromossome = population->getCurrentPopulation()[chromosomeCount++];
+    currentChromossome = population->getCurrentPopulation()[++chromosomeCount];
 }
 
 void GeneticServer::start()
 {
-    std::cout << "Initializing server: [" << sf::IpAddress::getLocalAddress() << ":" << port << "]\n";
+    std::cout << "Start server: [" << sf::IpAddress::getLocalAddress() << ":" << port << "]\n";
     for (;;)
     {
         sf::TcpListener listener;
@@ -35,11 +35,11 @@ void GeneticServer::start()
         auto res = listener.accept(socket);
         if (res != sf::Socket::Done)
         {
-            std::cout << "  -Connection failed" << std::endl;
+            std::cout << "--- Connection failed ---" << std::endl;
         }
         else
         {
-            std::cout << "  -Connected" << std::endl;
+            std::cout << "\n--- Connected ---" << std::endl;
         }
 
         sf::Packet packet;
@@ -47,34 +47,39 @@ void GeneticServer::start()
         res = socket.receive(packet);
         if (res != sf::Socket::Done)
         {
-            std::cout << "  -Receive failed" << std::endl;
+            std::cout << "--- Receive failed ---" << std::endl;
         }
 
         // Recebendo dados do cliente / requisição
         sf::Int32 gen, chrom, fit;
         packet >> gen >> chrom >> fit;
 
-        // Valores -1 indicam primeira requisição de instancia do jogo
-        if (gen == -1 && chrom == -1 && fit == -1)
+        std::cout << "request: [" << gen << " " << chrom << " " << fit << "]\nData: ";
+        // Independente de ser primeira requisição ou não, sempre será retornado
+        // um cromossomo válido para o cliente
+
+        packet.clear();
+
+        // Inserir IDs de geração e população
+        packet << generationCount << chromosomeCount << generationSize;
+
+        for (float i : currentChromossome.getAllGenes())
         {
-            std::cout << "req: " << gen << " " << chrom << " " << fit << "\nData: ";
+            std::cout << i << " ";
+            packet << i;
+        }
+        std::cout << std::endl;
+        socket.send(packet);
 
-            packet.clear();
-            
-            // Inserir IDs de geração e população
-            packet << generationCount << chromosomeCount << generationSize;
-
-
-            for (float i : currentChromossome.getAllGenes())
-            {
-                std::cout << i << " ";
-                packet << i;
-            }
-            std::cout << std::endl;
-            socket.send(packet);
+        // Requisição com valor válido de IDs e de fitness
+        if (gen != -1 && chrom != -1 && fit != -1)
+        {
+            population->getCurrentPopulation()[chrom].setFitness(fit);
         }
 
+        socket.disconnect();
         listener.close();
+        next();
     }
 }
 

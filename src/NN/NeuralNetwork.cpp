@@ -214,36 +214,47 @@ int NeuralNetwork::getCurrentChromossomeID() const
 
 void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
 {
-    std::cout << "Trying to connect to server [" << serverIP << ":" << serverPORT << "]..." << std::endl;
     sf::TcpSocket socket;
 
     auto res = socket.connect(serverIP, serverPORT);
     if (res == sf::Socket::Done)
     {
-        std::cout << "Connection server stablished.\n";
+        std::cout << "Connected to [" << serverIP << ":" << serverPORT << "]\n";
+    } else 
+    {
+        std::cout << "Connect failed. Address: " << serverIP << ":" << serverPORT << "\n";
     }
 
     sf::Packet packet;
     packet << request.generationID << request.chromossomeID << request.fitnessValue;
 
-    res = socket.send(packet);
-    if (res != sf::Socket::Done)
-    {
-        std::cout << "Message not sent!\n";
-    }
-
-    packet.clear();
-    res = socket.receive(packet);
+    // Enquanto ele não receber a mensagem, vai ficar enviando requisições
+    bool loop = true;
     std::vector<float> genes;
-    if (res != sf::Socket::Done)
+    while (loop)
     {
-        std::cout << "Message not received!\n";
+        res = socket.send(packet);
+        if (res != sf::Socket::Done)
+        {
+            std::cout << "Request not sent! Trying again...\n";
+        }
+
+        packet.clear();
+        res = socket.receive(packet);
+        if (res == sf::Socket::Done)
+        {
+            loop = false;
+        }
+        else
+        {
+            std::cout << "Response not received! Trying again...\n";
+        }
     }
 
     // Salvar IDs de geração e cromossomo atual
     packet >> currentGenerationID >> currentChromossomeID >> currentGenerationSIZE;
 
-    std::cout << "gen: " << currentGenerationID << "   chr: " << currentChromossomeID << std::endl;
+    std::cout << "generation: [" << currentGenerationID << "]   chromossome: [" << currentChromossomeID << "]\n";
 
     // Pegar os valores para montar o cromossomo
     float gene = 0;
@@ -267,7 +278,7 @@ void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
 
     socket.disconnect();
 
-    //exit(0);
+    // exit(0);
 }
 
 // [x]         valor a ser normalizado
