@@ -243,6 +243,8 @@ void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
     // Salvar IDs de geração e cromossomo atual
     packet >> currentGenerationID >> currentChromossomeID >> currentGenerationSIZE;
 
+    std::cout << "gen: " << currentGenerationID << "   chr: " << currentChromossomeID << std::endl;
+
     // Pegar os valores para montar o cromossomo
     float gene = 0;
     while (packet >> gene)
@@ -258,9 +260,14 @@ void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
     }
     std::cout << std::endl;
 
+    // Construir um cromossomo baseado nos valores obtidos do servidor
+    Chromosome chromosome;
+    chromosome.setAllGenes(genes);
+    loadDataFromChromosome(chromosome);
+
     socket.disconnect();
 
-    exit(0);
+    //exit(0);
 }
 
 // [x]         valor a ser normalizado
