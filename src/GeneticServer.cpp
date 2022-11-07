@@ -44,6 +44,7 @@ void GeneticServer::next()
         if (generationFullyTested)
         {
             std::cout << "------ if(generationFullyTested) ------\n";
+            population->executeElitism();
             population->generateNewPopulation();
             generationCount++;
             generationSize = population->getCurrentPopulation().size() - 1;
