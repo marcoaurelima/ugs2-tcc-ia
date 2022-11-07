@@ -19,11 +19,13 @@
 using std::cout;
 int main()
 {
+    for(int i = 0; i < 50; i++) puts("");
+
     // população inicial
     Population population;
-    population.enablePrintLogs();
-    population.createInitialPopulation(100, 44);
-    population.show();
+    //population.enablePrintLogs();
+    //population.show();
+    population.createInitialPopulation(10, 44);
     population.setNewGenerationParams(
         NewGenParams{
             SELECTION_TYPE::ROULLETE,

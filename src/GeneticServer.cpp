@@ -7,7 +7,7 @@ GeneticServer::GeneticServer()
 GeneticServer::GeneticServer(Population *population) : population(population)
 {
     currentChromossome = population->getCurrentPopulation()[0];
-    generationSize = population->getCurrentPopulation().size();
+    generationSize = population->getCurrentPopulation().size() - 1;
 };
 
 GeneticServer::~GeneticServer()
@@ -21,14 +21,44 @@ void GeneticServer::setPort(unsigned port)
 
 void GeneticServer::next()
 {
+    // Verificar se todos os cromossomos da geração foram oferecidos para clientes
+    if (chromosomeCount == generationSize)
+    {
+        std::cout << "------ if(chromosomeCount == generationSize) ------\n";
+        // Verificar se todos os cromossomos oferecidos já tem um fitness
+        // Pode acontecer de um cliente ainda estar testando
+        bool generationFullyTested = true;
+        for (unsigned i = 0; i < population->getCurrentPopulation().size(); i++)
+        {
+            if (population->getCurrentPopulation()[i].getFitness() == 0)
+            {
+                std::cout << "------ generationFullyTested = false; ------\n";
+                generationFullyTested = false;
+            }
+            else
+            {
+                std::cout << "------ generationFullyTested = true; ------\n";
+            }
+        }
+
+        if (generationFullyTested)
+        {
+            std::cout << "------ if(generationFullyTested) ------\n";
+            population->generateNewPopulation();
+            generationCount++;
+            generationSize = population->getCurrentPopulation().size() - 1;
+            chromosomeCount = 0;
+        }
+        return;
+    }
     currentChromossome = population->getCurrentPopulation()[++chromosomeCount];
 }
 
 void GeneticServer::start()
 {
-    std::cout << "+----------------------------------------+\n";
+    std::cout << "+-----------------------------------------+\n";
     std::cout << "|   Genetic Server [" << sf::IpAddress::getLocalAddress() << ":" << port << "]  |\n";
-    std::cout << "+----------------------------------------+\n";
+    std::cout << "+-----------------------------------------+\n";
     for (;;)
     {
         sf::TcpListener listener;
@@ -77,7 +107,15 @@ void GeneticServer::start()
         // Requisição com valor válido de IDs e de fitness
         if (gen != -1 && chrom != -1 && fit != -1)
         {
-            population->getCurrentPopulation()[chrom].setFitness(fit);
+            // Verificar se os valores contidos na requisição se referam a geração atal ou da anterior
+            if (gen == generationCount)
+            {
+                std::cout << "population->setChromossomeFitness(chrom, fit); c: " << chrom << "   f: " << fit << std::endl;
+                population->setChromossomeFitness(chrom, fit);
+            } else 
+            {
+                std::cout << "-------- INFORMACAO REFERENTE A UM CROMOSSOMO DA GERACAO ANTERIOR --------\n";
+            }
         }
 
         socket.disconnect();
