@@ -16,8 +16,6 @@ public:
     void setPort(unsigned port);
     void start();
 
-    void test();
-
 private:
     Population* population;
     unsigned port;
