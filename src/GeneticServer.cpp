@@ -25,7 +25,9 @@ void GeneticServer::next()
 
 void GeneticServer::start()
 {
-    std::cout << "Start server: [" << sf::IpAddress::getLocalAddress() << ":" << port << "]\n";
+    std::cout << "+----------------------------------------+\n";
+    std::cout << "|   Genetic Server [" << sf::IpAddress::getLocalAddress() << ":" << port << "]   |\n";
+    std::cout << "+----------------------------------------+\n";
     for (;;)
     {
         sf::TcpListener listener;
@@ -39,7 +41,7 @@ void GeneticServer::start()
         }
         else
         {
-            std::cout << "\n--- Connected ---" << std::endl;
+            std::cout << "\nClient Connected!" << std::endl;
         }
 
         sf::Packet packet;
@@ -54,7 +56,7 @@ void GeneticServer::start()
         sf::Int32 gen, chrom, fit;
         packet >> gen >> chrom >> fit;
 
-        std::cout << "request: [" << gen << " " << chrom << " " << fit << "]\nData: ";
+        std::cout << "Request: [" << gen << " " << chrom << " " << fit << "]\nData: ";
         // Independente de ser primeira requisição ou não, sempre será retornado
         // um cromossomo válido para o cliente
 

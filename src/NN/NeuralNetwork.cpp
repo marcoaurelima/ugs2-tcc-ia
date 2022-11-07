@@ -219,7 +219,7 @@ void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
     auto res = socket.connect(serverIP, serverPORT);
     if (res == sf::Socket::Done)
     {
-        std::cout << "Connected to [" << serverIP << ":" << serverPORT << "]\n";
+        std::cout << "Connected to Genetic Server [" << serverIP << ":" << serverPORT << "]\n";
     } else 
     {
         std::cout << "Connect failed. Address: " << serverIP << ":" << serverPORT << "\n";
@@ -254,7 +254,7 @@ void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
     // Salvar IDs de geração e cromossomo atual
     packet >> currentGenerationID >> currentChromossomeID >> currentGenerationSIZE;
 
-    std::cout << "generation: [" << currentGenerationID << "]   chromossome: [" << currentChromossomeID << "]\n";
+    std::cout << "Generation: [" << currentGenerationID << "]   Chromossome: [" << currentChromossomeID << "]\n";
 
     // Pegar os valores para montar o cromossomo
     float gene = 0;
