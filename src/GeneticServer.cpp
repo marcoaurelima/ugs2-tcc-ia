@@ -7,6 +7,7 @@ GeneticServer::GeneticServer()
 GeneticServer::GeneticServer(Population *population) : population(population)
 {
     currentChromossome = population->getCurrentPopulation()[0];
+    generationSize = population->getCurrentPopulation().size();
 };
 
 GeneticServer::~GeneticServer()
@@ -26,7 +27,7 @@ void GeneticServer::next()
 void GeneticServer::start()
 {
     std::cout << "+----------------------------------------+\n";
-    std::cout << "|   Genetic Server [" << sf::IpAddress::getLocalAddress() << ":" << port << "]   |\n";
+    std::cout << "|   Genetic Server [" << sf::IpAddress::getLocalAddress() << ":" << port << "]  |\n";
     std::cout << "+----------------------------------------+\n";
     for (;;)
     {
