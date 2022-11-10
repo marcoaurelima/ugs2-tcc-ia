@@ -24,47 +24,46 @@ void GeneticServer::next()
     // Verificar se todos os cromossomos da geração foram oferecidos para clientes
     if (chromosomeCount == generationSize)
     {
-        //std::cout << "------ if(chromosomeCount == generationSize) ------\n";
-        // Verificar se todos os cromossomos oferecidos já tem um fitness
-        // Pode acontecer de um cliente ainda estar testando
+        // Voltar o contador para que possa começar do 0 logo em seguida (currentChromossome)
+        chromosomeCount = -1;
+
+        // std::cout << "------ if(chromosomeCount == generationSize) ------\n";
+        //  Verificar se todos os cromossomos oferecidos já tem um fitness
+        //  Pode acontecer de um cliente ainda estar testando
         bool generationFullyTested = true;
         for (unsigned i = 0; i < population->getCurrentPopulation().size(); i++)
         {
             if (population->getCurrentPopulation()[i].getFitness() == 0)
             {
-                //std::cout << "------ generationFullyTested = false; ------\n";
+                // std::cout << "------ generationFullyTested = false; ------\n";
                 generationFullyTested = false;
             }
             else
             {
-                //std::cout << "------ generationFullyTested = true; ------\n";
+                // std::cout << "------ generationFullyTested = true; ------\n";
             }
         }
 
         if (generationFullyTested)
         {
-            //std::cout << "------ if(generationFullyTested) ------\n";
+            // std::cout << "------ if(generationFullyTested) ------\n";
             population->executeElitism();
             population->generateNewPopulation();
             generationCount++;
             generationSize = population->getCurrentPopulation().size() - 1;
-            chromosomeCount = 0;
-            
-           
         }
         return;
     }
 
     // Pular todos os cromossomos que contenham valor de fitness
-    for(;;)
+    for (;;)
     {
         currentChromossome = population->getCurrentPopulation()[++chromosomeCount];
-        if(currentChromossome.getFitness() == 0)
+        if (currentChromossome.getFitness() == 0)
         {
             break;
         }
     }
-
 }
 
 void GeneticServer::start()
@@ -132,4 +131,3 @@ void GeneticServer::start()
         next();
     }
 }
-
