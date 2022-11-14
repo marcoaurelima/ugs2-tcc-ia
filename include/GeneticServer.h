@@ -5,6 +5,8 @@
 
 #include "GA/Population.h"
 #include <SFML/Network.hpp>
+#include <list>
+#include <vector>
 
 class GeneticServer
 {
@@ -15,6 +17,7 @@ public:
 
     void setPort(unsigned port);
     void start();
+    void _start();
 
 private:
     Population* population;
@@ -25,7 +28,10 @@ private:
     sf::Int32 generationSize {};
     sf::Int32 chromosomeCount {};
 
+    std::vector<bool> sentControl; // Controla quais indices já foram entregues
+
     void next();
+    void _next();
 };
 
 #endif

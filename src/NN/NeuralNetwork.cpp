@@ -212,43 +212,70 @@ int NeuralNetwork::getCurrentChromossomeID() const
     return currentChromossomeID;
 }
 
+void NeuralNetwork::connectToServer()
+{
+    std::cout << "connectToServer: " << serverIP << ":" << serverPORT << "\n";
+    socket = new sf::TcpSocket;
+
+    auto res = socket->connect(serverIP, serverPORT);
+    if (res == sf::Socket::Done)
+    {
+        std::cout << "Connected to Genetic Server [" << serverIP << ":" << serverPORT << "]\n";
+        isConnected = true;
+    }
+    else
+    {
+        std::cout << "Connect failed. Address: " << serverIP << ":" << serverPORT << "\n";
+    }
+    puts("FIM DO METODO");
+}
+
 void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
 {
+    if(!isConnected)
+    {
+        std::cout << "[Error] Server is not connected!. Call connectToServer() function to connect.\n";
+        exit(-1);
+    }
+    
+    /*
     sf::TcpSocket socket;
 
     auto res = socket.connect(serverIP, serverPORT);
     if (res == sf::Socket::Done)
     {
         std::cout << "Connected to Genetic Server [" << serverIP << ":" << serverPORT << "]\n";
-    } else 
+    } else
     {
         std::cout << "Connect failed. Address: " << serverIP << ":" << serverPORT << "\n";
     }
+    */
 
     sf::Packet packet;
     packet << request.generationID << request.chromossomeID << request.fitnessValue;
 
     // Enquanto ele não receber a mensagem, vai ficar enviando requisições
     // Se tiver sido feita 300 requisições sem resposta, o jogo irá fechar e abrir outra instancia antes.
-    static int countReq = 0;
+    //static int countReq = 0;
     bool loop = true;
     std::vector<float> genes;
     while (loop)
     {
-        if(countReq++ == 300)
+        // if(countReq++ == 300)
+        if (false)
         {
-            _sleep(5000);
+            //_sleep(5000);
             system("start \"cmd\" \"ugs2-tcc.exe\"");
             exit(0);
         }
-        res = socket.send(packet);
+        auto res = socket->send(packet);
         if (res != sf::Socket::Done)
         {
             std::cout << "Request not sent! Trying again...\n";
         }
 
         packet.clear();
-        res = socket.receive(packet);
+        res = socket->receive(packet);
         if (res == sf::Socket::Done)
         {
             loop = false;
@@ -284,7 +311,7 @@ void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
     chromosome.setAllGenes(genes);
     loadDataFromChromosome(chromosome);
 
-    socket.disconnect();
+    /// socket.disconnect();
 
     // exit(0);
 }

@@ -44,6 +44,7 @@ public:
     void loadDataFromChromosome(const Chromosome& chromossome);
     void getNewChromossomeFromServer(ServerRequest request);
     void setServerAddress(std::string ip, unsigned short port);
+    void connectToServer();
 
     static float normalize(float x, float xMin, float xMax, float d1, float d2);
 
@@ -60,6 +61,9 @@ private:
 
     std::string serverIP;
     unsigned short serverPORT;
+
+    sf::TcpSocket* socket;
+    bool isConnected {};
 
     sf::Int32 currentGenerationID {};
     sf::Int32 currentGenerationSIZE {};

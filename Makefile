@@ -50,4 +50,5 @@ run:
 	@./bin/main
 
 clean:
-	rm -rf ./obj/*.o
+	rmdir /s obj 
+	mkdir obj
