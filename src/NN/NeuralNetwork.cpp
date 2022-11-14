@@ -229,14 +229,15 @@ void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
     packet << request.generationID << request.chromossomeID << request.fitnessValue;
 
     // Enquanto ele não receber a mensagem, vai ficar enviando requisições
-    // Se tiver sido feita 100 requisições sem resposta, o jogo irá fechar e abrir outra instancia antes.
+    // Se tiver sido feita 300 requisições sem resposta, o jogo irá fechar e abrir outra instancia antes.
     static int countReq = 0;
     bool loop = true;
     std::vector<float> genes;
     while (loop)
     {
-        if(countReq++ == 100)
+        if(countReq++ == 300)
         {
+            _sleep(5000);
             system("start \"cmd\" \"ugs2-tcc.exe\"");
             exit(0);
         }
