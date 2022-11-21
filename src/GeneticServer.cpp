@@ -359,7 +359,10 @@ void GeneticServer::_start()
         sf::Int32 gen, chrom, fit;
         packet >> gen >> chrom >> fit;
 
-        std::cout << "Request: [" << gen << " " << chrom << " " << fit << "]\nData: ";
+        if(fit > bestFit){ bestFit = fit; }
+
+        std::cout << "Best fit: " << bestFit << std::endl;
+        std::cout << "Request: [" << gen << " " << chrom << " " << fit << "]\n";
         // Independente de ser primeira requisição ou não, sempre será retornado
         // um cromossomo válido para o cliente
 
@@ -370,7 +373,7 @@ void GeneticServer::_start()
 
         for (float i : currentChromossome.getAllGenes())
         {
-            std::cout << i << " ";
+            //std::cout << i << " ";
             packet << i;
         }
         std::cout << std::endl;

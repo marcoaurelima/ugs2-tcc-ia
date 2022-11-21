@@ -28,7 +28,7 @@ private:
     sf::Int32 generationCount {};
     sf::Int32 generationSize {};
     sf::Int32 chromosomeCount {};
-
+    sf::Int32 bestFit {};
     std::vector<bool> sentControl; // Controla quais indices já foram entregues
 
     void next();

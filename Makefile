@@ -1,4 +1,4 @@
-CXX = g++ -std=c++11 -Wall -Wextra -DSFML_STATIC
+CXX = C:/Program Files/CodeBlocks/MinGW/bin/g++ -std=c++11 -Wall -Wextra -DSFML_STATIC
 
 SFML = -lsfml-graphics-s -lsfml-window-s -lsfml-audio-s -lsfml-network-s -lsfml-system-s 
 DEPEND = -lgdi32 -lopengl32 -lfreetype -lopenal32 -lflac -lvorbisenc -lvorbisfile -lvorbis -logg -lws2_32 -lwinmm 

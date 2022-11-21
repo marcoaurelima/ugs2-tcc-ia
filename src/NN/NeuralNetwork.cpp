@@ -298,11 +298,11 @@ void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
         genes.push_back(gene);
     }
 
-    std::cout << "Data: ";
+    //std::cout << "Data: ";
 
     for (unsigned int i = 0; i < genes.size(); ++i)
     {
-        std::cout << genes[i] << " ";
+        //std::cout << genes[i] << " ";
     }
     std::cout << std::endl;
 
