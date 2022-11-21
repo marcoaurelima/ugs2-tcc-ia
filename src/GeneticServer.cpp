@@ -10,7 +10,6 @@ GeneticServer::GeneticServer(Population *population) : population(population)
     generationSize = population->getCurrentPopulation().size() - 1;
 
     sentControl = std::vector<bool>(static_cast<unsigned>(generationSize + 1));
-
 };
 
 GeneticServer::~GeneticServer()
@@ -126,9 +125,9 @@ void GeneticServer::_next()
 
 void GeneticServer::start()
 {
-    std::cout << "+-----------------------------------------+\n";
-    std::cout << "|   Genetic Server [selector version] [" << sf::IpAddress::getLocalAddress() << ":" << port << "]  |\n";
-    std::cout << "+-----------------------------------------+\n";
+    std::cout << "+------------------------------------------------------------+\n";
+    std::cout << "|   Genetic Server [selector-version] [" << sf::IpAddress::getLocalAddress() << ":" << port << "]  |\n";
+    std::cout << "+------------------------------------------------------------+\n";
 
     sf::TcpListener listener;
     listener.listen(port);
@@ -171,7 +170,13 @@ void GeneticServer::start()
                             // Salvando os logs
                             saveLogs(gen, chrom, fit);
 
-                            std::cout << "\nRequest: [" << gen << " " << chrom << " " << fit << "]\nData: ";
+                            if (fit > bestFit)
+                            {
+                                bestFit = fit;
+                            }
+
+                            std::cout << "\n--- Best fit: [" << bestFit << "]\n";
+                            std::cout << "\nRequest: [" << gen << " " << chrom << " " << fit << "]\n";
                             // Independente de ser primeira requisição ou não, sempre será retornado
                             // um cromossomo válido para o cliente
 
@@ -182,10 +187,10 @@ void GeneticServer::start()
 
                             for (float i : currentChromossome.getAllGenes())
                             {
-                                std::cout << i << " ";
+                                // std::cout << i << " ";
                                 packet << i;
                             }
-                            std::cout << std::endl;
+                            //std::cout << std::endl;
                             client.send(packet);
 
                             // Requisição com valor válido de IDs e de fitness
@@ -269,22 +274,23 @@ void GeneticServer::start()
     }*/
 }
 
-
 void GeneticServer::saveLogs(int gen, int chrom, int fit) const
 {
-    if (gen == -1 || chrom == -1 || fit == -1){ return; }
+    if (gen == -1 || chrom == -1 || fit == -1)
+    {
+        return;
+    }
 
     std::time_t result = std::time(nullptr);
     std::string now(std::ctime(&result));
 
     std::stringstream filename;
     filename << "logs/chromossomes/"
-             << "F-" << fit 
+             << "F-" << fit
              << " G-" << gen
              << " C-" << chrom
              << " - " << now.substr(0, now.size() - 1)
              << ".log";
-             
 
     std::stringstream fileContents;
 
@@ -324,6 +330,10 @@ void GeneticServer::saveLogs(int gen, int chrom, int fit) const
     FILE *fileFit = fopen("logs/fitness-log.txt", "a");
     fprintf(fileFit, "%d\n", fit);
     fclose(fileFit);
+
+    fileFit = fopen("logs/best-fitness.txt", "w");
+    fprintf(fileFit, "%d\n", bestFit);
+    fclose(fileFit);
 }
 
 void GeneticServer::_start()
@@ -359,9 +369,6 @@ void GeneticServer::_start()
         sf::Int32 gen, chrom, fit;
         packet >> gen >> chrom >> fit;
 
-        if(fit > bestFit){ bestFit = fit; }
-
-        std::cout << "Best fit: " << bestFit << std::endl;
         std::cout << "Request: [" << gen << " " << chrom << " " << fit << "]\n";
         // Independente de ser primeira requisição ou não, sempre será retornado
         // um cromossomo válido para o cliente
@@ -373,10 +380,10 @@ void GeneticServer::_start()
 
         for (float i : currentChromossome.getAllGenes())
         {
-            //std::cout << i << " ";
+            // std::cout << i << " ";
             packet << i;
         }
-        std::cout << std::endl;
+        // std::cout << std::endl;
         socket.send(packet);
 
         // Requisição com valor válido de IDs e de fitness

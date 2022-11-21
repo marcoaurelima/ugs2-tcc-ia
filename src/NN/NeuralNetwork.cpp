@@ -304,7 +304,7 @@ void NeuralNetwork::getNewChromossomeFromServer(ServerRequest request)
     {
         //std::cout << genes[i] << " ";
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
 
     // Construir um cromossomo baseado nos valores obtidos do servidor
     Chromosome chromosome;
