@@ -7,6 +7,7 @@
 #include <SFML/Network.hpp>
 #include <list>
 #include <vector>
+#include <fstream>
 
 class GeneticServer
 {
@@ -32,6 +33,8 @@ private:
 
     void next();
     void _next();
+
+    void saveLogs(int gen, int chrom, int fit) const;
 };
 
 #endif

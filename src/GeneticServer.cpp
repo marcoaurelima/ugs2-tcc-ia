@@ -168,6 +168,9 @@ void GeneticServer::start()
                             sf::Int32 gen, chrom, fit;
                             packet >> gen >> chrom >> fit;
 
+                            // Salvando os logs
+                            saveLogs(gen, chrom, fit);
+
                             std::cout << "\nRequest: [" << gen << " " << chrom << " " << fit << "]\nData: ";
                             // Independente de ser primeira requisição ou não, sempre será retornado
                             // um cromossomo válido para o cliente
@@ -264,6 +267,63 @@ void GeneticServer::start()
         listener.close();
         next();
     }*/
+}
+
+
+void GeneticServer::saveLogs(int gen, int chrom, int fit) const
+{
+    if (gen == -1 || chrom == -1 || fit == -1){ return; }
+
+    std::time_t result = std::time(nullptr);
+    std::string now(std::ctime(&result));
+
+    std::stringstream filename;
+    filename << "logs/chromossomes/"
+             << "F-" << fit 
+             << " G-" << gen
+             << " C-" << chrom
+             << " - " << now.substr(0, now.size() - 1)
+             << ".log";
+             
+
+    std::stringstream fileContents;
+
+    unsigned index = chrom;
+    for (unsigned i = 0; i < population->getCurrentPopulation()[index].getAllGenes().size(); i++)
+    {
+        fileContents << population->getCurrentPopulation()[index].getAllGenes()[i] << ", ";
+    }
+
+    std::string filenameCorr;
+    for (unsigned i = 0; i < filename.str().size(); i++)
+    {
+        if (filename.str()[i] == ' ')
+        {
+            filenameCorr += R"(   )";
+            continue;
+        }
+        else if (filename.str()[i] == ':')
+        {
+            filenameCorr += '-';
+            continue;
+        }
+
+        filenameCorr += filename.str()[i];
+    }
+
+    std::ofstream file;
+    file.open(filenameCorr, std::ofstream::out);
+    if (!file.is_open())
+    {
+        std::cerr << "Error: " << filenameCorr << std::endl;
+    }
+
+    file << fileContents.str();
+    file.close();
+
+    FILE *fileFit = fopen("logs/fitness-log.txt", "a");
+    fprintf(fileFit, "%d\n", fit);
+    fclose(fileFit);
 }
 
 void GeneticServer::_start()
