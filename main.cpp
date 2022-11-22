@@ -25,7 +25,7 @@ int main()
     Population population;
     //population.enablePrintLogs();
     //population.show();
-    population.createInitialPopulation(50, 44);
+    population.createInitialPopulation(100, 44);
     population.setNewGenerationParams(
         NewGenParams{
             SELECTION_TYPE::ROULLETE,
