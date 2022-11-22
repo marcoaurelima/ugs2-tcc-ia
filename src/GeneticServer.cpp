@@ -190,7 +190,7 @@ void GeneticServer::start()
                                 // std::cout << i << " ";
                                 packet << i;
                             }
-                            //std::cout << std::endl;
+                            // std::cout << std::endl;
                             client.send(packet);
 
                             // Requisição com valor válido de IDs e de fitness
@@ -280,6 +280,22 @@ void GeneticServer::saveLogs(int gen, int chrom, int fit) const
     {
         return;
     }
+    //return;
+    // Verificar se a informação de log é em relação a população atual
+    // Se for da população anterior, ignorar
+    if (generationCount != gen)
+    {
+        std::cout << "--- LOG DE OUTRA GERACAO - IGNORADO(0) ---\n";
+        std::cout << "Current: " << generationCount << "  gen: " << gen << std::endl;
+        return;
+    }
+
+    if ((unsigned) chrom > population->getCurrentPopulation().size() - 1)
+    {
+        std::cout << "--- LOG COM INDICE DE OUTRA GERACAO - IGNORADO(1) ---\n";
+        std::cout << "index: " << chrom << "  pop.size: " << population->getCurrentPopulation().size() << std::endl;
+        return;
+    }
 
     std::time_t result = std::time(nullptr);
     std::string now(std::ctime(&result));
@@ -295,6 +311,11 @@ void GeneticServer::saveLogs(int gen, int chrom, int fit) const
     std::stringstream fileContents;
 
     unsigned index = chrom;
+
+    //std::cout << "Atual: chr: " << chromosomeCount << "  gen: " << generationCount << "\n";
+    //std::cout << "Logs: chr: " << chrom << "  gen: " << gen << "\n";
+    //std::cout << "index: " << index << "  pop.size: " << population->getCurrentPopulation().size() << std::endl;
+
     for (unsigned i = 0; i < population->getCurrentPopulation()[index].getAllGenes().size(); i++)
     {
         fileContents << population->getCurrentPopulation()[index].getAllGenes()[i] << ", ";
