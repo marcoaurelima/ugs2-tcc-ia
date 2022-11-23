@@ -175,7 +175,7 @@ void GeneticServer::start()
                                 bestFit = fit;
                             }
 
-                            std::cout << "\n--- Best fit: [" << bestFit << "]\n";
+                            std::cout << "\nBest fit: <" << bestFit << ">\n";
                             std::cout << "\nRequest: [" << gen << " " << chrom << " " << fit << "]\n";
                             // Independente de ser primeira requisição ou não, sempre será retornado
                             // um cromossomo válido para o cliente
